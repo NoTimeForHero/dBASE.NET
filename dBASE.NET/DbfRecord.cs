@@ -16,6 +16,12 @@
         private const string defaultSeparator = ",";
         private const string defaultMask = "{name}={value}";
 
+        private enum Marker
+        {
+            Normal = 0x20,
+            Deleted = 0x2a,
+        }
+
         private List<DbfField> fields;
 
         internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, byte[] memoData, Encoding encoding)
@@ -25,6 +31,17 @@
 
             // Read record marker.
             byte marker = reader.ReadByte();
+            switch (marker)
+            {
+                case (byte)Marker.Normal:
+                    // Normal, not-deleted
+                    break;
+                case (byte)Marker.Deleted:
+                    IsDeleted = true;
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid marker: {marker}");
+            }
 
             // Read entire record as sequence of bytes.
             // Note that record length includes marker.
@@ -57,6 +74,11 @@
         }
 
         public List<object> Data { get; }
+
+        /// <summary>
+        /// Check is record a delete (0x20 if not)
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         public object this[int index] => Data[index];
 
@@ -118,8 +140,11 @@
 
         internal void Write(BinaryWriter writer, Encoding encoding)
         {
-            // Write marker (always "not deleted")
-            writer.Write((byte)0x20);
+            // Write marker
+            Console.WriteLine("Record type: " + (IsDeleted ? "DELETED" : "normal"));
+            var marker = (byte)(IsDeleted ? Marker.Deleted : Marker.Normal);
+            Console.WriteLine("Marker: " + marker);
+            writer.Write(marker);
 
             int index = 0;
             foreach (DbfField field in fields)

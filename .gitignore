@@ -1,3 +1,4 @@
 .vs
 *.suo
 
+/dBASE.NET.sln.DotSettings.user

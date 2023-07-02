@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace dBASE.NET.Tests
@@ -18,6 +19,9 @@ namespace dBASE.NET.Tests
         [TestMethod]
         public void ToStringTest()
         {
+            // In some locales default float delimiter is , instead . so we need set culture to invariant
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
             Assert.AreEqual(
                 "ID=87,CATCOUNT=2,AGRPCOUNT=0,PGRPCOUNT=0,ORDER=87,CODE=1,NAME=Assorted Petits Fours,THUMBNAIL=graphics/00000001/t_1.jpg,IMAGE=graphics/00000001/1.jpg,PRICE=0,COST=0,DESC=,WEIGHT=5.51,TAXABLE=True,ACTIVE=True",
                 dbf.Records[0].ToString(),

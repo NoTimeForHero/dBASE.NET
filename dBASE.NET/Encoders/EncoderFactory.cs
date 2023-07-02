@@ -8,7 +8,7 @@ namespace dBASE.NET.Encoders
 {
 	internal class EncoderFactory
 	{
-		public static IEncoder GetEncoder(DbfFieldType type)
+		public static IEncoder GetEncoder(DbfFieldType type, bool strict = true)
 		{
 			switch (type)
 			{
@@ -32,8 +32,11 @@ namespace dBASE.NET.Encoders
 					return NullFlagsEncoder.Instance;
 				case DbfFieldType.Numeric:
 					return NumericEncoder.Instance;
+				case DbfFieldType.Long:
+                    return LongEncoder.Instance;
 				default:
-					throw new ArgumentException("No encoder found for dBASE type " + type);
+					if (strict) throw new ArgumentException("No encoder found for dBASE field type " + type);
+                    return UnknownEncoder.Instance;
 			}
 		}
 

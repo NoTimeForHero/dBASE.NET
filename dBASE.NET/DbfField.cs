@@ -76,7 +76,7 @@
             // Some field name maybe like `NUM\0\0?B\0\0\0\0`, so we should split by `\0` instead of end trimming.
             string rawName = encoding.GetString(reader.ReadBytes(11));
             Name = rawName.Split((char)0)[0];
-            Type = (DbfFieldType)reader.ReadByte();
+            Type = DbfFiledTypeParser.Parse(reader.ReadByte());
             reader.ReadBytes(4); // reserved: Field data address in memory.
             Length = reader.ReadByte();
             Precision = reader.ReadByte();

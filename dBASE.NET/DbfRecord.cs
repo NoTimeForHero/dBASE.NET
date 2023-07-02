@@ -141,9 +141,7 @@
         internal void Write(BinaryWriter writer, Encoding encoding)
         {
             // Write marker
-            Console.WriteLine("Record type: " + (IsDeleted ? "DELETED" : "normal"));
             var marker = (byte)(IsDeleted ? Marker.Deleted : Marker.Normal);
-            Console.WriteLine("Marker: " + marker);
             writer.Write(marker);
 
             int index = 0;

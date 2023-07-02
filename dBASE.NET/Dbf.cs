@@ -121,7 +121,8 @@
         /// </summary>
         /// <param name="path">The file to read.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
-        public void Write(string path, DbfVersion version = DbfVersion.Unknown)
+        /// <param name="packRecords">Remove all records that were marked as deleted</param>
+        public void Write(string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
             if (version != DbfVersion.Unknown)
             {
@@ -131,7 +132,7 @@
 
             using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.Write))
             {
-                Write(stream, false);
+                Write(stream, false, packRecords);
             }
         }
 
@@ -140,7 +141,8 @@
         /// </summary>
         /// <param name="stream">The output stream.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
-        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown)
+        /// <param name="packRecords">Remove all records that were marked as deleted</param>
+        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
             if (version != DbfVersion.Unknown)
             {
@@ -148,16 +150,16 @@
                 header = DbfHeader.CreateHeader(header.Version);
             }
 
-            Write(stream, true);
+            Write(stream, true, packRecords);
         }
 
-        private void Write(Stream stream, bool leaveOpen)
+        private void Write(Stream stream, bool leaveOpen, bool packRecords = false)
         {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding, leaveOpen))
             {
                 header.Write(writer, Fields, Records);
                 WriteFields(writer);
-                WriteRecords(writer);
+                WriteRecords(writer, packRecords);
             }
         }
 
@@ -225,10 +227,12 @@
             writer.Write((byte)0x0d);
         }
 
-        private void WriteRecords(BinaryWriter writer)
+        private void WriteRecords(BinaryWriter writer, bool packRecords = false)
         {
             foreach (DbfRecord record in Records)
             {
+                Console.WriteLine("Skip record: " + (packRecords && record.IsDeleted));
+                if (packRecords && record.IsDeleted) continue;
                 record.Write(writer, Encoding);
             }
 

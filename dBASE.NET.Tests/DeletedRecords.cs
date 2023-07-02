@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,8 @@ namespace dBASE.NET.Tests
 	/// DBase3WithoutMemo is version 0x03.
 	/// </summary>
 	[TestClass]
-	public class DeletedRecords
+    [SuppressMessage("ReSharper", "LocalVariableHidesMember")]
+    public class DeletedRecords
 	{
 		Dbf dbf;
         private const int RECORDS_TOTAL = 14;
@@ -40,21 +42,42 @@ namespace dBASE.NET.Tests
         [TestMethod]
         public void DeletedFlagSavesToFile()
         {
-            var lDbf = getDbf();
-            lDbf.Records.ForEach(x => x.IsDeleted = true);
+            var dbf = getDbf();
+            dbf.Records.ForEach(x => x.IsDeleted = true);
 
             using (var stream = new MemoryStream())
             {
-                lDbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo);
+                dbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                var newDbf = new Dbf();
-                newDbf.Read(stream);
+                dbf = new Dbf();
+                dbf.Read(stream);
 
-                Assert.AreEqual(RECORDS_TOTAL, lDbf.Records.Count);
-                var deleted = lDbf.Records.Count(x => x.IsDeleted);
+                Assert.AreEqual(RECORDS_TOTAL, dbf.Records.Count);
+                var deleted = dbf.Records.Count(x => x.IsDeleted);
                 Assert.AreEqual(RECORDS_TOTAL, deleted);
             }
         }
+
+        [TestMethod]
+        public void PackRemovedRecords()
+        {
+            var dbf = getDbf();
+            using (var stream = new MemoryStream())
+            {
+                dbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo, true);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                dbf = new Dbf();
+                dbf.Read(stream);
+
+                var deleted = dbf.Records.Count(x => x.IsDeleted);
+                Assert.AreEqual(0, deleted, "After packing should be zero marked to delete records!");
+
+                var mustBe = RECORDS_TOTAL - RECORDS_DELETED;
+                Assert.AreEqual(mustBe, dbf.Records.Count, $"After packing should be {mustBe} records");
+            }
+        }
+
     }
 }

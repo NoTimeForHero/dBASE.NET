@@ -44,6 +44,11 @@
         public List<DbfRecord> Records { get; }
 
         /// <summary>
+        /// Main header of type <see cref="DbfHeader" />
+        /// </summary>
+        public DbfHeader Header => header;
+
+        /// <summary>
         /// The <see cref="System.Text.Encoding" /> class that corresponds to the specified code page.
         /// Default value is <see cref="System.Text.Encoding.ASCII" />
         /// </summary>
@@ -231,7 +236,6 @@
         {
             foreach (DbfRecord record in Records)
             {
-                Console.WriteLine("Skip record: " + (packRecords && record.IsDeleted));
                 if (packRecords && record.IsDeleted) continue;
                 record.Write(writer, Encoding);
             }

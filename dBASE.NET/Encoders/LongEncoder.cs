@@ -14,8 +14,8 @@
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {
-            int value = 0;
-            if (data != null) value = (int)data;
+            long value = 0;
+            if (data != null) value = (long)data;
             return BitConverter.GetBytes(value);
         }
 

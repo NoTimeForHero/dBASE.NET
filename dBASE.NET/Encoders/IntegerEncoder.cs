@@ -3,14 +3,8 @@
     using System;
     using System.Text;
 
-    public class IntegerEncoder : IEncoder
+    internal class IntegerEncoder : IEncoder
     {
-        private static IntegerEncoder instance;
-
-        private IntegerEncoder() { }
-
-        public static IntegerEncoder Instance => instance ?? (instance = new IntegerEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

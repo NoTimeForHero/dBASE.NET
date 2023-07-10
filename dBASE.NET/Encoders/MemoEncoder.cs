@@ -5,12 +5,6 @@
 
     internal class MemoEncoder : IEncoder
     {
-        private static MemoEncoder instance;
-
-        private MemoEncoder() { }
-
-        public static MemoEncoder Instance => instance ?? (instance = new MemoEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

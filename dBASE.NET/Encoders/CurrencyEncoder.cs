@@ -5,12 +5,6 @@
 
     internal class CurrencyEncoder : IEncoder
     {
-        private static CurrencyEncoder instance;
-
-        private CurrencyEncoder() { }
-
-        public static CurrencyEncoder Instance => instance ?? (instance = new CurrencyEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

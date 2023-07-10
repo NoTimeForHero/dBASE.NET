@@ -6,12 +6,6 @@
 
     internal class FloatEncoder : IEncoder
     {
-        private static FloatEncoder instance;
-
-        private FloatEncoder() { }
-
-        public static FloatEncoder Instance => instance ?? (instance = new FloatEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

@@ -4,12 +4,6 @@
 
     internal class NullFlagsEncoder : IEncoder
     {
-        private static NullFlagsEncoder instance;
-
-        private NullFlagsEncoder() { }
-
-        public static NullFlagsEncoder Instance => instance ?? (instance = new NullFlagsEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

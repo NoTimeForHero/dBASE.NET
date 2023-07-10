@@ -7,38 +7,37 @@ using System.Threading.Tasks;
 namespace dBASE.NET.Encoders
 {
 	internal class EncoderFactory
-	{
+    {
+        private static readonly Dictionary<DbfFieldType, IEncoder> encoders = new()
+        {
+            {DbfFieldType.Character, Resolve<CharacterEncoder>()},
+            {DbfFieldType.Currency, Resolve<CurrencyEncoder>()},
+            {DbfFieldType.Date, Resolve<DateEncoder>()},
+            {DbfFieldType.DateTime, Resolve<DateTimeEncoder>()},
+            {DbfFieldType.Float, Resolve<FloatEncoder>()},
+            {DbfFieldType.Integer, Resolve<IntegerEncoder>()},
+            {DbfFieldType.Logical, Resolve<LogicalEncoder>()},
+            {DbfFieldType.Memo, Resolve<MemoEncoder>()},
+            {DbfFieldType.NullFlags, Resolve<NullFlagsEncoder>()},
+            {DbfFieldType.Numeric, Resolve<NumericEncoder>()},
+            {DbfFieldType.Long, Resolve<LongEncoder>()},
+        };
+
+        private static readonly IEncoder UnknownEncoder = Resolve<UnknownEncoder>();
+
+
 		public static IEncoder GetEncoder(DbfFieldType type, bool strict = true)
 		{
-			switch (type)
-			{
-				case DbfFieldType.Character:
-					return CharacterEncoder.Instance;
-				case DbfFieldType.Currency:
-					return CurrencyEncoder.Instance;
-				case DbfFieldType.Date:
-					return DateEncoder.Instance;
-				case DbfFieldType.DateTime:
-					return DateTimeEncoder.Instance;
-				case DbfFieldType.Float:
-					return FloatEncoder.Instance;
-				case DbfFieldType.Integer:
-					return IntegerEncoder.Instance;
-				case DbfFieldType.Logical:
-					return LogicalEncoder.Instance;
-				case DbfFieldType.Memo:
-					return MemoEncoder.Instance;
-				case DbfFieldType.NullFlags:
-					return NullFlagsEncoder.Instance;
-				case DbfFieldType.Numeric:
-					return NumericEncoder.Instance;
-				case DbfFieldType.Long:
-                    return LongEncoder.Instance;
-				default:
-					if (strict) throw new ArgumentException("No encoder found for dBASE field type " + type);
-                    return UnknownEncoder.Instance;
-			}
-		}
+			var hasValue = encoders.TryGetValue(type, out IEncoder encoder);
+			if (hasValue) return encoder;
+            if (strict) throw new ArgumentException("No encoder found for dBASE field type " + type);
+            return UnknownEncoder;
+        }
+
+        private static T Resolve<T>() where T : IEncoder
+        {
+            return Activator.CreateInstance<T>();
+        }
 
 	}
 }

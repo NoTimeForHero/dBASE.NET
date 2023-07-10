@@ -36,7 +36,7 @@ namespace dBASE.NET
             if (input == '+') return DbfFieldType.Integer; // Auto-Increment ID
             if (input == '@') return DbfFieldType.Long; // Unix Timestamp
             if (input == '^') return DbfFieldType.Long; // Record modification count
-
+			if (input == '?') return DbfFieldType.Long; // Record modification count
             return (DbfFieldType)input;
         }
     }

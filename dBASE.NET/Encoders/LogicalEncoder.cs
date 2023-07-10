@@ -4,12 +4,6 @@
 
     internal class LogicalEncoder : IEncoder
     {
-        private static LogicalEncoder instance;
-
-        private LogicalEncoder() { }
-
-        public static LogicalEncoder Instance => instance ?? (instance = new LogicalEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

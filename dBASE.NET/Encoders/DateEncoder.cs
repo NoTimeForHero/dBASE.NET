@@ -8,12 +8,6 @@
     {
         private const string format = "yyyyMMdd";
 
-        private static DateEncoder instance;
-
-        private DateEncoder() { }
-
-        public static DateEncoder Instance => instance ?? (instance = new DateEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

@@ -5,12 +5,6 @@
 
     public class LongEncoder : IEncoder
     {
-        private static LongEncoder instance;
-
-        private LongEncoder() { }
-
-        public static LongEncoder Instance => instance ?? (instance = new LongEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

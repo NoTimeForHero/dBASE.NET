@@ -5,12 +5,6 @@
 
     internal class DateTimeEncoder : IEncoder
     {
-        private static DateTimeEncoder instance;
-
-        private DateTimeEncoder() { }
-
-        public static DateTimeEncoder Instance => instance ?? (instance = new DateTimeEncoder());
-
         /// <inheritdoc />
         public byte[] Encode(DbfField field, object data, Encoding encoding)
         {

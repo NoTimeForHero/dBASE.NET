@@ -7,12 +7,6 @@
 
     internal class CharacterEncoder : IEncoder
     {
-        private static CharacterEncoder instance;
-
-        private CharacterEncoder() { }
-
-        public static CharacterEncoder Instance => instance ?? (instance = new CharacterEncoder());
-
         // cach different length bytes (for performance)
         Dictionary<int, byte[]> buffers = new Dictionary<int, byte[]>();
 

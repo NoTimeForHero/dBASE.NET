@@ -47,5 +47,17 @@ namespace dBASE.NET
             if (stream == null) return null;
             return adapter.GetBlockData(index, encoding);
         }
+
+        /// <summary>
+        /// Write new data to memo file
+        /// </summary>
+        /// <param name="index">Block index</param>
+        /// <param name="data">Raw byte data</param>
+        public void WriteBlockData(int index, byte[] data)
+        {
+            if (stream == null) return;
+            // BUG: Access to disposed stream...
+            adapter.WriteBlockData(index, data);
+        }
     }
 }

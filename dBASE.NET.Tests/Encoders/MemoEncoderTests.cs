@@ -28,5 +28,18 @@ namespace dBASE.NET.Tests.Encoders
             using var ms = new MemoryStream();
             dbf.Write("fixtures/memo/temp.dbf");
         }
+
+        [TestMethod]
+        public void SimpleAddRecord()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/simple.dbf");
+            var record = dbf.CreateRecord();
+            record.Data[0] = "User";
+            record.Data[1] = "Hello world!";
+
+            using var ms = new MemoryStream();
+            dbf.Write("fixtures/memo/temp2.dbf");
+        }
     }
 }

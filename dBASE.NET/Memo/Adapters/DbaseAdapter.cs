@@ -7,7 +7,7 @@ namespace dBASE.NET.Memo.Adapters
     internal class DbaseAdapter : IMemoAdapter
     {
         private Stream stream;
-        private int blockSize;
+        private int blockSize = 512;
         const byte markerBlockEnd = 0x1A; // 0x1A/26 - block end marker
 
         public void Initialize(Stream stream)
@@ -17,7 +17,6 @@ namespace dBASE.NET.Memo.Adapters
 
         public string GetBlockData(int index, Encoding encoding)
         {
-            blockSize = 512;
             var offset = blockSize * index;
 
             stream.Seek(offset, SeekOrigin.Begin);
@@ -38,6 +37,20 @@ namespace dBASE.NET.Memo.Adapters
             var data = new byte[length];
             Buffer.BlockCopy(tempBlock, 0, data, 0, length);
             return encoding.GetString(data).Trim();
+        }
+
+        public void WriteBlockData(int index, byte[] data)
+        {
+            /*
+            if (data.Length > blockSize) throw new NotImplementedException("Multiblock not supported now!");
+
+            var offset = blockSize * index;
+            stream.Seek(offset, SeekOrigin.Begin);
+
+            stream.Write(data, 0, data.Length);
+            stream.WriteByte(markerBlockEnd);
+            stream.WriteByte(markerBlockEnd);
+            */
         }
     }
 }

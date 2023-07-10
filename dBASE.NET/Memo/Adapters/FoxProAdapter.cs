@@ -44,5 +44,10 @@ namespace dBASE.NET.Memo.Adapters
                 throw new InvalidOperationException($"Readed {readed} bytes from buffer instead {buffer.Length}");
             return encoding.GetString(buffer).Trim();
         }
+
+        public void WriteBlockData(int index, byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

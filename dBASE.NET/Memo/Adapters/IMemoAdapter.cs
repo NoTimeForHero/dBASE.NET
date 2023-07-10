@@ -7,5 +7,6 @@ namespace dBASE.NET.Memo.Adapters
     {
         void Initialize(Stream stream);
         string GetBlockData(int index, Encoding encoding);
+        void WriteBlockData(int index, byte[] data);
     }
 }

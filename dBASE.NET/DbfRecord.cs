@@ -22,14 +22,14 @@
             Deleted = 0x2a,
         }
 
-        private List<DbfField> fields;
-        private MemoContext memoData;
+        private readonly List<DbfField> fields;
+        private readonly EncoderContext encoderContext;
 
         internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding)
         {
             this.fields = fields;
-            this.memoData = memoData;
             Data = new List<object>();
+            encoderContext = new EncoderContext { Encoding = encoding, Memo = memoData };
 
             // Read record marker.
             byte marker = reader.ReadByte();
@@ -61,7 +61,7 @@
                 offset += field.Length;
 
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-                Data.Add(encoder.Decode(buffer, encoding, memoData));
+                Data.Add(encoder.Decode(encoderContext, buffer));
             }
         }
 
@@ -73,6 +73,7 @@
             this.fields = fields;
             Data = new List<object>();
             foreach (DbfField field in fields) Data.Add(null);
+            encoderContext = new EncoderContext { };
         }
 
         public List<object> Data { get; }
@@ -150,7 +151,9 @@
             foreach (DbfField field in fields)
             {
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-                byte[] buffer = encoder.Encode(field, Data[index], encoding, memoData);
+                encoderContext.Encoding = encoding;
+                encoderContext.Field = field;
+                byte[] buffer = encoder.Encode(encoderContext, Data[index]);
                 if (buffer.Length > field.Length)
                     throw new ArgumentOutOfRangeException(nameof(buffer.Length), buffer.Length, "Buffer length has exceeded length of the field.");
 

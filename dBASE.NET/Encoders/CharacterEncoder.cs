@@ -8,7 +8,7 @@
     internal class CharacterEncoder : IEncoder
     {
         // cach different length bytes (for performance)
-        Dictionary<int, byte[]> buffers = new Dictionary<int, byte[]>();
+        Dictionary<int, byte[]> buffers = new();
 
         private byte[] GetBuffer(int length)
         {
@@ -22,27 +22,27 @@
         }
 
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             // Input data maybe various: int, string, whatever.
             string res = data?.ToString();
             if (string.IsNullOrEmpty(res))
             {
-                res = field.DefaultValue;
+                res = context.Field.DefaultValue;
             }
 
             // consider multibyte should truncate or padding after GetBytes (11 bytes)
-            var buffer = GetBuffer(field.Length);
-            var bytes = encoding.GetBytes(res);
-            Array.Copy(bytes, buffer, Math.Min(bytes.Length, field.Length));
+            var buffer = GetBuffer(context.Field.Length);
+            var bytes = context.Encoding.GetBytes(res);
+            Array.Copy(bytes, buffer, Math.Min(bytes.Length, context.Field.Length));
 
             return buffer;
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
-            string text = encoding.GetString(buffer).Trim();
+            string text = context.Encoding.GetString(buffer).Trim();
             if (text.Length == 0) return null;
             return text;
         }

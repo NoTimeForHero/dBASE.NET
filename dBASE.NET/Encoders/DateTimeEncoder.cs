@@ -6,12 +6,12 @@
     internal class DateTimeEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
-            if (field.Length != 8) throw new ArgumentException("DateTime fields must always be 8 bytes in length.");
+            if (context.Field.Length != 8) throw new ArgumentException("DateTime fields must always be 8 bytes in length.");
 
             // Null values result in zeroes.
-            if (data == null) return new byte[field.Length];
+            if (data == null) return new byte[context.Field.Length];
 
             // The date gets encoded as a Julian Day.
             DateTime dt = (DateTime)data;
@@ -40,7 +40,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
             return ConvertFoxProToDateTime(buffer);
         }

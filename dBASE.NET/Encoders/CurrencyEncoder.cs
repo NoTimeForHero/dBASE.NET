@@ -6,7 +6,7 @@
     internal class CurrencyEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             float value = 0;
             if (data != null) value = (float)data;
@@ -14,7 +14,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
             return BitConverter.ToSingle(buffer, 0);
         }

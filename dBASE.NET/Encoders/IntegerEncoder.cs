@@ -6,7 +6,7 @@
     internal class IntegerEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             int value = 0;
             if (data != null) value = (int)data;
@@ -14,7 +14,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
             return BitConverter.ToInt32(buffer, 0);
         }

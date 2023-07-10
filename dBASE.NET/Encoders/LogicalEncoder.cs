@@ -5,7 +5,7 @@
     internal class LogicalEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             // Convert boolean value to string.
             string text = "?";
@@ -15,16 +15,16 @@
             }
 
             // Grow string to fill field length.
-            text = text.PadLeft(field.Length, ' ');
+            text = text.PadLeft(context.Field.Length, ' ');
 
             // Convert string to byte array.
-            return encoding.GetBytes(text);
+            return context.Encoding.GetBytes(text);
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
-            string text = encoding.GetString(buffer).Trim().ToUpper();
+            string text = context.Encoding.GetString(buffer).Trim().ToUpper();
             if (text == "?") return null;
             return (text == "Y" || text == "T");
         }

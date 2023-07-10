@@ -7,21 +7,22 @@
     internal class FloatEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
+            var field = context.Field;
             string text = Convert.ToString(data, CultureInfo.InvariantCulture).PadLeft(field.Length, ' ');
             if (text.Length > field.Length)
             {
                 text.Substring(0, field.Length);
             }
 
-            return encoding.GetBytes(text);
+            return context.Encoding.GetBytes(text);
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
-            string text = encoding.GetString(buffer).Trim();
+            string text = context.Encoding.GetString(buffer).Trim();
             if (text.Length == 0)
             {
                 return null;

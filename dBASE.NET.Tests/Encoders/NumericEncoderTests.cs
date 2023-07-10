@@ -24,7 +24,8 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
+            var context = new EncoderContext { Encoding = encoding, Field = numericField };
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(context, val);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -42,7 +43,8 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
+            var context = new EncoderContext { Encoding = encoding, Field = numericField };
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(context, val);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -60,7 +62,8 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
+            var context = new EncoderContext { Encoding = encoding, Field = numericField };
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(context, val);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -78,7 +81,8 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
+            var context = new EncoderContext { Encoding = encoding, Field = numericField };
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(context, val);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -96,7 +100,8 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(integerField, val, encoding, null);
+            var context = new EncoderContext { Encoding = encoding, Field = integerField };
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(context, val);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)

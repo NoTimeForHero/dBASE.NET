@@ -18,15 +18,15 @@ namespace dBASE.NET.Tests.Encoders
             Assert.AreEqual("Third user", dbf.Records[2].Data[1]);
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void SimpleOverwrite()
         {
             var dbf = new Dbf();
             dbf.Read("fixtures/memo/simple.dbf");
             dbf.Records[0].Data[1] = "Hello world!";
 
-            //using var ms = new MemoryStream();
-            //dbf.Write("fixtures/memo/temp.dbf");
+            using var ms = new MemoryStream();
+            dbf.Write("fixtures/memo/temp.dbf");
         }
     }
 }

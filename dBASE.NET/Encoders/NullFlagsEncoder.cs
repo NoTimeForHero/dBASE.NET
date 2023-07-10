@@ -5,7 +5,7 @@
     internal class NullFlagsEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             byte[] buffer = new byte[1];
             buffer[0] = 0;
@@ -13,7 +13,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
             return buffer[0];
         }

@@ -8,8 +8,7 @@ namespace dBASE.NET.Encoders
 {
     internal interface IEncoder
     {
-        byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo);
-
-        object Decode(byte[] buffer, Encoding encoding, MemoContext memo);
+        byte[] Encode(EncoderContext context, object data);
+        object Decode(EncoderContext context, byte[] buffer);
     }
 }

@@ -5,18 +5,20 @@
 
     internal class MemoEncoder : IEncoder
     {
+        public static readonly object Key = new();
+
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
-            return null;
+            return new byte[]{};
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
-            var index = GetBlockIndex(buffer, encoding);
+            var index = GetBlockIndex(buffer, context.Encoding);
             if (!index.HasValue) return null;
-            return memo.GetBlockData(index.Value, encoding);
+            return context.Memo.GetBlockData(index.Value, context.Encoding);
         }
 
         private static int? GetBlockIndex(byte[] buffer, Encoding encoding)

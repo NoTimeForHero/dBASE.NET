@@ -6,7 +6,7 @@
     public class LongEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
+        public byte[] Encode(EncoderContext context, object data)
         {
             long value = 0;
             if (data != null) value = (long)data;
@@ -14,7 +14,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
+        public object Decode(EncoderContext context, byte[] buffer)
         {
             return BitConverter.ToInt64(buffer, 0);
         }

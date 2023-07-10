@@ -40,10 +40,9 @@
 		[TestMethod]
 		public void WriteOneField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
-			dbf.Fields.Add(field);
-			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
+            DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
+            dbf = new Dbf(null, new[] { field });
+            dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
 
 			dbf = new Dbf();
 			dbf.Read("test.dbf");
@@ -54,9 +53,8 @@
 		[TestMethod]
 		public void WriteFieldAndRecord()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = "HELLO";
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -70,9 +68,8 @@
 		[TestMethod]
 		public void WriteFieldAndThreeRecords()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Character, 12);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = "HELLO";
 			record = dbf.CreateRecord();
@@ -90,9 +87,8 @@
 		[TestMethod]
 		public void NumericField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Numeric, 12, 2);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Numeric, 12, 2);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = 3.14;
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -106,9 +102,8 @@
 		[TestMethod]
 		public void FloatField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Float, 12);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Float, 12);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = 3.14f;
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -122,9 +117,8 @@
 		[TestMethod]
 		public void LogicalField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Logical, 12);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Logical, 12);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = true;
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -138,9 +132,8 @@
 		[TestMethod]
 		public void DateField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Date, 12);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Date, 12);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = new DateTime(2018, 8, 7);
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -154,9 +147,8 @@
 		[TestMethod]
 		public void DateTimeField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.DateTime, 8);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.DateTime, 8);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = new DateTime(2018, 8, 7, 20, 15, 8);
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -170,9 +162,8 @@
 		[TestMethod]
 		public void IntegerField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Integer, 4);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Integer, 4);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = 34;
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
@@ -186,9 +177,8 @@
 		[TestMethod]
 		public void CurrencyField()
 		{
-			dbf = new Dbf();
-			DbfField field = new DbfField("TEST", DbfFieldType.Currency, 4);
-			dbf.Fields.Add(field);
+            DbfField field = new DbfField("TEST", DbfFieldType.Currency, 4);
+            dbf = new Dbf(null, new[] { field });
 			DbfRecord record = dbf.CreateRecord();
 			record.Data[0] = 4.34F;
 			dbf.Write("test.dbf", DbfVersion.VisualFoxPro);

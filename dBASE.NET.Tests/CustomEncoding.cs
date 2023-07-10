@@ -73,8 +73,7 @@
             // Arrange.
             var standard = ReadStandard();
 
-            var dbf = new Dbf(encoding);
-            fields.ForEach(x => dbf.Fields.Add(x));
+            var dbf = new Dbf(encoding, fields);
 
             DbfRecord record = dbf.CreateRecord();
             foreach (var field in fields)

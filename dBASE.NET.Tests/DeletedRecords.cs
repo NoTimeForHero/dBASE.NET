@@ -43,11 +43,11 @@ namespace dBASE.NET.Tests
         public void DeletedFlagSavesToFile()
         {
             var dbf = getDbf();
-            dbf.Records.ForEach(x => x.IsDeleted = true);
+            dbf.Records.ToList().ForEach(x => x.IsDeleted = true);
 
             using (var stream = new MemoryStream())
             {
-                dbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo);
+                dbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo, leaveOpen: true);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 dbf = new Dbf();

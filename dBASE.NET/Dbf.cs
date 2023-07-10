@@ -47,34 +47,12 @@ namespace dBASE.NET
         /// <param name="leaveOpen">Keep the BinaryWriter open</param>
         public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false)
         {
-            if (version != DbfVersion.Unknown)
-            {
-                header.Version = version;
-                header = DbfHeader.CreateHeader(header.Version);
-            }
+            using BinaryWriter writer = new(stream, Encoding, leaveOpen);
 
-            using (BinaryWriter writer = new(stream, Encoding, leaveOpen))
-            {
-                header.Write(writer, _fields, _records);
-                Utils.Write.Fields(writer, _fields, Encoding);
-                Utils.Write.Data(writer, _records, Encoding, packRecords);
-            }
-        }
-
-
-        private List<DbfRecord> ReadRecords(BinaryReader reader, byte[] memoData)
-        {
-            var records = new List<DbfRecord>();
-            // Records are terminated by 0x1a char (officially), or EOF (also seen).
-            while (reader.PeekChar() != 0x1a && reader.PeekChar() != -1)
-            {
-                try
-                {
-                    records.Add(new DbfRecord(reader, header, _fields, memoData, Encoding));
-                }
-                catch (EndOfStreamException) { }
-            }
-            return records;
+            if (version != DbfVersion.Unknown) header = DbfHeader.CreateHeader(version);
+            header.Write(writer, _fields, _records);
+            Utils.Write.Fields(writer, _fields, Encoding);
+            Utils.Write.Data(writer, _records, Encoding, packRecords);
         }
 
         /// <summary>
@@ -99,6 +77,21 @@ namespace dBASE.NET
 
             byte[] memoData = memoStream != null ? Utils.Read.Memos(memoStream) : null;
             _records = ReadRecords(reader, memoData);
+        }
+
+        private List<DbfRecord> ReadRecords(BinaryReader reader, byte[] memoData)
+        {
+            var records = new List<DbfRecord>();
+            // Records are terminated by 0x1a char (officially), or EOF (also seen).
+            while (reader.PeekChar() != 0x1a && reader.PeekChar() != -1)
+            {
+                try
+                {
+                    records.Add(new DbfRecord(reader, header, _fields, memoData, Encoding));
+                }
+                catch (EndOfStreamException) { }
+            }
+            return records;
         }
     }
 }

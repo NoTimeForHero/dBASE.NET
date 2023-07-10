@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace dBASE.NET.Tests
+namespace dBASE.NET.Tests.Formats
 {
 	/// <summary>
 	/// DBase4WithMemo is version 0x8b.

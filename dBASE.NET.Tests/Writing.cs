@@ -37,6 +37,16 @@
 			Assert.AreEqual(0x30, data[0], "Version should be 0x30.");
 		}
 
+        [TestMethod]
+        public void WriteCheckVersion()
+        {
+            dbf = new Dbf();
+            dbf.Write("test.dbf", DbfVersion.VisualFoxPro);
+
+            byte[] data = ReadBytes();
+            Assert.AreEqual((byte)DbfVersion.VisualFoxPro, data[0], "Version should be 0x30.");
+        }
+
 		[TestMethod]
 		public void WriteOneField()
 		{

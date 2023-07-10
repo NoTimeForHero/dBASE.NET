@@ -62,19 +62,19 @@
     <Compile Include="BrokenFields.cs" />
     <Compile Include="CustomEncoding2.cs" />
     <Compile Include="CustomEncoding.cs" />
-    <Compile Include="Dbase3WithMemoStreamRead.cs" />
-    <Compile Include="Dbase3WithMemo.cs" />
+    <Compile Include="Formats\Dbase3WithMemoStreamRead.cs" />
+    <Compile Include="Formats\Dbase3WithMemo.cs" />
     <Compile Include="DeletedRecords.cs" />
-    <Compile Include="Dbase3WithoutMemo.cs" />
-    <Compile Include="DBase4WithMemo.cs" />
+    <Compile Include="Formats\Dbase3WithoutMemo.cs" />
+    <Compile Include="Formats\DBase4WithMemo.cs" />
     <Compile Include="DbfRecordTests.cs" />
     <Compile Include="Encoders\CharacterEncoderTests.cs" />
     <Compile Include="Encoders\DateEncoderTests.cs" />
     <Compile Include="Encoders\NumericEncoderTests.cs" />
-    <Compile Include="FoxProWithMemo.cs" />
-    <Compile Include="VisualFoxPro.cs" />
+    <Compile Include="Formats\FoxProWithMemo.cs" />
+    <Compile Include="Formats\VisualFoxPro.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualFoxProWithAI.cs" />
+    <Compile Include="Formats\VisualFoxProWithAI.cs" />
     <Compile Include="Writing.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +274,7 @@
       <Name>dBASE.NET</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Writing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -43,10 +43,8 @@ namespace dBASE.NET
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
         public static void Write(this Dbf dbf, string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
-            using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.Write))
-            {
-                dbf.Write(stream, version, packRecords);
-            }
+            using FileStream stream = File.Open(path, FileMode.Create, FileAccess.Write);
+            dbf.Write(stream, version, packRecords);
         }
 
         private static string GetMemoPath(string basePath)

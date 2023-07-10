@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace dBASE.NET.Tests
+namespace dBASE.NET.Tests.Formats
 {
     /// <summary>
     /// DBase3WithMemo is version 0x83.

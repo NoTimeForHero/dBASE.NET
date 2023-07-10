@@ -38,28 +38,29 @@ namespace dBASE.NET
 		/// </summary>
 		public ushort RecordLength { get; set; }
 
+		// TODO: Rewrite this
 		public static DbfHeader CreateHeader(DbfVersion version)
 		{
 			DbfHeader header;
 			switch(version)
 			{
 				case DbfVersion.FoxBaseDBase3NoMemo:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				case DbfVersion.VisualFoxPro:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				case DbfVersion.VisualFoxProWithAutoIncrement:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				case DbfVersion.FoxPro2WithMemo:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				case DbfVersion.FoxBaseDBase3WithMemo:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				case DbfVersion.dBase4WithMemo:
-					header = new Dbf3Header();
+                    header = new Dbf3Header { Version = version };
 					break;
 				default:
 					throw new ArgumentException("Unsupported dBASE version: " + version);

@@ -65,7 +65,7 @@ namespace dBASE.NET
         {
             Utils.EnsureStreamSeekable(baseStream);
 
-            //using (BinaryReader reader = new BinaryReader(baseStream))
+            //using (BinaryReader adapter = new BinaryReader(baseStream))
             //ReadFields() use PeekChar to detect end flag=0D, default Encoding may be UTF8 then clause exception
             using var reader = new BinaryReader(baseStream, Encoding.ASCII);
 

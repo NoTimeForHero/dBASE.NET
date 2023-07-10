@@ -71,7 +71,7 @@ namespace dBASE.NET
 		}
 
 		/// <summary>
-		/// Read the .dbf file header from the specified reader.
+		/// Read the .dbf file header from the specified adapter.
 		/// </summary>
 		internal abstract void Read(BinaryReader reader);
 

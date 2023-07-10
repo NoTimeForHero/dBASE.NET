@@ -23,10 +23,13 @@ namespace dBASE.NET.Tests.Encoders
         {
             var dbf = new Dbf();
             dbf.Read("fixtures/memo/simple.dbf");
-            dbf.Records[0].Data[1] = "Hello world!";
+            var testMessage = "Hello world!";
+            dbf.Records[0].Data[1] = testMessage;
 
-            using var ms = new MemoryStream();
             dbf.Write("fixtures/memo/temp.dbf");
+            dbf = new Dbf();
+            dbf.Read("fixtures/memo/temp.dbf");
+            Assert.AreEqual(testMessage, dbf.Records[0].Data[1]);
         }
 
         [TestMethod]
@@ -38,7 +41,6 @@ namespace dBASE.NET.Tests.Encoders
             record.Data[0] = "User";
             record.Data[1] = "Hello world!";
 
-            using var ms = new MemoryStream();
             dbf.Write("fixtures/memo/temp2.dbf");
         }
     }

@@ -17,6 +17,12 @@ namespace dBASE.NET
         private readonly Stream stream;
         private readonly IMemoAdapter adapter;
 
+        public void CopyStreamTo(Stream target)
+        {
+            stream.Position = 0;
+            stream.CopyTo(target);
+        }
+
         internal MemoContext(Stream stream, DbfHeader header)
         {
             if (stream == null) return;

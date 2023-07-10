@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dBASE.NET.Memo;
 
 namespace dBASE.NET
 {
@@ -17,21 +18,17 @@ namespace dBASE.NET
         public static void Read(this Dbf dbf, string path)
         {
             // Open stream for reading.
-            using (FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            string memoPath = GetMemoPath(path, out var type);
+            if (memoPath == null)
             {
-                string memoPath = GetMemoPath(path);
-                if (memoPath == null)
-                {
-                    dbf.Read(baseStream);
-                }
-                else
-                {
-                    using (FileStream memoStream = File.Open(memoPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        dbf.Read(baseStream, memoStream);
-                    }
-                }
+                dbf.Read(baseStream, null);
+                return;
             }
+            using var memoStream = File.Open(memoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var memoryMemoStream = new MemoryStream();
+            memoStream.CopyTo(memoryMemoStream);
+            dbf.Read(baseStream, memoryMemoStream, type);
         }
 
         /// <summary>
@@ -43,22 +40,40 @@ namespace dBASE.NET
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
         public static void Write(this Dbf dbf, string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
-            using FileStream stream = File.Open(path, FileMode.Create, FileAccess.Write);
-            dbf.Write(stream, version, packRecords);
+            using var stream = File.Open(path, FileMode.Create, FileAccess.Write);
+
+            if (dbf.MemoType == MemoFileType.None)
+            {
+                dbf.Write(stream, version, packRecords);
+                return;
+            }
+
+            var extension = dbf.MemoType.ToString().ToLower();
+            var memoPath = Path.ChangeExtension(path, extension);
+            using var memoStream = File.Open(memoPath, FileMode.Create, FileAccess.Write);
+            dbf.Write(stream, version, packRecords, memoStream: memoStream);
         }
 
-        private static string GetMemoPath(string basePath)
+        private static string GetMemoPath(string basePath, out MemoFileType type)
         {
-            string memoPath = Path.ChangeExtension(basePath, "fpt");
-            if (!File.Exists(memoPath))
+            string path;
+
+            path = Path.ChangeExtension(basePath, "fpt");
+            if (File.Exists(path))
             {
-                memoPath = Path.ChangeExtension(basePath, "dbt");
-                if (!File.Exists(memoPath))
-                {
-                    return null;
-                }
+                type = MemoFileType.FPT;
+                return path;
             }
-            return memoPath;
+
+            path = Path.ChangeExtension(basePath, "dbt");
+            if (File.Exists(path))
+            {
+                type = MemoFileType.DBT;
+                return path;
+            }
+
+            type = MemoFileType.None;
+            return null;
         }
 
     }

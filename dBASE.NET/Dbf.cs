@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using dBASE.NET.Memo;
 
 namespace dBASE.NET
 {
@@ -28,6 +29,8 @@ namespace dBASE.NET
         private List<DbfRecord> _records = new();
         private MemoContext memo;
 
+        public MemoFileType MemoType { get; protected set; }
+
         /// <summary>
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
         /// </summary>
@@ -45,8 +48,9 @@ namespace dBASE.NET
         /// <param name="stream">The output stream.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
+        /// <param name="memoStream"></param>
         /// <param name="leaveOpen">Keep the BinaryWriter open</param>
-        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false)
+        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false, Stream memoStream = null)
         {
             using BinaryWriter writer = new(stream, Encoding, leaveOpen);
 
@@ -54,6 +58,7 @@ namespace dBASE.NET
             header.Write(writer, _fields, _records);
             Utils.Write.Fields(writer, _fields, Encoding);
             Utils.Write.Data(writer, _records, Encoding, packRecords);
+            if (memoStream != null) memo.CopyStreamTo(memoStream);
         }
 
         /// <summary>
@@ -61,8 +66,9 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="baseStream">Stream with a database.</param>
         /// <param name="memoStream">Stream with a memo.</param>
-        public void Read(Stream baseStream, Stream memoStream = null)
+        public void Read(Stream baseStream, Stream memoStream = null, MemoFileType memoType = MemoFileType.None)
         {
+            MemoType = memoType;
             Utils.EnsureStreamSeekable(baseStream);
 
             //using (BinaryReader adapter = new BinaryReader(baseStream))

@@ -41,7 +41,6 @@ namespace dBASE.NET.Memo.Adapters
 
         public void WriteBlockData(int index, byte[] data)
         {
-            /*
             if (data.Length > blockSize) throw new NotImplementedException("Multiblock not supported now!");
 
             var offset = blockSize * index;
@@ -50,7 +49,6 @@ namespace dBASE.NET.Memo.Adapters
             stream.Write(data, 0, data.Length);
             stream.WriteByte(markerBlockEnd);
             stream.WriteByte(markerBlockEnd);
-            */
         }
     }
 }

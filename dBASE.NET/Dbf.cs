@@ -76,7 +76,8 @@ namespace dBASE.NET
             // of the records, as indicated by the "HeaderLength" value in the header.
             baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
 
-            memo = new MemoContext(memoStream);
+            // TODO: Throw error if some DbfField has MEMO field but memoStream == null
+            memo = new MemoContext(memoStream, header);
             _records = ReadRecords(reader, memo);
         }
 

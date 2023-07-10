@@ -62,6 +62,7 @@
     <Compile Include="BrokenFields.cs" />
     <Compile Include="CustomEncoding2.cs" />
     <Compile Include="CustomEncoding.cs" />
+    <Compile Include="Encoders\MemoEncoderTests.cs" />
     <Compile Include="Formats\Dbase3WithMemoStreamRead.cs" />
     <Compile Include="Formats\Dbase3WithMemo.cs" />
     <Compile Include="DeletedRecords.cs" />

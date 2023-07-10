@@ -66,30 +66,6 @@
         }
 
         /// <summary>
-        /// Opens a DBF file, reads the contents that initialize the current instance, and then closes the file.
-        /// </summary>
-        /// <param name="path">The file to read.</param>
-        public void Read(string path)
-        {
-            // Open stream for reading.
-            using (FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                string memoPath = GetMemoPath(path);
-                if (memoPath == null)
-                {
-                    Read(baseStream);
-                }
-                else
-                {
-                    using (FileStream memoStream = File.Open(memoPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        Read(baseStream, memoStream);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Reads the contents of streams that initialize the current instance.
         /// </summary>
         /// <param name="baseStream">Stream with a database.</param>
@@ -124,30 +100,11 @@
         /// <summary>
         /// Creates a new file, writes the current instance to the file, and then closes the file. If the target file already exists, it is overwritten.
         /// </summary>
-        /// <param name="path">The file to read.</param>
-        /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
-        /// <param name="packRecords">Remove all records that were marked as deleted</param>
-        public void Write(string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
-        {
-            if (version != DbfVersion.Unknown)
-            {
-                header.Version = version;
-                header = DbfHeader.CreateHeader(header.Version);
-            }
-
-            using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.Write))
-            {
-                Write(stream, false, packRecords);
-            }
-        }
-
-        /// <summary>
-        /// Creates writes the current instance to the specified stream.
-        /// </summary>
         /// <param name="stream">The output stream.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
-        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
+        /// <param name="leaveOpen">Keep the BinaryWriter open</param>
+        public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false)
         {
             if (version != DbfVersion.Unknown)
             {
@@ -155,11 +112,6 @@
                 header = DbfHeader.CreateHeader(header.Version);
             }
 
-            Write(stream, true, packRecords);
-        }
-
-        private void Write(Stream stream, bool leaveOpen, bool packRecords = false)
-        {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding, leaveOpen))
             {
                 header.Write(writer, Fields, Records);
@@ -244,18 +196,6 @@
             writer.Write((byte)0x1a);
         }
 
-        private static string GetMemoPath(string basePath)
-        {
-            string memoPath = Path.ChangeExtension(basePath, "fpt");
-            if (!File.Exists(memoPath))
-            {
-                memoPath = Path.ChangeExtension(basePath, "dbt");
-                if (!File.Exists(memoPath))
-                {
-                    return null;
-                }
-            }
-            return memoPath;
-        }
+
     }
 }

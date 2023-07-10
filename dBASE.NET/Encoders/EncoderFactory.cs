@@ -34,7 +34,7 @@ namespace dBASE.NET.Encoders
             return UnknownEncoder;
         }
 
-        private static T Resolve<T>() where T : IEncoder
+        public static T Resolve<T>() where T : IEncoder
         {
             return Activator.CreateInstance<T>();
         }

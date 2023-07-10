@@ -23,7 +23,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = DateEncoder.Instance.Encode(dateField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<DateEncoder>().Encode(dateField, val, encoding);
 
             // Assert.
             for (int i = 0; i < dateField.Length; i++)
@@ -41,7 +41,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = DateEncoder.Instance.Encode(dateField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<DateEncoder>().Encode(dateField, val, encoding);
 
             // Assert.
             for (int i = 0; i < dateField.Length; i++)

@@ -27,69 +27,49 @@ namespace dBASE.NET
         /// The collection of <see cref="DbfField" /> that represent table header.
         /// </summary>
         public IReadOnlyList<DbfField> Fields => _fields.AsReadOnly();
-        protected readonly List<DbfField> _fields;
-
-        public BaseDbf(IEnumerable<DbfField> fields = null) => _fields = fields?.ToList() ?? new();
 
         /// <summary>
-        /// Reads the contents of streams that initialize the current instance.
+        /// Real collection of <see cref="DbfField" /> that represent table header.
         /// </summary>
-        /// <param name="baseStream">Stream with a database.</param>
-        /// <param name="memoStream">Stream with a memo.</param>
-        public void Read(Stream baseStream, Stream memoStream = null)
+        protected List<DbfField> _fields;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Dbf" />.
+        /// </summary>
+        public BaseDbf(Encoding encoding = null, IEnumerable<DbfField> fields = null)
         {
-            if (baseStream == null)
-            {
-                throw new ArgumentNullException(nameof(baseStream));
-            }
-            if (!baseStream.CanSeek)
-            {
-                throw new InvalidOperationException("The stream must provide positioning (support Seek method).");
-            }
-
-            baseStream.Seek(0, SeekOrigin.Begin);
-
-            //using (BinaryReader reader = new BinaryReader(baseStream))
-            using (BinaryReader reader = new BinaryReader(baseStream, Encoding.ASCII))          //ReadFields() use PeekChar to detect end flag=0D, default Encoding may be UTF8 then clause exception
-            {
-                ReadHeader(reader);
-                byte[] memoData = memoStream != null ? ReadMemos(memoStream) : null;
-                ReadFields(reader);
-
-                // After reading the fields, we move the read pointer to the beginning
-                // of the records, as indicated by the "HeaderLength" value in the header.
-                baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
-                ReadData(reader, memoData);
-            }
+            header = DbfHeader.CreateHeader(DbfVersion.FoxBaseDBase3NoMemo);
+            Encoding = encoding ?? Encoding;
+            _fields = fields?.ToList() ?? new();
         }
 
-        protected abstract void ReadData(BinaryReader reader, byte[] memoData);
-
-        private void ReadHeader(BinaryReader reader)
+        protected DbfHeader ReadHeader(BinaryReader reader)
         {
             // Peek at version number, then try to read correct version header.
             byte versionByte = reader.ReadByte();
             reader.BaseStream.Seek(0, SeekOrigin.Begin);
             DbfVersion version = (DbfVersion)versionByte;
-            header = DbfHeader.CreateHeader(version);
-            header.Read(reader);
+            var newHeader = DbfHeader.CreateHeader(version);
+            newHeader.Read(reader);
+            return newHeader;
         }
 
-        private void ReadFields(BinaryReader reader)
+        protected List<DbfField> ReadFields(BinaryReader reader)
         {
-            _fields.Clear();
+            var fields = new List<DbfField>();
 
             // Fields are terminated by 0x0d char.
             while (reader.PeekChar() != 0x0d)
             {
-                _fields.Add(new DbfField(reader, Encoding));
+                fields.Add(new DbfField(reader, Encoding));
             }
 
             // Read fields terminator.
             reader.ReadByte();
+            return fields;
         }
 
-        private static byte[] ReadMemos(Stream stream)
+        protected static byte[] ReadMemos(Stream stream)
         {
             if (stream == null)
             {

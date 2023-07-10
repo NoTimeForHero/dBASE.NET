@@ -26,6 +26,7 @@ namespace dBASE.NET
         /// </summary>
         public IReadOnlyList<DbfRecord> Records => _records.AsReadOnly();
         private List<DbfRecord> _records = new();
+        private MemoContext memo;
 
         /// <summary>
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
@@ -75,11 +76,11 @@ namespace dBASE.NET
             // of the records, as indicated by the "HeaderLength" value in the header.
             baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
 
-            byte[] memoData = memoStream != null ? Utils.Read.Memos(memoStream) : null;
-            _records = ReadRecords(reader, memoData);
+            memo = new MemoContext(memoStream);
+            _records = ReadRecords(reader, memo);
         }
 
-        private List<DbfRecord> ReadRecords(BinaryReader reader, byte[] memoData)
+        private List<DbfRecord> ReadRecords(BinaryReader reader, MemoContext memoData)
         {
             var records = new List<DbfRecord>();
             // Records are terminated by 0x1a char (officially), or EOF (also seen).

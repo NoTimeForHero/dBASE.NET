@@ -6,13 +6,13 @@
     internal class MemoEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             return null;
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding)
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
         {
             int index = 0;
             // Memo fields of 5+ byts in length store their index in text, e.g. "     39394"
@@ -29,10 +29,10 @@
                 if (index == 0) return null;
             }
 
-            return findMemo(index, memoData, encoding);
+            return findMemo(index, memo, encoding);
         }
 
-        private static string findMemo(int index, byte[] memoData, Encoding encoding)
+        private static string findMemo(int index, MemoContext memoData, Encoding encoding)
         {
             // This is the original implementation of findMemo. It was found that
             // the LINQ methods are orders of magnitude slower than using using array
@@ -46,6 +46,7 @@
 
             // The index is measured from the start of the file, even though the memo file header blocks takes
             // up the first few index positions.
+            /*
             UInt16 blockSize = BitConverter.ToUInt16(new[] { memoData[7], memoData[6] }, 0);
             int length = (int)BitConverter.ToUInt32(
                 new[]
@@ -66,6 +67,8 @@
             }
 
             return encoding.GetString(memoBytes).Trim();
+            */
+            return string.Empty;
         }
     }
 }

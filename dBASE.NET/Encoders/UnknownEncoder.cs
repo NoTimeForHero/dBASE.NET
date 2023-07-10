@@ -8,12 +8,12 @@ namespace dBASE.NET.Encoders
 {
     internal class UnknownEncoder : IEncoder
     {
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             if (!(data is byte[] rawBuffer)) throw new ArgumentException("Input object is not a byte[]!");
             return rawBuffer;
         }
 
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding) => buffer;
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo) => buffer;
     }
 }

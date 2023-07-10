@@ -5,7 +5,7 @@
     internal class LogicalEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             // Convert boolean value to string.
             string text = "?";
@@ -22,7 +22,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding)
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
         {
             string text = encoding.GetString(buffer).Trim().ToUpper();
             if (text == "?") return null;

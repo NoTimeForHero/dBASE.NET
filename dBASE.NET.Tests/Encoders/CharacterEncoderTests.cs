@@ -22,7 +22,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < characterField.Length; i++)
@@ -40,7 +40,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < characterField.Length; i++)
@@ -58,7 +58,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<CharacterEncoder>().Encode(characterField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < characterField.Length; i++)

@@ -7,7 +7,7 @@
     internal class FloatEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             string text = Convert.ToString(data, CultureInfo.InvariantCulture).PadLeft(field.Length, ' ');
             if (text.Length > field.Length)
@@ -19,7 +19,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding)
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
         {
             string text = encoding.GetString(buffer).Trim();
             if (text.Length == 0)

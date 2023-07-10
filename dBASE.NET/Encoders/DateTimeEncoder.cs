@@ -6,7 +6,7 @@
     internal class DateTimeEncoder : IEncoder
     {
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             if (field.Length != 8) throw new ArgumentException("DateTime fields must always be 8 bytes in length.");
 
@@ -40,7 +40,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding)
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
         {
             return ConvertFoxProToDateTime(buffer);
         }

@@ -22,7 +22,7 @@
         }
 
         /// <inheritdoc />
-        public byte[] Encode(DbfField field, object data, Encoding encoding)
+        public byte[] Encode(DbfField field, object data, Encoding encoding, MemoContext memo)
         {
             // Input data maybe various: int, string, whatever.
             string res = data?.ToString();
@@ -40,7 +40,7 @@
         }
 
         /// <inheritdoc />
-        public object Decode(byte[] buffer, byte[] memoData, Encoding encoding)
+        public object Decode(byte[] buffer, Encoding encoding, MemoContext memo)
         {
             string text = encoding.GetString(buffer).Trim();
             if (text.Length == 0) return null;

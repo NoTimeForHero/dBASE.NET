@@ -24,7 +24,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -42,7 +42,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -60,7 +60,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -78,7 +78,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(numericField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)
@@ -96,7 +96,7 @@
 
             // Act.
             var expectedEncodedVal = encoding.GetBytes(expectedVal);
-            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(integerField, val, encoding);
+            var encodedVal = EncoderFactory.Resolve<NumericEncoder>().Encode(integerField, val, encoding, null);
 
             // Assert.
             for (int i = 0; i < numericField.Length; i++)

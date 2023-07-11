@@ -65,5 +65,15 @@ namespace dBASE.NET
             // BUG: Access to disposed stream...
             adapter.WriteBlockData(index, data);
         }
+
+        /// <summary>
+        /// Add new block to memo file
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public int AppendNewBlock(byte[] data)
+        {
+            return adapter.AppendBlock(data);
+        }
     }
 }

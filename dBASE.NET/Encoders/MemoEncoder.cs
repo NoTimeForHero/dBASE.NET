@@ -10,15 +10,25 @@
         /// <inheritdoc />
         public byte[] Encode(EncoderContext encoder, object data)
         {
+            if (data is not string text) throw new ArgumentException("Memo field value must be a string!");
+
             if (!encoder.RecordContext.TryGetValue(Key, out var ctxObj))
-                throw new InvalidOperationException("Missing context data with block index and length!");
-            if (ctxObj is not ContextData ctxData) throw new InvalidOperationException("Invalid context data type!");
+            {
+                var bytes = encoder.Encoding.GetBytes(text);
+                var block = encoder.Memo.AppendNewBlock(bytes);
+                var chars = block.ToString().PadLeft(10);
+                return encoder.Encoding.GetBytes(chars);
+            }
 
-            if (ctxData.blockIndex == ContextData.MissingBlockIndex) return ctxData.inputBuffer;
+            if (ctxObj is ContextData ctxData)
+            {
+                if (ctxData.blockIndex == ContextData.MissingBlockIndex) return ctxData.inputBuffer;
+                var bytes = encoder.Encoding.GetBytes(text);
+                encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
+                return ctxData.inputBuffer;
+            }
 
-            var bytes = encoder.Encoding.GetBytes(data.ToString());
-            encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
-            return ctxData.inputBuffer;
+            throw new InvalidOperationException("Invalid context data type!");
         }
 
         /// <inheritdoc />
@@ -37,7 +47,7 @@
             // Memo fields of 4 bytes store their index as an int.
             if (buffer.Length > 4)
             {
-                string text = encoding.GetString(buffer).Trim();
+                string text = Encoding.ASCII.GetString(buffer).Trim();
                 if (text.Length == 0) return null;
                 index = Convert.ToInt32(text);
             }

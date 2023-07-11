@@ -68,12 +68,12 @@
         /// <summary>
         /// Create an empty record.
         /// </summary>
-        internal DbfRecord(List<DbfField> fields)
+        internal DbfRecord(List<DbfField> fields, MemoContext memoData, Encoding encoding)
         {
             this.fields = fields;
             Data = new List<object>();
             foreach (DbfField field in fields) Data.Add(null);
-            encoderContext = new EncoderContext { };
+            encoderContext = new EncoderContext { Memo = memoData, Encoding = encoding };
         }
 
         public List<object> Data { get; }

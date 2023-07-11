@@ -50,5 +50,39 @@ namespace dBASE.NET.Memo.Adapters
             stream.WriteByte(markerBlockEnd);
             stream.WriteByte(markerBlockEnd);
         }
+
+        public int AppendBlock(byte[] data)
+        {
+            if (data.Length > blockSize) throw new NotImplementedException("Multiblock not supported now!");
+
+            var block = GetFreeBlock();
+
+            var newBlockLen = data.Length + 2;
+            stream.SetLength(block * blockSize + newBlockLen);
+            stream.Seek(block * blockSize, SeekOrigin.Begin);
+
+            stream.Write(data, 0, data.Length);
+            stream.WriteByte(markerBlockEnd);
+            stream.WriteByte(markerBlockEnd);
+
+            SetFreeBlock(block + 1);
+            return block;
+        }
+
+        private int GetFreeBlock()
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            var buffer = new byte[4];
+            var _ = stream.Read(buffer, 0, buffer.Length);
+            var number = BitConverter.ToInt32(buffer, 0);
+            return number;
+        }
+
+        private void SetFreeBlock(int value)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            var buffer = BitConverter.GetBytes(value);
+            stream.Write(buffer, 0, buffer.Length);
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace dBASE.NET
         /// <returns>A <see cref="DbfRecord" /> with the same schema as the <see cref="T:System.Data.DataTable" />.</returns>
         public DbfRecord CreateRecord()
         {
-            DbfRecord record = new(_fields);
+            DbfRecord record = new(_fields, memo, Encoding);
             _records.Add(record);
             return record;
         }

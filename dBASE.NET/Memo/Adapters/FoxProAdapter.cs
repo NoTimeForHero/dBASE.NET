@@ -49,5 +49,10 @@ namespace dBASE.NET.Memo.Adapters
         {
             throw new NotImplementedException();
         }
+
+        public int AppendBlock(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

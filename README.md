@@ -9,8 +9,12 @@ It is based on [dBase Level 7](https://www.dbf2002.com/dbf-file-format.html) wit
 Current progress:
 - ✔️ Reading extra fields +/^/@/?
 - ✔️ Reading and writing DBase memo files
-- 🚧 Creating new memo files
+- 🚧 Full support for extra fields (like AutoIncrement)
 - 🚧 Lazy manipulation with the file (without reading it full to the memory and rewriting full file on drive)
+- 🚧 Supports for memo blocks with different sizes (not only 512 bytes)
+- 🚧 Supports for memo blocks larger 512 bytes
+- 🚧 Move mem block to end of file on overflow
+- 🚧 Creating new memo files
 
 ## Base information
 

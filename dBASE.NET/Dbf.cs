@@ -48,7 +48,7 @@ namespace dBASE.NET
         }
 
         /// <summary>
-        /// 
+        /// Create a new Dbf file with fields
         /// </summary>
         public void Create(IEnumerable<DbfField> fields, bool withMemo = false)
         {
@@ -62,7 +62,7 @@ namespace dBASE.NET
         /// <param name="stream">The output stream.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
-        /// <param name="memoStream"></param>
+        /// <param name="memoStream">Memory stream to write</param>
         /// <param name="leaveOpen">Keep the BinaryWriter open</param>
         public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false, Stream memoStream = null)
         {
@@ -97,7 +97,8 @@ namespace dBASE.NET
 
             if (memoStream == null)
             {
-                // TODO: Throw error if some DbfField has MEMO field but memoStream == null
+                var hasMemoField = _fields.Any(x => x.Type == DbfFieldType.Memo);
+                if (hasMemoField) throw new InvalidOperationException("Missed MEMO file for DBF file with MEMO fields!");
             }
             else
             {

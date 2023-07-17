@@ -36,7 +36,6 @@ namespace dBASE.NET
         /// <param name="path">The output path.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
-        /// <param name="memoType">Type of memo type for specific extension</param>
         public static void Write(this Dbf dbf, string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
             using var stream = File.Open(path, FileMode.Create, FileAccess.Write);

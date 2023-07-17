@@ -21,6 +21,10 @@ namespace dBASE.NET.Encoders
             {DbfFieldType.NullFlags, Resolve<NullFlagsEncoder>()},
             {DbfFieldType.Numeric, Resolve<NumericEncoder>()},
             {DbfFieldType.Long, Resolve<LongEncoder>()},
+
+            {DbfFieldType.AutoIncrement, Resolve<IntegerEncoder>()},
+            {DbfFieldType.RowVersion, Resolve<LongEncoder>()},
+            {DbfFieldType.UnixTime, Resolve<LongEncoder>()},
         };
 
         private static readonly IEncoder UnknownEncoder = Resolve<UnknownEncoder>();

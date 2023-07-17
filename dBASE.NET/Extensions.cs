@@ -15,12 +15,13 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="dbf">Target DBF instance</param>
         /// <param name="path">The file to read.</param>
-        public static void Read(this Dbf dbf, string path)
+        /// <param name="ignoreMemo">Helpeful when you have</param>
+        public static void Read(this Dbf dbf, string path, bool ignoreMemo = false)
         {
             // Open stream for reading.
             using FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             string memoPath = GetMemoPath(path);
-            if (memoPath == null)
+            if (memoPath == null || ignoreMemo)
             {
                 dbf.Read(baseStream);
                 return;

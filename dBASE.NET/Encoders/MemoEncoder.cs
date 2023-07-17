@@ -1,4 +1,6 @@
-﻿namespace dBASE.NET.Encoders
+﻿using dBASE.NET.Memo.Adapters;
+
+namespace dBASE.NET.Encoders
 {
     using System;
     using System.Text;
@@ -11,20 +13,29 @@
         public byte[] Encode(EncoderContext encoder, object data)
         {
             if (data is not string text) throw new ArgumentException("Memo field value must be a string!");
+            var bytes = encoder.Encoding.GetBytes(text);
+
+            byte[] GetBlockIndexData(int block)
+            {
+                var chars = block.ToString().PadLeft(10);
+                return encoder.Encoding.GetBytes(chars);
+            }
 
             if (!encoder.RecordContext.TryGetValue(Key, out var ctxObj))
             {
-                var bytes = encoder.Encoding.GetBytes(text);
                 var block = encoder.Memo.AppendNewBlock(bytes);
-                var chars = block.ToString().PadLeft(10);
-                return encoder.Encoding.GetBytes(chars);
+                return GetBlockIndexData(block);
             }
 
             if (ctxObj is ContextData ctxData)
             {
                 if (ctxData.blockIndex == ContextData.MissingBlockIndex) return ctxData.inputBuffer;
-                var bytes = encoder.Encoding.GetBytes(text);
-                encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
+                var status = encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
+                if (status == BlockWriteStatusEnum.NeedResize)
+                {
+                    var block = encoder.Memo.AppendNewBlock(bytes);
+                    return GetBlockIndexData(block);
+                }
                 return ctxData.inputBuffer;
             }
 

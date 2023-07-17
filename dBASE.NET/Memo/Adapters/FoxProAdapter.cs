@@ -45,7 +45,7 @@ namespace dBASE.NET.Memo.Adapters
             return encoding.GetString(buffer).Trim();
         }
 
-        public void WriteBlockData(int index, byte[] data)
+        public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
             throw new NotImplementedException();
         }

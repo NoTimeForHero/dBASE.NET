@@ -28,7 +28,7 @@ namespace dBASE.NET.Memo.Adapters
             return encoding.GetString(data).Trim();
         }
 
-        public void WriteBlockData(int index, byte[] data)
+        public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
             int oldLength = GetBlockContentSize(index);
             Console.WriteLine($"Block {index} has length: {oldLength}, new length: {data.Length}");
@@ -37,7 +37,7 @@ namespace dBASE.NET.Memo.Adapters
                 int increasedBy = data.Length - oldLength;
                 int canBeAdded = LeftSizeInBlock(blockSize, oldLength);
                 Console.WriteLine($"Block increased by {increasedBy} bytes but allowed only {canBeAdded}");
-                if (increasedBy > canBeAdded) throw new NotImplementedException("Need resize blocks!");
+                if (increasedBy > canBeAdded) return BlockWriteStatusEnum.NeedResize;
             }
 
             var offset = blockSize * index;
@@ -46,12 +46,12 @@ namespace dBASE.NET.Memo.Adapters
             stream.Write(data, 0, data.Length);
             stream.WriteByte(markerBlockEnd);
             stream.WriteByte(markerBlockEnd);
+            return BlockWriteStatusEnum.Success;
         }
 
         public int AppendBlock(byte[] data)
         {
-            if (data.Length > blockSize) throw new NotImplementedException("Multiblock not supported now!");
-
+            int sizeInBlocks = BlocksNeededToFit(blockSize, data.Length);
             var block = GetFreeBlock();
 
             var newBlockLen = data.Length + 2;
@@ -62,7 +62,7 @@ namespace dBASE.NET.Memo.Adapters
             stream.WriteByte(markerBlockEnd);
             stream.WriteByte(markerBlockEnd);
 
-            SetFreeBlock(block + 1);
+            SetFreeBlock(block + sizeInBlocks);
             return block;
         }
 
@@ -123,12 +123,17 @@ namespace dBASE.NET.Memo.Adapters
             stream.Position = position;
         }
 
-        private static int LeftSizeInBlock(int blockSize, int length)
+        private static int BlocksNeededToFit(int blockSize, int length)
         {
             int fullBlocks = length / blockSize;
             int mod = length % blockSize;
             if (mod > 0) fullBlocks += 1;
-            int blocksBytes = blockSize * fullBlocks;
+            return fullBlocks;
+        }
+
+        private static int LeftSizeInBlock(int blockSize, int length)
+        {
+            int blocksBytes = blockSize * BlocksNeededToFit(blockSize, length);
             return blocksBytes - length - 2; // end marker length includes too
         }
     }

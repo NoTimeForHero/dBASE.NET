@@ -36,7 +36,6 @@ namespace dBASE.NET
 
             switch (version)
             {
-                case DbfVersion.dBase4WithMemo:
                 case DbfVersion.FoxBaseDBase3WithMemo:
                     adapter = new DbaseAdapter();
                     break;
@@ -44,6 +43,8 @@ namespace dBASE.NET
                 case DbfVersion.VisualFoxPro:
                     adapter = new FoxProAdapter();
                     break;
+                // DBase IV has different memo format!
+                //case DbfVersion.dBase4WithMemo:
                 case DbfVersion.Unknown:
                     throw new InvalidOperationException("Unknown Dbase Type!");
                 default:
@@ -70,10 +71,10 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="index">Block index</param>
         /// <param name="data">Raw byte data</param>
-        public void WriteBlockData(int index, byte[] data)
+        public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
-            if (stream == null) return;
-            adapter.WriteBlockData(index, data);
+            if (stream == null) return BlockWriteStatusEnum.InvalidStream;
+            return adapter.WriteBlockData(index, data);
         }
 
         /// <summary>

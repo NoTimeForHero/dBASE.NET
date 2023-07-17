@@ -68,5 +68,48 @@ namespace dBASE.NET.Tests.Memo
             Assert.AreEqual(lorem.Length, loremNew.Length);
         }
 
+        [TestMethod]
+        public void TestIncreaseLarge()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/large.dbf");
+
+            // We have 132 free bytes to left
+            var lorem = (string)dbf.Records[2].Data[1];
+            var added = "Somebody once told me".Repeat(100);
+            lorem += added;
+            dbf.Records[2].Data[1] = lorem;
+
+            var record = dbf.CreateRecord();
+            record.Data[0] = "Small";
+            record.Data[1] = "This is a just small text";
+
+            dbf.Write("large_large.dbf");
+            dbf.Read("large_large.dbf");
+            var loremNew = (string)dbf.Records[2].Data[1];
+            Assert.AreEqual(lorem.Length, loremNew.Length);
+        }
+
+        [TestMethod]
+        public void TestAppendLarge()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/large.dbf");
+
+            var record = dbf.CreateRecord();
+            var memo = "Somebody once told me".Repeat(40);
+            record.Data[0] = "Large";
+            record.Data[1] = memo;
+
+            record = dbf.CreateRecord();
+            record.Data[0] = "Small";
+            record.Data[1] = "This is a just small text";
+
+            dbf.Write("large_append.dbf");
+            dbf.Read("large_append.dbf");
+            var memoNew = (string)dbf.Records[dbf.Records.Count - 2].Data[1];
+            Assert.AreEqual(memo.Length, memoNew.Length);
+        }
+
     }
 }

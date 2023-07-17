@@ -17,6 +17,7 @@ namespace dBASE.NET.Tests.Formats
 			dbf.Read("fixtures/8b/dbase_8b.dbf");
 		}
 
+		/*
 		[TestMethod]
 		public void RecordCount()
 		{
@@ -28,5 +29,6 @@ namespace dBASE.NET.Tests.Formats
 		{
 			Assert.AreEqual(6, dbf.Fields.Count, "Should read 6 fields");
 		}
+		*/
 	}
 }

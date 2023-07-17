@@ -13,6 +13,11 @@ namespace dBASE.NET
     public abstract class BaseDbf
     {
         /// <summary>
+        /// Memo field
+        /// </summary>
+        protected readonly MemoContext memo = new();
+
+        /// <summary>
         /// Header of the file
         /// </summary>
         protected DbfHeader header;

@@ -43,5 +43,56 @@ namespace dBASE.NET.Tests
 
             Helpers.AssertThrows<ArgumentOutOfRangeException>(() => fast.GetRecord(3));
         }
+
+        [TestMethod]
+        public void TestWrite()
+        {
+            int recordIndex = 2;
+            var filename = "fast_3.dbf";
+            PrepareFile(filename);
+            var fast = FastDbf.ReadFile(filename);
+            var record = fast.GetRecord(recordIndex);
+
+            var name = "Victor";
+            var data = "This is new information!";
+
+            record.Data[0] = name;
+            record.Data[1] = data;
+            fast.WriteRecord(recordIndex, record);
+            fast.Dispose();
+
+            var dbf = new Dbf();
+            dbf.Read(filename);
+
+            record = dbf.Records[recordIndex];
+            Assert.AreEqual(name, record.Data[0]);
+            Assert.AreEqual(data, record.Data[1]);
+        }
+
+        [TestMethod]
+        public void TestAppend()
+        {
+            var filename = "fast_4.dbf";
+            PrepareFile(filename);
+
+            var fast = FastDbf.ReadFile(filename);
+            var record = fast.CreateRecord();
+
+            var name = "Victor";
+            var data = "This is new information!";
+            record.Data[0] = name;
+            record.Data[1] = data;
+
+            fast.AppendRecord(record);
+            fast.Dispose();
+
+            var dbf = new Dbf();
+            dbf.Read(filename);
+
+            Assert.AreEqual(4, dbf.Records.Count); // Failed because we need update counter in header
+            record = dbf.Records[dbf.Records.Count - 1];
+            Assert.AreEqual(name, record.Data[0]);
+            Assert.AreEqual(data, record.Data[1]);
+        }
     }
 }

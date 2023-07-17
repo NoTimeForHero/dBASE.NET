@@ -34,7 +34,6 @@ namespace dBASE.NET
         public bool HasMemo => memo.HasMemo;
 
         private List<DbfRecord> _records = new();
-        private readonly MemoContext memo = new();
 
         /// <summary>
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.

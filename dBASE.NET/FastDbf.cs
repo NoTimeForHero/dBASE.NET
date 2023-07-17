@@ -14,7 +14,7 @@ namespace dBASE.NET
     {
         private readonly Stream baseStream;
         private readonly BinaryReader reader;
-        private readonly MemoContext memoData = new();
+        private readonly BinaryWriter writer;
 
         /// <summary>
         /// Total count of records in file
@@ -45,6 +45,7 @@ namespace dBASE.NET
         {
             Utils.EnsureStreamSeekable(baseStream);
             reader = new BinaryReader(baseStream, Encoding.ASCII);
+            writer = new BinaryWriter(baseStream, Encoding.ASCII);
             this.baseStream = baseStream;
             Initialize(memoStream);
         }
@@ -61,7 +62,7 @@ namespace dBASE.NET
             }
             else
             {
-                memoData.Initialize(memoStream, header.Version);
+                memo.Initialize(memoStream, header.Version);
             }
 
             // After reading the fields, we move the read pointer to the beginning
@@ -72,12 +73,45 @@ namespace dBASE.NET
             RecordCount = (int)(bodyLength / header.RecordLength);
         }
 
+        /// <summary>
+        /// Get a record by given index
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public DbfRecord GetRecord(int index)
         {
             if (index > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(index));
             var offset = header.HeaderLength + index * header.RecordLength;
             baseStream.Seek(offset, SeekOrigin.Begin);
-            return new DbfRecord(reader, header, _fields, memoData, Encoding);
+            return new DbfRecord(reader, header, _fields, memo, Encoding);
+        }
+
+        /// <summary>
+        /// Writes record to file by offset<br/>
+        /// For add new record use special method <see cref="AppendRecord(DbfRecord)"/>
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void WriteRecord(int index, DbfRecord record)
+        {
+            if (index > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(index));
+            var offset = header.HeaderLength + index * header.RecordLength;
+            baseStream.Seek(offset, SeekOrigin.Begin);
+            record.Write(writer, Encoding);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
+        /// </summary>
+        /// <returns>A <see cref="DbfRecord" /> with the same schema as the <see cref="T:System.Data.DataTable" />.</returns>
+        public DbfRecord CreateRecord() => new(_fields, memo, Encoding);
+
+        /// <summary>
+        /// Writes new record to the end of the file
+        /// </summary>
+        /// <param name="record">Record to write</param>
+        public void AppendRecord(DbfRecord record)
+        {
+            baseStream.Seek(0, SeekOrigin.End);
+            record.Write(writer, Encoding);
         }
 
         /// <summary>
@@ -86,8 +120,9 @@ namespace dBASE.NET
         public void Dispose()
         {
             baseStream?.Dispose();
-            memoData?.Dispose();
+            memo?.Dispose();
             reader?.Dispose();
+            writer?.Dispose();
         }
     }
 }

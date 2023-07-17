@@ -18,6 +18,55 @@ namespace dBASE.NET.Tests.Memo
 
             var lorem = (string)dbf.Records[2].Data[1];
             Assert.AreEqual(1404, lorem.Length);
+            Assert.AreEqual("Lorem", lorem.Substring(0, 5));
+            Assert.AreEqual("Aenean", lorem.Substring(256, 6));
+            Assert.AreEqual("penatibus", lorem.Substring(511, 9));
+            Assert.AreEqual("laoreet, aliqua", lorem.Substring(1018, 15));
+            Assert.AreEqual("duis.", lorem.Substring(1399, 5));
         }
+
+        [TestMethod]
+        public void TestOverwrite()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/large.dbf");
+
+            dbf.Write("test_large.dbf");
+        }
+
+        [TestMethod]
+        public void TestSmallIncrease()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/large.dbf");
+
+            var lorem = (string)dbf.Records[2].Data[1];
+            lorem += " Never gonna give you up!";
+            dbf.Records[2].Data[1] = lorem;
+
+            dbf.Write("large_small.dbf");
+            dbf.Read("large_small.dbf");
+            var loremNew = (string)dbf.Records[2].Data[1];
+            Assert.AreEqual(lorem.Length, loremNew.Length);
+        }
+
+        [TestMethod]
+        public void TestIncreaseToLimit()
+        {
+            var dbf = new Dbf();
+            dbf.Read("fixtures/memo/large.dbf");
+
+            // We have 132 free bytes to left
+            var lorem = (string)dbf.Records[2].Data[1];
+            var added = "ABC".Repeat(100).Substring(0, 130);
+            lorem += added;
+            dbf.Records[2].Data[1] = lorem;
+
+            dbf.Write("large_limit.dbf");
+            dbf.Read("large_limit.dbf");
+            var loremNew = (string)dbf.Records[2].Data[1];
+            Assert.AreEqual(lorem.Length, loremNew.Length);
+        }
+
     }
 }

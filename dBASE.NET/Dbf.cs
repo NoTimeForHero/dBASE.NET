@@ -107,6 +107,7 @@ namespace dBASE.NET
             {
                 // We need copy original stream to allow modification without broke original data
                 var copiedStream = new MemoryStream();
+                memoStream.Position = 0;
                 memoStream.CopyTo(copiedStream);
                 memo.Initialize(copiedStream, header.Version);
             }

@@ -13,6 +13,10 @@ namespace dBASE.NET.Memo.Adapters
         public void Initialize(Stream stream)
         {
             this.stream = stream;
+            var len = stream.Length;
+
+            if (len > 0 && len < blockSize) throw new InvalidDataException("Corrupted header!");
+            if (len == 0) GenerateHeader();
         }
 
         public string GetBlockData(int index, Encoding encoding)
@@ -67,6 +71,18 @@ namespace dBASE.NET.Memo.Adapters
 
             SetFreeBlock(block + 1);
             return block;
+        }
+
+        private void GenerateHeader()
+        {
+            var header = new byte[512];
+            stream.Write(header, 0, header.Length);
+            SetFreeBlock(1);
+            stream.Seek(5, SeekOrigin.Begin);
+            stream.WriteByte(2);
+            stream.Seek(8, SeekOrigin.Begin);
+            var title = Encoding.ASCII.GetBytes("Harbour");
+            stream.Write(title, 0, title.Length);
         }
 
         private int GetFreeBlock()

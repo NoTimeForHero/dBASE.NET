@@ -61,16 +61,18 @@ namespace dBASE.NET.Tests.Memo
             Dbf dbf;
             using var msData = new MemoryStream();
             using var msMemo = new MemoryStream();
+            //using var msData = new FileStream("c_test.dbf", FileMode.Create, FileAccess.ReadWrite);
+            //using var msMemo = new FileStream("c_test.dbt", FileMode.Create, FileAccess.ReadWrite);
 
             var testData = "Hello world!";
 
             dbf = new Dbf();
-            var field = new DbfField("memo", DbfFieldType.Memo, 10);
-            dbf.Create(new[] { field }, DbfVersion.dBase4WithMemo);
+            var field = new DbfField("TEST_MEMO", DbfFieldType.Memo, 10);
+            dbf.Create(new[] { field }, DbfVersion.FoxBaseDBase3WithMemo);
             DbfRecord record = dbf.CreateRecord();
             record.Data[0] = testData;
 
-            dbf.Write(msData, DbfVersion.dBase4WithMemo, memoStream: msMemo, leaveOpen: true);
+            dbf.Write(msData, DbfVersion.FoxBaseDBase3WithMemo, memoStream: msMemo, leaveOpen: true);
 
             dbf = new Dbf();
             dbf.Read(msData, msMemo);

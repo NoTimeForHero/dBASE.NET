@@ -76,8 +76,9 @@
     <Compile Include="Formats\FoxProWithMemo.cs" />
     <Compile Include="Formats\VisualFoxPro.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="Memo\DbaseTests.cs" />
-    <Compile Include="Memo\WrongFields.cs" />
+    <Compile Include="Memo\LargeMemoTests.cs" />
+    <Compile Include="Memo\SimpleTests.cs" />
+    <Compile Include="Memo\WrongFieldsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Formats\VisualFoxProWithAI.cs" />
     <Compile Include="Writing.cs" />
@@ -272,6 +273,18 @@
     <Content Include="fixtures\fields\POST986.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="fixtures\memo\large.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\large.dbt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\simple.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\simple.dbt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dBASE.NET\dBASE.NET.csproj">

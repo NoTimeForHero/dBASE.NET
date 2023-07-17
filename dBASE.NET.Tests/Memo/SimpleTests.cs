@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace dBASE.NET.Tests.Memo
 {
     [TestClass]
-    public class DbaseTests
+    public class SimpleTests
     {
         [TestMethod]
         public void SimpleRead()

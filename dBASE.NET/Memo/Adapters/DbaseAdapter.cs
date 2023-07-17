@@ -25,21 +25,21 @@ namespace dBASE.NET.Memo.Adapters
 
             stream.Seek(offset, SeekOrigin.Begin);
 
-            byte[] tempBlock = new byte[blockSize];
-            var length = stream.Read(tempBlock, 0, blockSize);
-
-            for (var i = 0; i < length - 1; i++)
+            int length = 0;
+            byte prevByte = 0;
+            while (true)
             {
-                if (tempBlock[i] != markerBlockEnd) continue;
-                if (tempBlock[i + 1] == markerBlockEnd)
-                {
-                    length = i;
-                    break;
-                }
+                length++;
+                int readed = stream.ReadByte();
+                if ((byte)readed == markerBlockEnd && prevByte == markerBlockEnd) break;
+                prevByte = (byte)readed;
+                if (readed == -1) throw new InvalidDataException("Block doest not contain end marker!");
             }
+            length -= 2; // Remove last two bytes of marker
 
             var data = new byte[length];
-            Buffer.BlockCopy(tempBlock, 0, data, 0, length);
+            stream.Seek(offset, SeekOrigin.Begin);
+            var _ = stream.Read(data, 0, data.Length);
             return encoding.GetString(data).Trim();
         }
 

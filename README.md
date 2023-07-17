@@ -15,7 +15,7 @@ Current progress:
 3. Memo fields
    - [x] Read and write DBase memo files
    - [x] Creating new memo files
-   - [ ] Supports read memo blocks larger than 512 bytes
+   - [x] Supports read memo blocks larger than 512 bytes
    - [ ] Move memo block to end of file on overflow
    - [ ] Supports memo blocks with different sizes (not only 512 bytes)
 4. Indexes support

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using dBASE.NET.Memo;
 
 namespace dBASE.NET
@@ -13,12 +14,12 @@ namespace dBASE.NET
     /// reading from disk, writing to disk, enumerating fields and enumerating records.
     /// [WARNING] This class reads ands writes ALL file to the memory! Can be slow on large DBF.
     /// </summary>
-    public class Dbf : BaseDbf
+    public class Dbf : BaseDbf, IDisposable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Dbf" />.
         /// </summary>
-        public Dbf(Encoding encoding = null, IEnumerable<DbfField> fields = null) : base(encoding, fields) {}
+        public Dbf(Encoding encoding = null) : base(encoding) {}
 
         /// <summary>
         /// <para>Readonly collection of <see cref="DbfRecord" /> that contains table data.</para>
@@ -26,10 +27,14 @@ namespace dBASE.NET
         /// To delete data update <see cref="DbfRecord.IsDeleted"/> property and overwrite dbf with PACK mode.
         /// </summary>
         public IReadOnlyList<DbfRecord> Records => _records.AsReadOnly();
-        private List<DbfRecord> _records = new();
-        private MemoContext memo;
 
-        public MemoFileType MemoType { get; protected set; }
+        /// <summary>
+        /// Return true if file have underlying memo file
+        /// </summary>
+        public bool HasMemo => memo.HasMemo;
+
+        private List<DbfRecord> _records = new();
+        private MemoContext memo = new(null, null);
 
         /// <summary>
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
@@ -40,6 +45,20 @@ namespace dBASE.NET
             DbfRecord record = new(_fields, memo, Encoding);
             _records.Add(record);
             return record;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Create(IEnumerable<DbfField> fields, bool withMemo = false)
+        {
+            if (withMemo)
+            {
+                var memoStream = new MemoryStream();
+                memo?.Dispose();
+                memo = new MemoContext(memoStream, header);
+            }
+            _fields = fields.ToList();
         }
 
         /// <summary>
@@ -66,9 +85,8 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="baseStream">Stream with a database.</param>
         /// <param name="memoStream">Stream with a memo.</param>
-        public void Read(Stream baseStream, Stream memoStream = null, MemoFileType memoType = MemoFileType.None)
+        public void Read(Stream baseStream, Stream memoStream = null)
         {
-            MemoType = memoType;
             Utils.EnsureStreamSeekable(baseStream);
 
             //using (BinaryReader adapter = new BinaryReader(baseStream))
@@ -82,8 +100,10 @@ namespace dBASE.NET
             // of the records, as indicated by the "HeaderLength" value in the header.
             baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
 
+            memo?.Dispose();
             // TODO: Throw error if some DbfField has MEMO field but memoStream == null
             memo = new MemoContext(memoStream, header);
+
             _records = ReadRecords(reader, memo);
         }
 
@@ -100,6 +120,14 @@ namespace dBASE.NET
                 catch (EndOfStreamException) { }
             }
             return records;
+        }
+
+        /// <summary>
+        /// Cleanup all opened files
+        /// </summary>
+        public void Dispose()
+        {
+            memo.Dispose();
         }
     }
 }

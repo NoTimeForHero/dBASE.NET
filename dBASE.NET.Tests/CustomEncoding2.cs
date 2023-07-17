@@ -35,7 +35,8 @@
         [TestMethod]
         public void WriteGB2312()
         {
-            var dbf = new Dbf(encoding, fields);
+            var dbf = new Dbf(encoding);
+            dbf.Create(fields);
 
             DbfRecord record = dbf.CreateRecord();
             foreach (var field in fields)

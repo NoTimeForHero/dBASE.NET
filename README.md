@@ -1,5 +1,19 @@
 ﻿# dBASE.NET - Read and write DBF files with .NET
 
+This is the fork of [henck/dBASE.NET](https://github.com/henck/dBASE.NET).\
+Deeply thankful to him for awesome library.
+
+The primary target of this fork - add support for reading and writing [x]Harbour Dbase fields.\
+It is based on [dBase Level 7](https://www.dbf2002.com/dbf-file-format.html) with possible additions.
+
+Current progress:
+- ✔️ Reading extra fields +/^/@/?
+- ✔️ Reading and writing DBase memo files
+- 🚧 Creating new memo files
+- 🚧 Lazy manipulation with the file (without reading it full to the memory and rewriting full file on drive)
+
+## Base information
+
 __dBASE.NET__ is a .NET class library used to read FoxBase, dBASE III and dBASE IV .dbf files. Data read
 from a file is returned as a list of typed fields and a list of records. This library is useful to add
 data import from dBASE sources to a .NET project.
@@ -9,28 +23,6 @@ files with and without memo files. A .NET unit test project is part of this repo
 may be added to it over time.
 
 There is [an article describing the dBASE file format](http://www.independent-software.com/dbase-dbf-dbt-file-format.html).
-
-## Installing dBASE.NET
-
-dBASE.NET is available from [nuget](https://www.nuget.org/packages/dBASE.NET/):
-
-* Package manager:
-
-```
-PM> Install-Package dBASE.NET -Version 1.2.2
-```
-
-* .NET CLI:
-
-```
-> dotnet add package dBASE.NET --version 1.2.2
-```
-   
-* Paket CLI:
-
-```
-> paket add dBASE.NET --version 1.2.2
-```
 
 ## Opening a DBF file
 

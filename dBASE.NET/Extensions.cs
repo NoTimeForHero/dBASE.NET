@@ -19,16 +19,16 @@ namespace dBASE.NET
         {
             // Open stream for reading.
             using FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            string memoPath = GetMemoPath(path, out var type);
+            string memoPath = GetMemoPath(path);
             if (memoPath == null)
             {
-                dbf.Read(baseStream, null);
+                dbf.Read(baseStream);
                 return;
             }
             using var memoStream = File.Open(memoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var memoryMemoStream = new MemoryStream();
+            var memoryMemoStream = new MemoryStream(); // TODO: Who will dispose this and when?
             memoStream.CopyTo(memoryMemoStream);
-            dbf.Read(baseStream, memoryMemoStream, type);
+            dbf.Read(baseStream, memoryMemoStream);
         }
 
         /// <summary>
@@ -38,41 +38,31 @@ namespace dBASE.NET
         /// <param name="path">The output path.</param>
         /// <param name="version">The version <see cref="DbfVersion" />. If unknown specified, use current header version.</param>
         /// <param name="packRecords">Remove all records that were marked as deleted</param>
+        /// <param name="memoType">Type of memo type for specific extension</param>
         public static void Write(this Dbf dbf, string path, DbfVersion version = DbfVersion.Unknown, bool packRecords = false)
         {
             using var stream = File.Open(path, FileMode.Create, FileAccess.Write);
 
-            if (dbf.MemoType == MemoFileType.None)
+            if (!dbf.HasMemo)
             {
                 dbf.Write(stream, version, packRecords);
                 return;
             }
 
-            var extension = dbf.MemoType.ToString().ToLower();
+            // TODO: Get memo extension based on DbfVersion
+            var extension = "dbt";
             var memoPath = Path.ChangeExtension(path, extension);
             using var memoStream = File.Open(memoPath, FileMode.Create, FileAccess.Write);
             dbf.Write(stream, version, packRecords, memoStream: memoStream);
         }
 
-        private static string GetMemoPath(string basePath, out MemoFileType type)
+        private static string GetMemoPath(string basePath)
         {
             string path;
-
             path = Path.ChangeExtension(basePath, "fpt");
-            if (File.Exists(path))
-            {
-                type = MemoFileType.FPT;
-                return path;
-            }
-
+            if (File.Exists(path)) return path;
             path = Path.ChangeExtension(basePath, "dbt");
-            if (File.Exists(path))
-            {
-                type = MemoFileType.DBT;
-                return path;
-            }
-
-            type = MemoFileType.None;
+            if (File.Exists(path)) return path;
             return null;
         }
 

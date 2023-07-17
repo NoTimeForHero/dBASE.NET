@@ -12,10 +12,15 @@ namespace dBASE.NET
     /// <summary>
     /// Class for lazy loading memo data
     /// </summary>
-    public class MemoContext
+    public class MemoContext : IDisposable
     {
         private readonly Stream stream;
         private readonly IMemoAdapter adapter;
+
+        /// <summary>
+        /// Return true if file have underlying memo file
+        /// </summary>
+        public bool HasMemo => stream != null;
 
         public void CopyStreamTo(Stream target)
         {
@@ -62,7 +67,6 @@ namespace dBASE.NET
         public void WriteBlockData(int index, byte[] data)
         {
             if (stream == null) return;
-            // BUG: Access to disposed stream...
             adapter.WriteBlockData(index, data);
         }
 
@@ -74,6 +78,14 @@ namespace dBASE.NET
         public int AppendNewBlock(byte[] data)
         {
             return adapter.AppendBlock(data);
+        }
+
+        /// <summary>
+        /// Close memo stream if he still open
+        /// </summary>
+        public void Dispose()
+        {
+            stream?.Dispose();
         }
     }
 }

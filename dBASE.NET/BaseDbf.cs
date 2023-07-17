@@ -36,9 +36,10 @@ namespace dBASE.NET
         /// <summary>
         /// Initializes a new instance of the <see cref="Dbf" />.
         /// </summary>
-        protected BaseDbf(Encoding encoding = null, IEnumerable<DbfField> fields = null)
+        protected BaseDbf(Encoding encoding = null, IEnumerable<DbfField> fields = null, DbfVersion version = DbfVersion.Unknown)
         {
-            header = DbfHeader.CreateHeader(DbfVersion.FoxBaseDBase3NoMemo);
+            if (version == DbfVersion.Unknown) version = DbfVersion.FoxBaseDBase3NoMemo;
+            header = DbfHeader.CreateHeader(version);
             Encoding = encoding ?? Encoding;
             _fields = fields?.ToList() ?? new();
         }

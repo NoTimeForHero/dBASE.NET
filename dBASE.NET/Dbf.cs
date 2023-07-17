@@ -83,6 +83,7 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="baseStream">Stream with a database.</param>
         /// <param name="memoStream">Stream with a memo.</param>
+        /// <exception cref="InvalidOperationException">If you trying to load file with MEMO fields without MEMO stream</exception>
         public void Read(Stream baseStream, Stream memoStream = null)
         {
             Utils.EnsureStreamSeekable(baseStream);

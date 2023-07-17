@@ -7,19 +7,21 @@ The primary target of this fork - add support for reading and writing [xHarbour]
 It is based on [dBase Level 7 Specification](https://www.dbf2002.com/dbf-file-format.html) with possible additions.
 
 Current progress:
-1. Extra fields
+1. Perfomance
+   - [ ] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
+2. Extra fields
    - [x] Reading extra fields +/^/@/?
    - [ ] Full support for extra fields (like AutoIncrement)
-2. Perfomance
-   - [ ] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
 3. Memo fields
    - [x] Read and write DBase memo files
    - [x] Creating new memo files
    - [x] Supports read memo blocks larger than 512 bytes
    - [x] Move memo block to end of file on overflow
-   - [ ] Supports memo blocks with different sizes (not only 512 bytes)
 4. Indexes support
    - [ ] Under construction...
+
+Useful links:
+- [xBase Format](https://www.clicketyclick.dk/databases/xbase/format/)   
 
 ## Base information
 

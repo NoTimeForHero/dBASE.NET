@@ -15,13 +15,12 @@ namespace dBASE.NET
         /// </summary>
         /// <param name="dbf">Target DBF instance</param>
         /// <param name="path">The file to read.</param>
-        /// <param name="ignoreMemo">Helpeful when you have</param>
-        public static void Read(this Dbf dbf, string path, bool ignoreMemo = false)
+        public static void Read(this Dbf dbf, string path)
         {
             // Open stream for reading.
             using FileStream baseStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            string memoPath = GetMemoPath(path);
-            if (memoPath == null || ignoreMemo)
+            string memoPath = Utils.GetMemoPath(path);
+            if (memoPath == null)
             {
                 dbf.Read(baseStream);
                 return;
@@ -53,16 +52,5 @@ namespace dBASE.NET
             using var memoStream = File.Open(memoPath, FileMode.Create, FileAccess.Write);
             dbf.Write(stream, version, packRecords, memoStream: memoStream);
         }
-
-        private static string GetMemoPath(string basePath)
-        {
-            string path;
-            path = Path.ChangeExtension(basePath, "fpt");
-            if (File.Exists(path)) return path;
-            path = Path.ChangeExtension(basePath, "dbt");
-            if (File.Exists(path)) return path;
-            return null;
-        }
-
     }
 }

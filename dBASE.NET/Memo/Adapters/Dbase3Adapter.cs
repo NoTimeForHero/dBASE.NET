@@ -31,12 +31,10 @@ namespace dBASE.NET.Memo.Adapters
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
             int oldLength = GetBlockContentSize(index);
-            Console.WriteLine($"Block {index} has length: {oldLength}, new length: {data.Length}");
             if (data.Length > blockSize)
             {
                 int increasedBy = data.Length - oldLength;
                 int canBeAdded = LeftSizeInBlock(blockSize, oldLength);
-                Console.WriteLine($"Block increased by {increasedBy} bytes but allowed only {canBeAdded}");
                 if (increasedBy > canBeAdded) return BlockWriteStatusEnum.NeedResize;
             }
 

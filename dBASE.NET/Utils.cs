@@ -23,6 +23,16 @@ namespace dBASE.NET
             baseStream.Seek(0, SeekOrigin.Begin);
         }
 
+        public static string GetMemoPath(string basePath)
+        {
+            string path;
+            path = Path.ChangeExtension(basePath, "fpt");
+            if (File.Exists(path)) return path;
+            path = Path.ChangeExtension(basePath, "dbt");
+            if (File.Exists(path)) return path;
+            return null;
+        }
+
         public class Read
         {
             public static DbfHeader Header(BinaryReader reader)
@@ -91,6 +101,5 @@ namespace dBASE.NET
                 writer.Write((byte)0x1a);
             }
         }
-
     }
 }

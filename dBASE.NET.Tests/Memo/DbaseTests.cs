@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,30 @@ namespace dBASE.NET.Tests.Memo
             dbf = new Dbf();
             dbf.Read("fixtures/memo/temp2.dbf");
             Assert.AreEqual(memoData, dbf.Records[3].Data[1]);
+        }
+
+        [TestMethod]
+        public void GenerateNewFile()
+        {
+            Dbf dbf;
+            using var msData = new MemoryStream();
+            using var msMemo = new MemoryStream();
+
+            var testData = "Hello world!";
+
+            dbf = new Dbf();
+            var field = new DbfField("memo", DbfFieldType.Memo, 10);
+            dbf.Create(new[] { field }, DbfVersion.dBase4WithMemo);
+            DbfRecord record = dbf.CreateRecord();
+            record.Data[0] = testData;
+
+            dbf.Write(msData, DbfVersion.dBase4WithMemo, memoStream: msMemo, leaveOpen: true);
+
+            dbf = new Dbf();
+            dbf.Read(msData, msMemo);
+
+            Assert.AreEqual(1, dbf.Records.Count);
+            Assert.AreEqual(testData, dbf.Records[0].Data[0]);
         }
     }
 }

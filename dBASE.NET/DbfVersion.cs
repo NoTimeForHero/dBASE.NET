@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#pragma warning disable CS1591
 
 namespace dBASE.NET
 {
@@ -21,4 +22,15 @@ namespace dBASE.NET
 		FoxPro2WithMemo                  = 0xF5, // DONE
 		FoxBASE                          = 0xFB
 	}
+
+    public class DbfVersionHelper
+    {
+        public static bool HasMemo(DbfVersion version)
+        {
+			if (version == DbfVersion.FoxBaseDBase3WithMemo) return true;
+            if (version == DbfVersion.dBase4WithMemo) return true;
+            if (version == DbfVersion.FoxPro2WithMemo) return true;
+			return false;
+        }
+    }
 }

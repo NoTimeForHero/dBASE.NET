@@ -50,10 +50,13 @@ namespace dBASE.NET
         /// <summary>
         /// Create a new Dbf file with fields
         /// </summary>
-        public void Create(IEnumerable<DbfField> fields, bool withMemo = false)
+        public void Create(IEnumerable<DbfField> fields, DbfVersion version = DbfVersion.Unknown)
         {
             _fields = fields.ToList();
-            if (withMemo) memo.Initialize(new MemoryStream(), header);
+            var isVersionWithMemo = DbfVersionHelper.HasMemo(version);
+            var hasMemoField = _fields.Any(x => x.Type == DbfFieldType.Memo);
+            if (hasMemoField && !isVersionWithMemo) throw new ArgumentException("Missed MEMO file for DBF file with MEMO fields!");
+            if (isVersionWithMemo) memo.Initialize(new MemoryStream(), version);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace dBASE.NET
                 // We need copy original stream to allow modification without broke original data
                 var copiedStream = new MemoryStream();
                 memoStream.CopyTo(copiedStream);
-                memo.Initialize(copiedStream, header);
+                memo.Initialize(copiedStream, header.Version);
             }
 
             _records = ReadRecords(reader, memo);

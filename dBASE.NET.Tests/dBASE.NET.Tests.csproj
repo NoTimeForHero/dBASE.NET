@@ -75,7 +75,9 @@
     <Compile Include="Encoders\NumericEncoderTests.cs" />
     <Compile Include="Formats\FoxProWithMemo.cs" />
     <Compile Include="Formats\VisualFoxPro.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Memo\DbaseTests.cs" />
+    <Compile Include="Memo\WrongFields.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Formats\VisualFoxProWithAI.cs" />
     <Compile Include="Writing.cs" />

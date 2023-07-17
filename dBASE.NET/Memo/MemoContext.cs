@@ -28,13 +28,13 @@ namespace dBASE.NET
             stream.CopyTo(target);
         }
 
-        public void Initialize(Stream stream, DbfHeader header)
+        public void Initialize(Stream stream, DbfVersion version)
         {
             if (stream == null) return;
             this.stream?.Dispose();
             this.stream = stream;
 
-            switch (header.Version)
+            switch (version)
             {
                 case DbfVersion.dBase4WithMemo:
                 case DbfVersion.FoxBaseDBase3WithMemo:
@@ -44,8 +44,10 @@ namespace dBASE.NET
                 case DbfVersion.VisualFoxPro:
                     adapter = new FoxProAdapter();
                     break;
+                case DbfVersion.Unknown:
+                    throw new InvalidOperationException("Unknown Dbase Type!");
                 default:
-                    throw new NotImplementedException($"DBase type not supported: {header.Version}");
+                    throw new NotImplementedException($"DBase type not supported: {version}");
             }
             adapter.Initialize(stream);
         }

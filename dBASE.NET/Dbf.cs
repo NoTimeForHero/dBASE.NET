@@ -10,9 +10,10 @@ namespace dBASE.NET
     using System.Text;
 
     /// <summary>
-    /// The Dbf class encapsulated a dBASE table (.dbf) file, allowing
-    /// reading from disk, writing to disk, enumerating fields and enumerating records.
-    /// [WARNING] This class reads ands writes ALL file to the memory! Can be slow on large DBF.
+    /// The Dbf class encapsulated a dBASE table (.dbf) file into memory, allowing
+    /// reading from disk, writing to disk, enumerating fields and enumerating records.<br/>
+    /// <br/>
+    /// <b>WARNING:</b> This can be slow for large tables. For this cases try use <see cref="FastDbf"/> instead this class
     /// </summary>
     public class Dbf : BaseDbf, IDisposable
     {

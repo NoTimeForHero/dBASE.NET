@@ -110,8 +110,11 @@ namespace dBASE.NET
         /// <param name="record">Record to write</param>
         public void AppendRecord(DbfRecord record)
         {
-            baseStream.Seek(0, SeekOrigin.End);
+            baseStream.Seek(-1, SeekOrigin.End); // Skip end of file marker
             record.Write(writer, Encoding);
+            writer.Write((byte)0x1a);
+            RecordCount += 1;
+            header.SetRecordCount(writer, RecordCount);
         }
 
         /// <summary>

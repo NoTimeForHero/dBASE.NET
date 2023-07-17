@@ -46,5 +46,13 @@ namespace dBASE.NET
 			writer.Write(RecordLength);
 			for (int i = 0; i < 20; i++) writer.Write((byte)0);
 		}
-	}
+
+        internal override void SetRecordCount(BinaryWriter writer, int newCount)
+        {
+            var position = writer.BaseStream.Position;
+            writer.Seek(4, SeekOrigin.Begin);
+			writer.Write((uint)newCount);
+            writer.BaseStream.Position = position;
+        }
+    }
 }

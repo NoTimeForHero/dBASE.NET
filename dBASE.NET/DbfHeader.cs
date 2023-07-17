@@ -79,5 +79,10 @@ namespace dBASE.NET
 		/// Write a .dbf file header to the specified writer.
 		/// </summary>
 		internal abstract void Write(BinaryWriter writer, List<DbfField> fields, List<DbfRecord> records);
-	}
+
+		/// <summary>
+		/// Method to update without rewriting full header
+		/// </summary>
+        internal abstract void SetRecordCount(BinaryWriter writer, int newCount);
+    }
 }

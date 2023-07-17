@@ -84,12 +84,17 @@ namespace dBASE.NET.Tests
             record.Data[1] = data;
 
             fast.AppendRecord(record);
+            fast.AppendRecord(record);
+            Assert.AreEqual(5, fast.RecordCount);
             fast.Dispose();
 
             var dbf = new Dbf();
             dbf.Read(filename);
 
-            Assert.AreEqual(4, dbf.Records.Count); // Failed because we need update counter in header
+            Assert.AreEqual(5, dbf.Records.Count); // Failed because we need update counter in header
+            record = dbf.Records[dbf.Records.Count - 2];
+            Assert.AreEqual(name, record.Data[0]);
+            Assert.AreEqual(data, record.Data[1]);
             record = dbf.Records[dbf.Records.Count - 1];
             Assert.AreEqual(name, record.Data[0]);
             Assert.AreEqual(data, record.Data[1]);

@@ -8,7 +8,7 @@ It is based on [dBase Level 7 Specification](https://www.dbf2002.com/dbf-file-fo
 
 Current progress:
 1. Perfomance
-   - [ ] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
+   - [x] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
 2. Extra fields
    - [x] Reading extra fields +/^/@/?
    - [ ] Full support for extra fields (like AutoIncrement)

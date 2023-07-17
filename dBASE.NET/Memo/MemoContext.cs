@@ -14,8 +14,8 @@ namespace dBASE.NET
     /// </summary>
     public class MemoContext : IDisposable
     {
-        private readonly Stream stream;
-        private readonly IMemoAdapter adapter;
+        private Stream stream;
+        private IMemoAdapter adapter;
 
         /// <summary>
         /// Return true if file have underlying memo file
@@ -28,11 +28,12 @@ namespace dBASE.NET
             stream.CopyTo(target);
         }
 
-        internal MemoContext(Stream stream, DbfHeader header)
+        public void Initialize(Stream stream, DbfHeader header)
         {
             if (stream == null) return;
-
+            this.stream?.Dispose();
             this.stream = stream;
+
             switch (header.Version)
             {
                 case DbfVersion.dBase4WithMemo:
@@ -48,6 +49,9 @@ namespace dBASE.NET
             }
             adapter.Initialize(stream);
         }
+
+
+        internal MemoContext() { }
 
         /// <summary>
         /// Parses block with given index

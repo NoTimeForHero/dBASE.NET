@@ -34,7 +34,7 @@ namespace dBASE.NET
         public bool HasMemo => memo.HasMemo;
 
         private List<DbfRecord> _records = new();
-        private MemoContext memo = new(null, null);
+        private readonly MemoContext memo = new();
 
         /// <summary>
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
@@ -52,13 +52,8 @@ namespace dBASE.NET
         /// </summary>
         public void Create(IEnumerable<DbfField> fields, bool withMemo = false)
         {
-            if (withMemo)
-            {
-                var memoStream = new MemoryStream();
-                memo?.Dispose();
-                memo = new MemoContext(memoStream, header);
-            }
             _fields = fields.ToList();
+            if (withMemo) memo.Initialize(new MemoryStream(), header);
         }
 
         /// <summary>
@@ -100,9 +95,17 @@ namespace dBASE.NET
             // of the records, as indicated by the "HeaderLength" value in the header.
             baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
 
-            memo?.Dispose();
-            // TODO: Throw error if some DbfField has MEMO field but memoStream == null
-            memo = new MemoContext(memoStream, header);
+            if (memoStream == null)
+            {
+                // TODO: Throw error if some DbfField has MEMO field but memoStream == null
+            }
+            else
+            {
+                // We need copy original stream to allow modification without broke original data
+                var copiedStream = new MemoryStream();
+                memoStream.CopyTo(copiedStream);
+                memo.Initialize(copiedStream, header);
+            }
 
             _records = ReadRecords(reader, memo);
         }
@@ -123,7 +126,7 @@ namespace dBASE.NET
         }
 
         /// <summary>
-        /// Cleanup all opened files
+        /// Close memo stream if he still open
         /// </summary>
         public void Dispose()
         {

@@ -26,9 +26,7 @@ namespace dBASE.NET
                 return;
             }
             using var memoStream = File.Open(memoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var memoryMemoStream = new MemoryStream(); // TODO: Who will dispose this and when?
-            memoStream.CopyTo(memoryMemoStream);
-            dbf.Read(baseStream, memoryMemoStream);
+            dbf.Read(baseStream, memoStream);
         }
 
         /// <summary>

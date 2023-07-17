@@ -4,7 +4,7 @@ using System.Text;
 
 namespace dBASE.NET.Memo.Adapters
 {
-    internal class DbaseAdapter : IMemoAdapter
+    internal class Dbase3Adapter : IMemoAdapter
     {
         private Stream stream;
         private int blockSize = 512;

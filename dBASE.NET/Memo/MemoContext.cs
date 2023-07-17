@@ -37,7 +37,7 @@ namespace dBASE.NET
             switch (version)
             {
                 case DbfVersion.FoxBaseDBase3WithMemo:
-                    adapter = new DbaseAdapter();
+                    adapter = new Dbase3Adapter();
                     break;
                 case DbfVersion.FoxPro2WithMemo:
                 case DbfVersion.VisualFoxPro:

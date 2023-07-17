@@ -3,18 +3,21 @@
 This is the fork of [henck/dBASE.NET](https://github.com/henck/dBASE.NET).\
 Deeply thankful to him for awesome library.
 
-The primary target of this fork - add support for reading and writing [xHarbour](http://www.xharbour.org/)/(Harbour)[https://harbour.github.io/] Dbase fields.\
-It is based on [dBase Level 7](https://www.dbf2002.com/dbf-file-format.html) with possible additions.
+The primary target of this fork - add support for reading and writing [xHarbour](http://www.xharbour.org/)/[Harbour](https://harbour.github.io/) Dbase fields.\
+It is based on [dBase Level 7 Specification](https://www.dbf2002.com/dbf-file-format.html) with possible additions.
 
 Current progress:
-✔️ Reading extra fields +/^/@/?
-✔️ Reading and writing DBase memo files
-🚧 Full support for extra fields (like AutoIncrement)
-🚧 Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
-🚧 Supports memo blocks with different sizes (not only 512 bytes)
-🚧 Supports memo blocks larger than 512 bytes
-🚧 Move mem block to end of file on overflow
-🚧 Creating new memo files
+1. Extra fields
+   - [x] Reading extra fields +/^/@/?
+   - [ ] Full support for extra fields (like AutoIncrement)
+2. Perfomance
+   - [ ] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)
+3. Memo fields
+   - [x] Reading and writing DBase memo files
+   - [ ] Creating new memo files
+   - [ ] Supports memo blocks larger than 512 bytes
+   - [ ] Move mem block to end of file on overflow
+   - [ ] Supports memo blocks with different sizes (not only 512 bytes)
 
 ## Base information
 

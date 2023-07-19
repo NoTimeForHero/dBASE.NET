@@ -275,16 +275,28 @@
     <Content Include="fixtures\fields\POST986.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="fixtures\memo\large.dbf">
+    <None Include="fixtures\memo\dbt\large.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fixtures\memo\large.dbt">
+    <None Include="fixtures\memo\dbt\large.dbt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fixtures\memo\simple.dbf">
+    <None Include="fixtures\memo\dbt\simple.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fixtures\memo\simple.dbt">
+    <None Include="fixtures\memo\dbt\simple.dbt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\fpt\large.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\fpt\large.fpt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\fpt\simple.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fixtures\memo\fpt\simple.fpt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

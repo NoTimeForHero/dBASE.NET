@@ -11,11 +11,13 @@ namespace dBASE.NET.Tests.Memo
     [TestClass]
     public class SimpleTests
     {
+        private const string inputFile = "fixtures/memo/dbt/simple.dbf";
+
         [TestMethod]
         public void SimpleRead()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/simple.dbf");
+            dbf.Read(inputFile);
 
             Assert.AreEqual("First user", dbf.Records[0].Data[1]);
             Assert.AreEqual("Second user", dbf.Records[1].Data[1]);
@@ -26,14 +28,14 @@ namespace dBASE.NET.Tests.Memo
         public void SimpleOverwrite()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/simple.dbf");
+            dbf.Read(inputFile);
             var testMessage = "Hello world!";
             dbf.Records[0].Data[1] = testMessage;
 
-            dbf.Write("fixtures/memo/temp.dbf");
+            dbf.Write("temp.dbf");
 
             dbf = new Dbf();
-            dbf.Read("fixtures/memo/temp.dbf");
+            dbf.Read("temp.dbf");
             Assert.AreEqual(testMessage, dbf.Records[0].Data[1]);
         }
 
@@ -43,15 +45,15 @@ namespace dBASE.NET.Tests.Memo
             var memoData = "Hello world!";
 
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/simple.dbf");
+            dbf.Read(inputFile);
             var record = dbf.CreateRecord();
             record.Data[0] = "User4";
             record.Data[1] = memoData;
 
-            dbf.Write("fixtures/memo/temp2.dbf");
+            dbf.Write("temp2.dbf");
 
             dbf = new Dbf();
-            dbf.Read("fixtures/memo/temp2.dbf");
+            dbf.Read("temp2.dbf");
             Assert.AreEqual(memoData, dbf.Records[3].Data[1]);
         }
 

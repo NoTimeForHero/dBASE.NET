@@ -9,7 +9,7 @@ namespace dBASE.NET.Tests
         private void PrepareFile(string target)
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/simple.dbf");
+            dbf.Read("fixtures/memo/dbt/simple.dbf");
             dbf.Write(target);
         }
 

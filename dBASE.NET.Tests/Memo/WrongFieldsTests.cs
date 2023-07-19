@@ -28,7 +28,7 @@ namespace dBASE.NET.Tests.Memo
         {
             Helpers.AssertThrows<InvalidOperationException>(() =>
             {
-                using var stream = new FileStream("fixtures/memo/simple.dbf", FileMode.Open, FileAccess.Read);
+                using var stream = new FileStream("fixtures/memo/dbt/simple.dbf", FileMode.Open, FileAccess.Read);
                 var dbf = new Dbf();
                 dbf.Read(stream);
             });

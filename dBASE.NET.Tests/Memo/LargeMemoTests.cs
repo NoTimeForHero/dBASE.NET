@@ -10,11 +10,13 @@ namespace dBASE.NET.Tests.Memo
     [TestClass]
     public class LargeMemoTests
     {
+        private const string inputFile = "fixtures/memo/dbt/large.dbf";
+
         [TestMethod]
         public void TestRead()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             var lorem = (string)dbf.Records[2].Data[1];
             Assert.AreEqual(1404, lorem.Length);
@@ -29,7 +31,7 @@ namespace dBASE.NET.Tests.Memo
         public void TestOverwrite()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             dbf.Write("test_large.dbf");
         }
@@ -38,7 +40,7 @@ namespace dBASE.NET.Tests.Memo
         public void TestSmallIncrease()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             var lorem = (string)dbf.Records[2].Data[1];
             lorem += " Never gonna give you up!";
@@ -54,7 +56,7 @@ namespace dBASE.NET.Tests.Memo
         public void TestIncreaseToLimit()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             // We have 132 free bytes to left
             var lorem = (string)dbf.Records[2].Data[1];
@@ -72,7 +74,7 @@ namespace dBASE.NET.Tests.Memo
         public void TestIncreaseLarge()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             // We have 132 free bytes to left
             var lorem = (string)dbf.Records[2].Data[1];
@@ -94,7 +96,7 @@ namespace dBASE.NET.Tests.Memo
         public void TestAppendLarge()
         {
             var dbf = new Dbf();
-            dbf.Read("fixtures/memo/large.dbf");
+            dbf.Read(inputFile);
 
             var record = dbf.CreateRecord();
             var memo = "Somebody once told me".Repeat(40);

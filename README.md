@@ -13,10 +13,19 @@ Current progress:
    - [x] Reading extra fields +/^/@/?
    - [ ] Full support for extra fields (like AutoIncrement)
 3. Memo fields
-   - [x] Read and write DBase memo files
-   - [x] Creating new memo files
-   - [x] Supports read memo blocks larger than 512 bytes
-   - [x] Move memo block to end of file on overflow
+   1. DBT
+      - [x] Read and write DBase memo files
+      - [x] Creating new memo files
+      - [x] Supports read memo blocks larger than 512 bytes
+      - [x] Move memo block to end of file on overflow
+      - [ ] Packing file (remove all unused blocks)
+   2. FPT
+      - [x] Read  memo fields
+      - [ ] Write memo fields
+      - [ ] Creating new memo files
+      - [ ] Move memo block to end of file on overflow   
+      - [ ] Variable memo block size (not only 64 byte)
+      - [ ] Packing file (remove all unused blocks)
 4. Indexes support
    - [ ] Under construction...
 

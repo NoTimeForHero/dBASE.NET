@@ -21,7 +21,7 @@ Current progress:
       - [x] Supports write memo blocks larger than %BlockSize
       - [x] Move memo block to end of file on overflow  
       - [x] Variable memo block size (not only 64 byte)
-      - [ ] Packing file (remove all unused blocks)
+      - [x] Packing file (remove all unused blocks)
      
 4. Indexes support
    - [ ] Under construction...

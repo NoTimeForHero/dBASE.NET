@@ -70,8 +70,8 @@ namespace dBASE.NET
         public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false, Stream memoStream = null)
         {
             using BinaryWriter writer = new(stream, Encoding, leaveOpen);
-
             if (version != DbfVersion.Unknown) header = DbfHeader.CreateHeader(version);
+            if (packRecords) memo.BeginPacking(version);
             header.Write(writer, _fields, _records);
             Utils.Write.Fields(writer, _fields, Encoding);
             Utils.Write.Data(writer, _records, Encoding, packRecords);

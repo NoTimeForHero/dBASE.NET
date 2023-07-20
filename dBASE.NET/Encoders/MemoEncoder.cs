@@ -21,14 +21,22 @@ namespace dBASE.NET.Encoders
                 return encoder.Encoding.GetBytes(chars);
             }
 
+            bool isPacking = encoder.Memo.PackerInstance != null;
+
             if (!encoder.RecordContext.TryGetValue(Key, out var ctxObj))
             {
-                var block = encoder.Memo.AppendNewBlock(bytes);
+                var target = isPacking ? encoder.Memo.PackerInstance : encoder.Memo;
+                var block = target.AppendNewBlock(bytes);
                 return GetBlockIndexData(block);
             }
 
             if (ctxObj is ContextData ctxData)
             {
+                if (isPacking)
+                {
+                    var block = encoder.Memo.PackerInstance.AppendNewBlock(bytes);
+                    return GetBlockIndexData(block);
+                }
                 if (ctxData.blockIndex == ContextData.MissingBlockIndex) return ctxData.inputBuffer;
                 var status = encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
                 if (status == BlockWriteStatusEnum.NeedResize)

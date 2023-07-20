@@ -65,7 +65,7 @@ namespace dBASE.NET.Tests
             var dbf = getDbf();
             using (var stream = new MemoryStream())
             {
-                dbf.Write(stream, DbfVersion.FoxBaseDBase3NoMemo, true, true);
+                dbf.Write(stream, DbfVersion.FoxBaseDBase3WithMemo, true, true);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 dbf = new Dbf();

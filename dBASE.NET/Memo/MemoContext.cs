@@ -18,23 +18,27 @@ namespace dBASE.NET
         private BinaryReader reader;
         private BinaryWriter writer;
         private IMemoAdapter adapter;
-        public MemoFormat Format { get; private set; }
+        internal MemoFormat Format { get; private set; }
 
-        /// <summary>
-        /// Return true if file have underlying memo file
-        /// </summary>
-        public bool HasMemo => stream != null;
 
-        public void CopyStreamTo(Stream target)
+        internal MemoContext PackerInstance { get; private set; }
+        internal void BeginPacking(DbfVersion version)
         {
-            stream.Position = 0;
-            stream.CopyTo(target);
+            PackerInstance = new MemoContext();
+            PackerInstance.Initialize(new MemoryStream(), version);
         }
 
-        public void Initialize(Stream stream, DbfVersion version)
+        internal void CopyStreamTo(Stream target)
         {
-            if (stream == null) return;
+            var currentStream = PackerInstance != null ? PackerInstance.stream : stream;
+            currentStream.Position = 0;
+            currentStream.CopyTo(target);
+        }
+
+        internal void Initialize(Stream stream, DbfVersion version)
+        {
             Dispose();
+            if (stream == null) return;
             this.stream = stream;
             reader = new BinaryReader(stream);
             writer = new BinaryWriter(stream);
@@ -101,6 +105,8 @@ namespace dBASE.NET
             stream?.Dispose();
             writer?.Dispose();
             reader?.Dispose();
+            PackerInstance?.Dispose();
+            PackerInstance = null;
         }
     }
 }

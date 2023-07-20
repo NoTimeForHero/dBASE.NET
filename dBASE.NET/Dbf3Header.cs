@@ -23,14 +23,14 @@ namespace dBASE.NET
 			reader.ReadBytes(20); // Skip rest of header.
 		}
 
-		internal override void Write(BinaryWriter writer, List<DbfField> fields, List<DbfRecord> records)
+		internal override void Write(BinaryWriter writer, List<DbfField> fields, List<DbfRecord> records, int? forceRecordCount = null)
 		{
 			this.LastUpdate = DateTime.Now;
 			// Header length = header fields (32b ytes)
 			//               + 32 bytes for each field
       //               + field descriptor array terminator (1 byte)
 			this.HeaderLength = (ushort)(32 + fields.Count * 32 + 1);
-			this.NumRecords = (uint)records.Count;
+			this.NumRecords = (uint)(forceRecordCount ?? records.Count);
 			this.RecordLength = 1;
 			foreach (DbfField field in fields)
 			{

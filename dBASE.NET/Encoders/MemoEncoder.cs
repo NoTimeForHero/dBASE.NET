@@ -7,7 +7,7 @@ namespace dBASE.NET.Encoders
 
     internal class MemoEncoder : IEncoder
     {
-        public static readonly object Key = new();
+        private static readonly object Key = new();
 
         /// <inheritdoc />
         public byte[] Encode(EncoderContext encoder, object data)
@@ -25,8 +25,8 @@ namespace dBASE.NET.Encoders
 
             if (!encoder.RecordContext.TryGetValue(Key, out var ctxObj))
             {
-                var target = isPacking ? encoder.Memo.PackerInstance : encoder.Memo;
-                var block = target.AppendNewBlock(bytes);
+                var target = isPacking ? encoder.Memo.PackerInstance.Adapter : encoder.Memo.Adapter;
+                var block = target.AppendBlock(bytes);
                 return GetBlockIndexData(block);
             }
 
@@ -34,14 +34,14 @@ namespace dBASE.NET.Encoders
             {
                 if (isPacking)
                 {
-                    var block = encoder.Memo.PackerInstance.AppendNewBlock(bytes);
+                    var block = encoder.Memo.PackerInstance.Adapter.AppendBlock(bytes);
                     return GetBlockIndexData(block);
                 }
                 if (ctxData.blockIndex == ContextData.MissingBlockIndex) return ctxData.inputBuffer;
-                var status = encoder.Memo.WriteBlockData(ctxData.blockIndex, bytes);
+                var status = encoder.Memo.Adapter.WriteBlockData(ctxData.blockIndex, bytes);
                 if (status == BlockWriteStatusEnum.NeedResize)
                 {
-                    var block = encoder.Memo.AppendNewBlock(bytes);
+                    var block = encoder.Memo.Adapter.AppendBlock(bytes);
                     return GetBlockIndexData(block);
                 }
                 return ctxData.inputBuffer;
@@ -56,7 +56,7 @@ namespace dBASE.NET.Encoders
             var index = GetBlockIndex(buffer, encoder.Encoding);
             encoder.RecordContext[Key] = new ContextData { inputBuffer = buffer, blockIndex = index ?? ContextData.MissingBlockIndex };
             if (!index.HasValue) return null;
-            return encoder.Memo.GetBlockData(index.Value, encoder.Encoding);
+            return encoder.Memo.Adapter.GetBlockData(index.Value, encoder.Encoding);
         }
 
         private static int? GetBlockIndex(byte[] buffer, Encoding encoding)

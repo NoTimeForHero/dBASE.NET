@@ -65,6 +65,51 @@ namespace dBASE.NET.Tests.Memo
         [TestMethod]
         public void ResizeRecord_FPT() => ResizeRecord(DbfVersion.FoxPro2WithMemo, "F", "fpt", 1088);
 
+        public void CleanRemoved(DbfVersion version, string prefix, string ext, int sizeAfterPack)
+        {
+            Dbf dbf;
+            DbfRecord record;
+            var TEST_LABEL = "Hello world!";
+            var REC_COUNT = 100;
+
+            dbf = new Dbf();
+            var field = new DbfField("TEST_MEMO", DbfFieldType.Memo, 10);
+            dbf.Create(new[] { field }, version);
+
+            for (var i = 0; i < REC_COUNT; i++)
+            {
+                record = dbf.CreateRecord();
+                record.IsDeleted = true;
+                record.Data[0] = $"Test record number: {i+1}";
+            }
+
+            record = dbf.CreateRecord();
+            record.Data[0] = TEST_LABEL;
+
+            using var msDataFast = new MemoryStream();
+            using var msMemoFast = new MemoryStream();
+            dbf.Write(msDataFast, version, memoStream: msMemoFast, leaveOpen: true, packRecords: false);
+
+            dbf = new Dbf();
+            dbf.Read(msDataFast, msMemoFast);
+            Assert.AreEqual(REC_COUNT + 1, dbf.Records.Count, "Record count without packing");
+            Console.WriteLine("Size before compression: " + msMemoFast.Length);
+
+            using var msData = new FileStream($"clean2_{prefix}.dbf", FileMode.Create, FileAccess.ReadWrite);
+            using var msMemo = new FileStream($"clean2_{prefix}.{ext}", FileMode.Create, FileAccess.ReadWrite);
+            dbf.Write(msData, version, memoStream: msMemo, leaveOpen: true, packRecords: true);
+            dbf = new Dbf();
+            dbf.Read(msData, msMemo);
+            Console.WriteLine("Size after compression: " + msMemo.Length);
+            Assert.AreEqual(1, dbf.Records.Count, "Record count after packing");
+            Assert.AreEqual(sizeAfterPack, msMemo.Length, "Wrong memo file length after packing!");
+        }
+
+        [TestMethod]
+        public void CleanRemoved_DBT() => CleanRemoved(DbfVersion.FoxBaseDBase3WithMemo, "D", "dbt", 526);
+
+        [TestMethod]
+        public void CleanRemoved_FPT() => CleanRemoved(DbfVersion.FoxPro2WithMemo, "F", "fpt", 1088);
 
     }
 }

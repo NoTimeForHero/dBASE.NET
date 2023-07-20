@@ -69,10 +69,15 @@ namespace dBASE.NET
         /// <param name="leaveOpen">Keep the BinaryWriter open</param>
         public void Write(Stream stream, DbfVersion version = DbfVersion.Unknown, bool packRecords = false, bool leaveOpen = false, Stream memoStream = null)
         {
+            var recordCount = Records.Count;
             using BinaryWriter writer = new(stream, Encoding, leaveOpen);
             if (version != DbfVersion.Unknown) header = DbfHeader.CreateHeader(version);
-            if (packRecords) memo.BeginPacking(version);
-            header.Write(writer, _fields, _records);
+            if (packRecords)
+            {
+                recordCount = Records.Count(x => !x.IsDeleted);
+                memo.BeginPacking(version);
+            }
+            header.Write(writer, _fields, _records, recordCount);
             Utils.Write.Fields(writer, _fields, Encoding);
             Utils.Write.Data(writer, _records, Encoding, packRecords);
             if (memoStream != null) memo.CopyStreamTo(memoStream);

@@ -20,10 +20,10 @@ Current progress:
       - [x] Move memo block to end of file on overflow
       - [ ] Packing file (remove all unused blocks)
    2. FPT
-      - [x] Read  memo fields
-      - [ ] Write memo fields
-      - [ ] Creating new memo files
-      - [ ] Move memo block to end of file on overflow   
+      - [x] Read and write memo fields
+      - [x] Creating new memo files
+      - [ ] Supports write memo blocks larger than BlockSize
+      - [ ] Move memo block to end of file on overflow  
       - [ ] Variable memo block size (not only 64 byte)
       - [ ] Packing file (remove all unused blocks)
 4. Indexes support

@@ -40,14 +40,13 @@ namespace dBASE.NET
         {
             using var stream = File.Open(path, FileMode.Create, FileAccess.Write);
 
-            if (!dbf.HasMemo)
+            if (dbf.MemoFormat == MemoFormat.Unknown || dbf.MemoFormat == MemoFormat.None)
             {
                 dbf.Write(stream, version, packRecords);
                 return;
             }
-
             // TODO: Get memo extension based on DbfVersion
-            var extension = "dbt";
+            var extension = dbf.MemoFormat.ToString().ToLower();
             var memoPath = Path.ChangeExtension(path, extension);
             using var memoStream = File.Open(memoPath, FileMode.Create, FileAccess.Write);
             dbf.Write(stream, version, packRecords, memoStream: memoStream);

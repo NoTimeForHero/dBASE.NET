@@ -15,7 +15,10 @@ namespace dBASE.NET
     public class MemoContext : IDisposable
     {
         private Stream stream;
+        private BinaryReader reader;
+        private BinaryWriter writer;
         private IMemoAdapter adapter;
+        public MemoFormat Format { get; private set; }
 
         /// <summary>
         /// Return true if file have underlying memo file
@@ -31,8 +34,11 @@ namespace dBASE.NET
         public void Initialize(Stream stream, DbfVersion version)
         {
             if (stream == null) return;
-            this.stream?.Dispose();
+            Dispose();
             this.stream = stream;
+            reader = new BinaryReader(stream);
+            writer = new BinaryWriter(stream);
+            Format = MemoFormatParser.FromVersion(version);
 
             switch (version)
             {
@@ -50,7 +56,7 @@ namespace dBASE.NET
                 default:
                     throw new NotImplementedException($"DBase type not supported: {version}");
             }
-            adapter.Initialize(stream);
+            adapter.Initialize(stream, reader, writer);
         }
 
 
@@ -93,6 +99,8 @@ namespace dBASE.NET
         public void Dispose()
         {
             stream?.Dispose();
+            writer?.Dispose();
+            reader?.Dispose();
         }
     }
 }

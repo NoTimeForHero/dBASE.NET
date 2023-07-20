@@ -30,9 +30,9 @@ namespace dBASE.NET
         public IReadOnlyList<DbfRecord> Records => _records.AsReadOnly();
 
         /// <summary>
-        /// Return true if file have underlying memo file
+        /// Return underlying memo format
         /// </summary>
-        public bool HasMemo => memo.HasMemo;
+        public MemoFormat MemoFormat => memo.Format;
 
         private List<DbfRecord> _records = new();
 

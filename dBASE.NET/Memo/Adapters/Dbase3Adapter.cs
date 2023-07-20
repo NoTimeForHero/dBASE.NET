@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.IO;
 using System.Text;
 
@@ -10,7 +10,7 @@ namespace dBASE.NET.Memo.Adapters
         private int blockSize = 512;
         const byte markerBlockEnd = 0x1A; // 0x1A/26 - block end marker
 
-        public void Initialize(Stream stream)
+        public void Initialize(Stream stream, BinaryReader reader, BinaryWriter writer)
         {
             this.stream = stream;
             var len = stream.Length;
@@ -31,7 +31,7 @@ namespace dBASE.NET.Memo.Adapters
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
             int oldLength = GetBlockContentSize(index);
-            if (data.Length > blockSize)
+            if (data.Length > blockSize - 2) // TODO: Write test if data.Length == blockSize
             {
                 int increasedBy = data.Length - oldLength;
                 int canBeAdded = LeftSizeInBlock(blockSize, oldLength);

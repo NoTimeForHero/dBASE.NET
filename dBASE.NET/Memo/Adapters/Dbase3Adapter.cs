@@ -7,6 +7,7 @@ namespace dBASE.NET.Memo.Adapters
     internal class Dbase3Adapter : IMemoAdapter
     {
         private Stream stream;
+        private const int blockMetaSize = 2; // Meta-Information like block end marker
         private int blockSize = 512;
         const byte markerBlockEnd = 0x1A; // 0x1A/26 - block end marker
 
@@ -31,10 +32,10 @@ namespace dBASE.NET.Memo.Adapters
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
             int oldLength = GetBlockContentSize(index);
-            if (data.Length > blockSize - 2) // TODO: Write test if data.Length == blockSize
+            if (data.Length > blockSize - blockMetaSize)
             {
                 int increasedBy = data.Length - oldLength;
-                int canBeAdded = LeftSizeInBlock(blockSize, oldLength);
+                int canBeAdded = Utils.LeftSizeInBlock(blockSize, oldLength + blockMetaSize);
                 if (increasedBy > canBeAdded) return BlockWriteStatusEnum.NeedResize;
             }
 
@@ -49,10 +50,10 @@ namespace dBASE.NET.Memo.Adapters
 
         public int AppendBlock(byte[] data)
         {
-            int sizeInBlocks = BlocksNeededToFit(blockSize, data.Length);
+            int sizeInBlocks = Utils.BlocksNeededToFit(blockSize, data.Length + blockMetaSize);
             var block = GetFreeBlock();
 
-            var newBlockLen = data.Length + 2;
+            var newBlockLen = data.Length + blockMetaSize;
             stream.SetLength(block * blockSize + newBlockLen);
             stream.Seek(block * blockSize, SeekOrigin.Begin);
 
@@ -119,20 +120,6 @@ namespace dBASE.NET.Memo.Adapters
             var buffer = BitConverter.GetBytes(value);
             stream.Write(buffer, 0, buffer.Length);
             stream.Position = position;
-        }
-
-        private static int BlocksNeededToFit(int blockSize, int length)
-        {
-            int fullBlocks = length / blockSize;
-            int mod = length % blockSize;
-            if (mod > 0) fullBlocks += 1;
-            return fullBlocks;
-        }
-
-        private static int LeftSizeInBlock(int blockSize, int length)
-        {
-            int blocksBytes = blockSize * BlocksNeededToFit(blockSize, length);
-            return blocksBytes - length - 2; // end marker length includes too
         }
     }
 }

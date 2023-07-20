@@ -9,6 +9,7 @@ namespace dBASE.NET.Memo.Adapters
     {
         private const int headerSize = 1024;
         private const int defaultBlockSize = 64;
+        private const int blockMetaSize = 8; // Meta-Information like block end marker
 
         private BinaryWriter writer;
         private BinaryReader reader;
@@ -60,7 +61,15 @@ namespace dBASE.NET.Memo.Adapters
 
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
-            if (data.Length >= blockSize) throw new NotImplementedException("Large data is not supported!");
+            stream.Seek(index * blockSize + 4, SeekOrigin.Begin);
+            var oldLength = (int)reader.ReadUInt32Reverse();
+            if (data.Length > blockSize - blockMetaSize)
+            {
+                int increasedBy = data.Length - oldLength;
+                int canBeAdded = Utils.LeftSizeInBlock(blockSize, oldLength + blockMetaSize);
+                if (increasedBy > canBeAdded) return BlockWriteStatusEnum.NeedResize;
+            }
+
             stream.Seek(index * blockSize + 4, SeekOrigin.Begin);
             writer.WriteReverse(data.Length);
             writer.Write(data);
@@ -69,16 +78,16 @@ namespace dBASE.NET.Memo.Adapters
 
         public int AppendBlock(byte[] data)
         {
-            if (data.Length >= blockSize) throw new NotImplementedException("Large data is not supported!");
-
+            int sizeInBlocks = Utils.BlocksNeededToFit(blockSize, data.Length + blockMetaSize);
             var index = GetFreeBlock();
-            var totalLength = (index + 1) * blockSize;
+
+            var totalLength = (index + sizeInBlocks) * blockSize;
             stream.SetLength(totalLength);
 
             stream.Seek(index * blockSize + 4, SeekOrigin.Begin);
             writer.WriteReverse(data.Length);
             writer.Write(data);
-            SetFreeBlock(index + 1);
+            SetFreeBlock(index + sizeInBlocks);
             return index;
         }
 

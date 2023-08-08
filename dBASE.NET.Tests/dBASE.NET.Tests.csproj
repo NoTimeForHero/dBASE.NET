@@ -78,6 +78,7 @@
     <Compile Include="Formats\FoxProWithMemo.cs" />
     <Compile Include="Formats\VisualFoxPro.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Index\Basic.cs" />
     <Compile Include="Memo\PackMemoTests.cs" />
     <Compile Include="Memo\LargeMemoTests.cs" />
     <Compile Include="Memo\SimpleTests.cs" />

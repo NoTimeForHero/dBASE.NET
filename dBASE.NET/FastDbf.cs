@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dBASE.NET.Encoders;
 
 namespace dBASE.NET
 {
@@ -71,6 +72,8 @@ namespace dBASE.NET
 
             var bodyLength = baseStream.Length - header.HeaderLength;
             RecordCount = (int)(bodyLength / header.RecordLength);
+
+            encoderContext = new EncoderContext { Encoding = Encoding, Memo = memo };
         }
 
         /// <summary>
@@ -83,6 +86,16 @@ namespace dBASE.NET
             var offset = header.HeaderLength + index * header.RecordLength;
             baseStream.Seek(offset, SeekOrigin.Begin);
             return new DbfRecord(reader, header, _fields, memo, Encoding);
+        }
+
+        private EncoderContext encoderContext;
+
+        public object GetColumn(int row, int column)
+        {
+            if (row > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(row));
+            var offset = header.HeaderLength + row * header.RecordLength;
+            baseStream.Seek(offset, SeekOrigin.Begin);
+            return null;
         }
 
         /// <summary>

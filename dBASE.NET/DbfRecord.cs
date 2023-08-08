@@ -61,7 +61,8 @@
                 offset += field.Length;
 
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-                Data.Add(encoder.Decode(encoderContext, buffer));
+                var data = encoder.Decode(encoderContext, buffer);
+                Data.Add(data);
             }
         }
 

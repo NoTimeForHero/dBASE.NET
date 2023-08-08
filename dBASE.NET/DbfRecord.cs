@@ -55,6 +55,7 @@
             int offset = 0;
             foreach (DbfField field in fields)
             {
+                encoderContext.Field = field;
                 // Copy bytes from record buffer into field buffer.
                 byte[] buffer = new byte[field.Length];
                 Array.Copy(row, offset, buffer, 0, field.Length);
@@ -143,6 +144,7 @@
 
         internal void Write(BinaryWriter writer, Encoding encoding)
         {
+            encoderContext.Encoding = encoding;
             // Write marker
             var marker = (byte)(IsDeleted ? Marker.Deleted : Marker.Normal);
             writer.Write(marker);
@@ -151,7 +153,6 @@
             foreach (DbfField field in fields)
             {
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-                encoderContext.Encoding = encoding;
                 encoderContext.Field = field;
                 byte[] buffer = encoder.Encode(encoderContext, Data[index]);
                 if (buffer.Length > field.Length)

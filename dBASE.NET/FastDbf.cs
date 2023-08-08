@@ -116,6 +116,7 @@ namespace dBASE.NET
             var offset = CalculateOffset(row, column);
             baseStream.Seek(offset, SeekOrigin.Begin);
             var field = _fields[column];
+            encoderContext.Field = field;
             var buffer = reader.ReadBytes(field.Length);
             IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
             return encoder.Decode(encoderContext, buffer);
@@ -127,6 +128,7 @@ namespace dBASE.NET
         /// </summary>
         public void SetValue(int row, int column, object value)
         {
+            // BUG: With MEMO field this method ALWAYS create new block!
             var offset = CalculateOffset(row, column);
             var field = _fields[column];
             IEncoder encoder = EncoderFactory.GetEncoder(field.Type);

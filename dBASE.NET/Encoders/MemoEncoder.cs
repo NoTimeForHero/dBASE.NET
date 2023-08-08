@@ -1,4 +1,5 @@
-﻿using dBASE.NET.Memo.Adapters;
+﻿using System.Linq;
+using dBASE.NET.Memo.Adapters;
 
 namespace dBASE.NET.Encoders
 {
@@ -25,6 +26,9 @@ namespace dBASE.NET.Encoders
 
             if (!encoder.RecordContext.TryGetValue(Key, out var ctxObj))
             {
+                // If input text is empty  do not create new block in memo...
+                if (bytes.Length == 0) return new byte[encoder.Field.Length];
+
                 var target = isPacking ? encoder.Memo.PackerInstance.Adapter : encoder.Memo.Adapter;
                 var block = target.AppendBlock(bytes);
                 return GetBlockIndexData(block);

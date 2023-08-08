@@ -65,7 +65,8 @@
     <Compile Include="CustomEncoding2.cs" />
     <Compile Include="CustomEncoding.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FastDbfTests.cs" />
+    <Compile Include="FastDBF\FastColumns.cs" />
+    <Compile Include="FastDBF\SimpleTests.cs" />
     <Compile Include="Formats\Dbase3WithMemoStreamRead.cs" />
     <Compile Include="Formats\Dbase3WithMemo.cs" />
     <Compile Include="DeletedRecords.cs" />

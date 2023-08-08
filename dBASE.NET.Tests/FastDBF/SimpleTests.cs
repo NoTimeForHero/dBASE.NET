@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace dBASE.NET.Tests
+namespace dBASE.NET.Tests.FastDBF
 {
     [TestClass]
-    public class FastDbfTests
+    public class SimpleTests
     {
         private void PrepareFile(string target)
         {

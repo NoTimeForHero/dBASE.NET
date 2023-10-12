@@ -13,6 +13,7 @@ namespace dBASE.NET
     /// </summary>
     public class FastDbf : BaseDbf, IDisposable
     {
+        private readonly bool readOnly;
         private readonly Stream baseStream;
         private readonly BinaryReader reader;
         private readonly BinaryWriter writer;
@@ -44,12 +45,13 @@ namespace dBASE.NET
         /// Initializes a new instance of the <see cref="FastDbf" />.
         /// </summary>
         /// <exception cref="InvalidOperationException">If you trying to load file with MEMO fields without MEMO stream</exception>
-        public FastDbf(Stream baseStream, Stream memoStream = null, Encoding encoding = null) : base(encoding)
+        public FastDbf(Stream baseStream, Stream memoStream = null, Encoding encoding = null, bool readOnly = false) : base(encoding)
         {
             Utils.EnsureStreamSeekable(baseStream);
-            reader = new BinaryReader(baseStream, Encoding.ASCII);
-            writer = new BinaryWriter(baseStream, Encoding.ASCII);
+            this.readOnly = readOnly;
             this.baseStream = baseStream;
+            reader = new BinaryReader(baseStream, Encoding.ASCII);
+            if (!readOnly) writer = new BinaryWriter(baseStream, Encoding.ASCII);
             Initialize(memoStream);
         }
 
@@ -128,6 +130,7 @@ namespace dBASE.NET
         /// </summary>
         public void SetValue(int row, int column, object value)
         {
+            if (readOnly) throw new InvalidOperationException("File is Readonly!");
             // BUG: With MEMO field this method ALWAYS create new block!
             var offset = CalculateOffset(row, column);
             var field = _fields[column];
@@ -148,6 +151,7 @@ namespace dBASE.NET
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void WriteRecord(int index, DbfRecord record)
         {
+            if (readOnly) throw new InvalidOperationException("File is Readonly!");
             if (index > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(index));
             var offset = header.HeaderLength + index * header.RecordLength;
             baseStream.Seek(offset, SeekOrigin.Begin);
@@ -158,7 +162,11 @@ namespace dBASE.NET
         /// Creates a new <see cref="DbfRecord" /> with the same schema as the table.
         /// </summary>
         /// <returns>A <see cref="DbfRecord" /> with the same schema as the <see cref="T:System.Data.DataTable" />.</returns>
-        public DbfRecord CreateRecord() => new(_fields, memo, Encoding);
+        public DbfRecord CreateRecord()
+        {
+            if (readOnly) throw new InvalidOperationException("File is Readonly!");
+            return new(_fields, memo, Encoding);
+        }
 
         /// <summary>
         /// Writes new record to the end of the file
@@ -166,6 +174,7 @@ namespace dBASE.NET
         /// <param name="record">Record to write</param>
         public void AppendRecord(DbfRecord record)
         {
+            if (readOnly) throw new InvalidOperationException("File is Readonly!");
             baseStream.Seek(-1, SeekOrigin.End); // Skip end of file marker
             record.Write(writer, Encoding);
             writer.Write((byte)0x1a);

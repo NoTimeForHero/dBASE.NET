@@ -43,6 +43,8 @@ namespace dBASE.NET
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastDbf" />.
+        /// <br/>
+        /// <b>BUG:</b> readOnly flag currently not supported with <b>MEMO</b> fields
         /// </summary>
         /// <exception cref="InvalidOperationException">If you trying to load file with MEMO fields without MEMO stream</exception>
         public FastDbf(Stream baseStream, Stream memoStream = null, Encoding encoding = null, bool readOnly = false) : base(encoding)
@@ -55,7 +57,7 @@ namespace dBASE.NET
             Initialize(memoStream);
         }
 
-        private void Initialize(Stream memoStream)
+        private void Initialize(Stream memoStream, bool readOnly = false)
         {
             header = Utils.Read.Header(reader);
             _fields = Utils.Read.Fields(reader, Encoding);
@@ -71,7 +73,8 @@ namespace dBASE.NET
             if (memoStream == null)
             {
                 var hasMemoField = _fields.Any(x => x.Type == DbfFieldType.Memo);
-                if (hasMemoField) throw new InvalidOperationException("Missed MEMO file for DBF file with MEMO fields!");
+                // TODO: This hack is needed because MEMO fields not supported readonly mode
+                if (!readOnly && hasMemoField) throw new InvalidOperationException("Missed MEMO file for DBF file with MEMO fields!");
             }
             else
             {

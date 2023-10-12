@@ -28,17 +28,17 @@ namespace dBASE.NET
         /// <summary>
         /// Initializes a new instance of the <see cref="FastDbf" />.
         /// </summary>
-        public static FastDbf ReadFile(string path, Encoding encoding = null)
+        public static FastDbf ReadFile(string path, Encoding encoding = null, bool readOnly = false)
         {
             // Open stream for reading.
             var baseStream = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             string memoPath = Utils.GetMemoPath(path);
             if (memoPath == null)
             {
-                return new FastDbf(baseStream, encoding: encoding);
+                return new FastDbf(baseStream, encoding: encoding, readOnly: readOnly);
             }
             var memoStream = File.Open(memoPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            return new FastDbf(baseStream, memoStream, encoding);
+            return new FastDbf(baseStream, memoStream, encoding, readOnly);
         }
 
         /// <summary>
@@ -91,12 +91,25 @@ namespace dBASE.NET
         /// Get a record by given index
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public DbfRecord GetRecord(int index)
+        public DbfRecord GetRecord(int rowIndex)
         {
-            if (index > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(index));
-            var offset = header.HeaderLength + index * header.RecordLength;
+            if (rowIndex > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            var offset = header.HeaderLength + rowIndex * header.RecordLength;
             baseStream.Seek(offset, SeekOrigin.Begin);
             return new DbfRecord(reader, header, _fields, memo, Encoding);
+        }
+
+        /// <summary>
+        /// Check is record at specific index is deleted
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public bool IsDeleted(int rowIndex)
+        {
+            if (rowIndex > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            var offset = header.HeaderLength + rowIndex * header.RecordLength;
+            baseStream.Seek(offset, SeekOrigin.Begin);
+            byte marker = reader.ReadByte();
+            return marker == (byte)DbfRecordMarker.Deleted;
         }
 
         private int CalculateOffset(int row, int column)

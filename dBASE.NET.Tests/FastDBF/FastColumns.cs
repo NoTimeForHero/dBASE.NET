@@ -39,6 +39,28 @@ namespace dBASE.NET.Tests.FastDBF
         }
 
         [TestMethod]
+        public void TestDeleted()
+        {
+            var fast = FastDbf.ReadFile("fixtures/deleted/data.dbf");
+            Assert.IsFalse(fast.IsDeleted(0), "Record 1 is NOT deleted");
+            Assert.IsFalse(fast.IsDeleted(1), "Record 2 is NOT deleted");
+            Assert.IsTrue(fast.IsDeleted(2), "Record 3 is deleted");
+            Assert.IsTrue(fast.IsDeleted(3), "Record 4 is deleted");
+            Assert.IsFalse(fast.IsDeleted(5), "Record 5 is NOT deleted");
+            fast.Dispose();
+        }
+
+        [TestMethod]
+        public void TestReadonly()
+        {
+            var fast = FastDbf.ReadFile("fixtures/deleted/data.dbf", readOnly: true);
+            Helpers.AssertThrows<InvalidOperationException>(() => fast.CreateRecord());
+            Helpers.AssertThrows<InvalidOperationException>(() => fast.AppendRecord(null));
+            Helpers.AssertThrows<InvalidOperationException>(() => fast.WriteRecord(24, null));
+            fast.Dispose();
+        }
+
+        [TestMethod]
         public void TestWrite()
         {
             var filename = "fastcol_3.dbf";

@@ -7,6 +7,12 @@
     using System.Linq;
     using System.Text;
 
+    internal enum DbfRecordMarker
+    {
+        Normal = 0x20,
+        Deleted = 0x2a,
+    }
+
     /// <summary>
     /// DbfRecord encapsulates a record in a .dbf file. It contains an array with
     /// data (as an Object) for each field.
@@ -15,12 +21,6 @@
     {
         private const string defaultSeparator = ",";
         private const string defaultMask = "{name}={value}";
-
-        private enum Marker
-        {
-            Normal = 0x20,
-            Deleted = 0x2a,
-        }
 
         private readonly List<DbfField> fields;
         private readonly EncoderContext encoderContext;
@@ -35,10 +35,10 @@
             byte marker = reader.ReadByte();
             switch (marker)
             {
-                case (byte)Marker.Normal:
+                case (byte)DbfRecordMarker.Normal:
                     // Normal, not-deleted
                     break;
-                case (byte)Marker.Deleted:
+                case (byte)DbfRecordMarker.Deleted:
                     IsDeleted = true;
                     break;
                 default:
@@ -146,7 +146,7 @@
         {
             encoderContext.Encoding = encoding;
             // Write marker
-            var marker = (byte)(IsDeleted ? Marker.Deleted : Marker.Normal);
+            var marker = (byte)(IsDeleted ? DbfRecordMarker.Deleted : DbfRecordMarker.Normal);
             writer.Write(marker);
 
             int index = 0;

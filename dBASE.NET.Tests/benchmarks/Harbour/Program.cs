@@ -19,7 +19,7 @@ internal static class Program
         Environment.SetEnvironmentVariable(DatasetPathVariable, Path.GetFullPath(args[0]));
         string[] options = args.Length == 1 ? new[] { "--filter", "*" } : args.Skip(1).ToArray();
 
-        var summaries = BenchmarkSwitcher.FromTypes(new[] { typeof(HarbourReadBenchmarks) }).Run(options);
+        var summaries = BenchmarkSwitcher.FromTypes(new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks) }).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||
             summary.Reports.Any(report => !report.Success || report.ResultStatistics == null)) ? 1 : 0;
     }

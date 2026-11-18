@@ -49,7 +49,8 @@ public class HarbourReadBenchmarks
         }
         long total = SequentialGetRecord();
         long selected = SequentialGetValue();
-        if (total != BlockReadRecords() || total != BlockReadAllValues() || selected != BlockReadValues() || selected != RandomGetValue())
+        if (total != BlockReadRecords() || total != BlockReadAllValues() || total != RandomGetRecord() ||
+            selected != BlockReadValues() || selected != RandomGetValue())
             throw new InvalidOperationException("Bulk reads differ from indexed reads.");
     }
 
@@ -88,6 +89,15 @@ public class HarbourReadBenchmarks
     }
 
     [Benchmark]
+    public long RandomGetRecord()
+    {
+        long sum = 0;
+        foreach (int row in randomRows)
+            sum += (long)(double)table.GetRecord(row)[idColumn];
+        return sum;
+    }
+
+    [Benchmark]
     public long RandomGetValue()
     {
         long sum = 0;
@@ -110,6 +120,7 @@ public class HarbourReadBenchmarks
             {
                 var reference = expected.GetRecord(index);
                 var indexed = table.GetRecord(index);
+                table.GetRecord(randomRows[index]);
                 if (projected.RowIndex != index || projected.IsDeleted != reference.IsDeleted ||
                     indexed.IsDeleted != reference.IsDeleted || table.IsDeleted(index) != reference.IsDeleted)
                     throw new InvalidOperationException($"Record metadata differs at row {index}.");
@@ -126,6 +137,18 @@ public class HarbourReadBenchmarks
             }
             if (index != expected.RecordCount)
                 throw new InvalidOperationException("Unexpected physical record count.");
+        }
+        var idField = table.Fields[idColumn];
+        var previousType = idField.Type;
+        try
+        {
+            idField.Type = DbfFieldType.Character;
+            if (!Equals("1", table.GetRecord(0)[idColumn]))
+                throw new InvalidOperationException("Indexed record decoding ignored a schema change.");
+        }
+        finally
+        {
+            idField.Type = previousType;
         }
         VerifyShortField();
     }
@@ -156,6 +179,15 @@ public class HarbourReadBenchmarks
                 file.Flush();
                 if (!Equals("Я", indexed.GetValue(lastRow, nameColumn)))
                     throw new InvalidOperationException("A short field read included bytes outside the available range.");
+                try
+                {
+                    indexed.GetRecord(lastRow);
+                    throw new InvalidOperationException("A short record read included bytes outside the available range.");
+                }
+                catch (ArgumentException)
+                {
+                    // The field crosses the actual end of the record.
+                }
             }
         }
         finally

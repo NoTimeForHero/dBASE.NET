@@ -33,13 +33,28 @@
             IsDeleted = isDeleted;
         }
 
-        internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding)
+        internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding,
+            byte[] readBuffer = null)
             : this(fields, memoData, encoding, DecodeDeletionMarker(reader.ReadByte()))
         {
             // Read entire record as sequence of bytes.
             // Note that record length includes marker.
-            byte[] row = reader.ReadBytes(header.RecordLength - 1);
-            if (row.Length == 0)
+            int payloadLength = header.RecordLength - 1;
+            byte[] row;
+            int bytesRead;
+#if NET8_0_OR_GREATER
+            if (readBuffer != null)
+            {
+                row = readBuffer;
+                bytesRead = reader.BaseStream.ReadAtLeast(row.AsSpan(0, payloadLength), payloadLength, throwOnEndOfStream: false);
+            }
+            else
+#endif
+            {
+                row = reader.ReadBytes(payloadLength);
+                bytesRead = row.Length;
+            }
+            if (bytesRead == 0)
                 throw new EndOfStreamException();
 
             // Read data for each field.
@@ -47,6 +62,10 @@
             foreach (DbfField field in fields)
             {
                 encoderContext.Field = field;
+#if NET8_0_OR_GREATER
+                if (bytesRead != row.Length && offset + field.Length > bytesRead)
+                    throw new ArgumentException("The field extends beyond the end of the DBF record.");
+#endif
                 var fieldBytes = new ArraySegment<byte>(row, offset, field.Length);
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
                 Data.Add(encoder.Decode(encoderContext, fieldBytes));

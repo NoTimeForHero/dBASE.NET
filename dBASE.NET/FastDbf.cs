@@ -24,6 +24,7 @@ namespace dBASE.NET
 #if NET8_0_OR_GREATER
         private readonly bool canReuseReadBuffers;
         private byte[] fieldReadBuffer;
+        private byte[] recordReadBuffer;
 #endif
 
         /// <summary>
@@ -126,6 +127,14 @@ namespace dBASE.NET
         {
             if ((uint)rowIndex >= (uint)RecordCount) throw new ArgumentOutOfRangeException(nameof(rowIndex));
             baseStream.Seek(RecordOffset(rowIndex), SeekOrigin.Begin);
+#if NET8_0_OR_GREATER
+            if (canReuseReadBuffers)
+            {
+                // The extra byte makes every field a slice, even if it occupies the entire payload.
+                recordReadBuffer ??= new byte[header.RecordLength];
+                return new DbfRecord(reader, header, _fields, memo, Encoding, recordReadBuffer);
+            }
+#endif
             return new DbfRecord(reader, header, _fields, memo, Encoding);
         }
 

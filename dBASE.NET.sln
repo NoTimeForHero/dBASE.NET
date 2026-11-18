@@ -14,6 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dBASE.NET.Tests", "dBASE.NET.Tests", "{1A6D1212-B74A-44D9-A12A-691B1FC6742A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{921BFB58-9741-44C2-B513-491CA3E34534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarbourBenchmarks", "dBASE.NET.Tests\benchmarks\Harbour\HarbourBenchmarks.csproj", "{21E0C507-4A05-4CC0-ABD2-FC7F14000B37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,11 +34,20 @@ Global
 		{EE26BEE5-5B9F-4C95-A4E2-23050EE64DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE26BEE5-5B9F-4C95-A4E2-23050EE64DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE26BEE5-5B9F-4C95-A4E2-23050EE64DF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E0C507-4A05-4CC0-ABD2-FC7F14000B37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E0C507-4A05-4CC0-ABD2-FC7F14000B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E0C507-4A05-4CC0-ABD2-FC7F14000B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E0C507-4A05-4CC0-ABD2-FC7F14000B37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38FA9562-DB68-4BBD-B3BC-5EBE4E269BC1}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE26BEE5-5B9F-4C95-A4E2-23050EE64DF9} = {1A6D1212-B74A-44D9-A12A-691B1FC6742A}
+		{921BFB58-9741-44C2-B513-491CA3E34534} = {1A6D1212-B74A-44D9-A12A-691B1FC6742A}
+		{21E0C507-4A05-4CC0-ABD2-FC7F14000B37} = {921BFB58-9741-44C2-B513-491CA3E34534}
 	EndGlobalSection
 EndGlobal

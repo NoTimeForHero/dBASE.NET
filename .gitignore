@@ -2,3 +2,5 @@
 *.suo
 
 /dBASE.NET.sln.DotSettings.user
+
+BenchmarkDotNet.Artifacts/

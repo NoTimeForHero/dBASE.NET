@@ -25,18 +25,22 @@ $toolchain = @{
 
 ## Замеры
 
+Для проверки стенда на 1 000 записей запустите четыре сценария BenchmarkDotNet 0.15.8 на обеих целевых платформах.
+
 ```powershell
 $bench = './dBASE.NET.Tests/benchmarks/Harbour/HarbourBenchmarks.csproj'
-dotnet run -c Release --project $bench -- ./dBASE.NET.Tests/fixtures/harbour/data/test_main.dbf
-
-foreach ($rows in 100000, 1000000) {
-    $output = "./dBASE.NET.Tests/bin/harbour-$rows"
-    & $generator -OutputDirectory $output -BenchmarkRows $rows @toolchain
-    dotnet run -c Release --project $bench -- "$output/test_main.dbf"
+$dataset = './dBASE.NET.Tests/fixtures/harbour/data/test_main.dbf'
+foreach ($target in 'net472', 'net8.0') {
+    dotnet run -c Release -f $target --project $bench -- $dataset --filter '*' --runtimes $target --job Dry
+    if ($LASTEXITCODE -ne 0) { throw "Benchmark failed for $target" }
 }
 ```
 
-Замер прогревает каждую операцию и выводит медиану трёх прогонов. Для открытия один прогон состоит из 100 открытий с закрытием, в таблице указано время на каждое. Для чтения один прогон обходит все физические записи. Аллокации считаются для потока, выполняющего замер.
+Регулярный замер использует набор на 10 000 записей. Команды генерации, параметры запуска, сводка и JSON сохранены вместе. [Базовый замер efb9651](../../../docs/benchmarks/efb9651/README.md)
+
+### Исторический замер через Stopwatch
+
+До перехода на BenchmarkDotNet стенд прогревал каждую операцию и выводил медиану трёх прогонов. Для открытия один прогон состоял из 100 открытий с закрытием, в таблице указано время на каждое. Для чтения один прогон обходил все физические записи. Аллокации считались для потока, выполнявшего замер.
 
 Первый локальный замер на Windows, .NET 8.0.0 x64, Intel Core i7-12700K. В таблице указаны миллисекунды и выделенные байты на операцию или полный проход.
 

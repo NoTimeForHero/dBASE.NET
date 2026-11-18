@@ -1,4 +1,7 @@
 using System;
+#if NET8_0_OR_GREATER
+using System.Buffers.Binary;
+#endif
 using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
@@ -62,6 +65,10 @@ public class RandomReadBenchmarks
 
         if (BufferedFileStream() != expected || PointReadsWithReusedBuffer() != expected || MappedFile() != expected)
             throw new InvalidOperationException("The readers disagree on the same physical DBF fields.");
+#if NET8_0_OR_GREATER
+        if (PositionalRead() != expected)
+            throw new InvalidOperationException("RandomAccess returned different bytes for the same physical DBF fields.");
+#endif
     }
 
     [Benchmark(Baseline = true)]
@@ -69,6 +76,31 @@ public class RandomReadBenchmarks
 
     [Benchmark]
     public long PointReadsWithReusedBuffer() => ReadFile(1);
+
+#if NET8_0_OR_GREATER
+    [Benchmark]
+    public long PositionalRead()
+    {
+        using (var handle = File.OpenHandle(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            Span<byte> buffer = stackalloc byte[sizeof(long)];
+            long sum = 0;
+            foreach (long offset in offsets)
+            {
+                int count = 0;
+                while (count < buffer.Length)
+                {
+                    int read = RandomAccess.Read(handle, buffer.Slice(count), offset + count);
+                    if (read == 0)
+                        throw new EndOfStreamException();
+                    count += read;
+                }
+                sum = unchecked(sum + BinaryPrimitives.ReadInt64LittleEndian(buffer));
+            }
+            return sum;
+        }
+    }
+#endif
 
     [Benchmark]
     public long MappedFile()
@@ -87,8 +119,20 @@ public class RandomReadBenchmarks
 
     private long ReadFile(int bufferSize)
     {
-        // BinaryReader keeps a reusable buffer for each eight-byte point read.
         using (var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize))
+#if NET8_0_OR_GREATER
+        {
+            Span<byte> buffer = stackalloc byte[sizeof(long)];
+            long sum = 0;
+            foreach (long offset in offsets)
+            {
+                file.Position = offset;
+                file.ReadExactly(buffer);
+                sum = unchecked(sum + BinaryPrimitives.ReadInt64LittleEndian(buffer));
+            }
+            return sum;
+        }
+#else
         using (var reader = new BinaryReader(file))
         {
             long sum = 0;
@@ -99,5 +143,6 @@ public class RandomReadBenchmarks
             }
             return sum;
         }
+#endif
     }
 }

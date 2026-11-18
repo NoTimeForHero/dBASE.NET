@@ -11,6 +11,7 @@ public class HarbourReadBenchmarks
     private Encoding encoding;
     private string path;
     private FastDbf table;
+    private int[] allColumns;
     private int idColumn;
     private int amountColumn;
     private int nameColumn;
@@ -29,6 +30,7 @@ public class HarbourReadBenchmarks
         path = Environment.GetEnvironmentVariable(Program.DatasetPathVariable);
         table = OpenTable();
         var fields = table.Fields;
+        allColumns = Enumerable.Range(0, fields.Count).ToArray();
         idColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "ID");
         amountColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_AMOUNT");
         nameColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "FULL_NAME");
@@ -36,7 +38,8 @@ public class HarbourReadBenchmarks
         dateColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_DATE");
         printedColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "IS_PRINTED");
         memoColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "NOTE");
-        if (SequentialGetRecord() != BlockReadRecords() || SequentialGetValue() != BlockReadValues())
+        long total = SequentialGetRecord();
+        if (total != BlockReadRecords() || total != BlockReadAllValues() || SequentialGetValue() != BlockReadValues())
             throw new InvalidOperationException("Bulk reads differ from indexed reads.");
     }
 
@@ -80,6 +83,15 @@ public class HarbourReadBenchmarks
         long sum = 0;
         foreach (var record in table.ReadRecords())
             sum += (long)(double)record[idColumn];
+        return sum;
+    }
+
+    [Benchmark]
+    public long BlockReadAllValues()
+    {
+        long sum = 0;
+        foreach (var row in table.ReadValues(allColumns))
+            sum += (long)(double)row.Values[idColumn];
         return sum;
     }
 

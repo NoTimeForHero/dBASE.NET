@@ -12,6 +12,7 @@ public class HarbourReadBenchmarks
     private string path;
     private FastDbf table;
     private int idColumn;
+    private int amountColumn;
     private int dateColumn;
     private int printedColumn;
     private int memoColumn;
@@ -27,6 +28,7 @@ public class HarbourReadBenchmarks
         table = OpenTable();
         var fields = table.Fields;
         idColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "ID");
+        amountColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_AMOUNT");
         dateColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_DATE");
         printedColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "IS_PRINTED");
         memoColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "NOTE");
@@ -86,6 +88,15 @@ public class HarbourReadBenchmarks
             sum += (long)(double)row.Values[0];
             if ((bool)row.Values[1]) sum++;
         }
+        return sum;
+    }
+
+    [Benchmark]
+    public double BlockReadAmount()
+    {
+        double sum = 0;
+        foreach (var row in table.ReadValues(amountColumn))
+            sum += (double)row.Values[0];
         return sum;
     }
 

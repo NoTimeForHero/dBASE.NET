@@ -49,6 +49,24 @@
         /// <inheritdoc />
         public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
+            if (field.Count != 0 && context.CanDecodeAsciiFields)
+            {
+                var unpadded = FieldBytes.TrimAsciiSpaces(field);
+                if (unpadded.Count == 0)
+                    return null;
+                if (FieldBytes.TryDecodeAsciiInteger(unpadded, out int integer))
+                    return (double)integer;
+
+                if (FieldBytes.IsAscii(unpadded))
+                {
+#if NET8_0_OR_GREATER
+                    if (double.TryParse(unpadded.AsSpan(), CultureInfo.InvariantCulture, out double value))
+                        return value;
+#endif
+                    field = unpadded;
+                }
+            }
+
             string text = context.Encoding.GetString(field.Array, field.Offset, field.Count).Trim();
             if (text.Length == 0)
             {

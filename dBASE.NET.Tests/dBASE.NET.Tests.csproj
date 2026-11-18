@@ -77,6 +77,7 @@
     <Compile Include="DbfRecordTests.cs" />
     <Compile Include="Encoders\CharacterEncoderTests.cs" />
     <Compile Include="Encoders\DateEncoderTests.cs" />
+    <Compile Include="Encoders\LogicalEncoderTests.cs" />
     <Compile Include="Encoders\NumericEncoderTests.cs" />
     <Compile Include="Formats\FoxProWithMemo.cs" />
     <Compile Include="Formats\VisualFoxPro.cs" />

@@ -8,7 +8,22 @@ namespace dBASE.NET.Encoders
 {
     public class EncoderContext
     {
-        public Encoding Encoding { get; set; }
+        private Encoding encoding;
+
+        public Encoding Encoding
+        {
+            get => encoding;
+            set
+            {
+                if (ReferenceEquals(encoding, value))
+                    return;
+
+                encoding = value;
+                CanDecodeAsciiFields = FieldBytes.HasStandardAsciiBytes(value);
+            }
+        }
+
+        internal bool CanDecodeAsciiFields { get; private set; }
         public MemoContext Memo { get; set; }
         public DbfField Field { get; set; }
 

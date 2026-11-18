@@ -25,9 +25,9 @@ namespace dBASE.NET.Other.Extensions
 
         public static uint ReadUInt32Reverse(this BinaryReader reader)
         {
-            var bytes = reader.ReadBytes(4);
-            Array.Reverse(bytes);
-            return BitConverter.ToUInt32(bytes, 0);
+            uint value = reader.ReadUInt32();
+            return (value >> 24) | ((value >> 8) & 0x0000ff00) |
+                ((value << 8) & 0x00ff0000) | (value << 24);
         }
 
         public static void WriteReverse(this BinaryWriter writer, int value)

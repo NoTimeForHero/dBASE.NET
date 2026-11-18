@@ -1,6 +1,7 @@
 ﻿ using System;
 using System.IO;
 using System.Text;
+using dBASE.NET.Encoders;
 
 namespace dBASE.NET.Memo.Adapters
 {
@@ -8,8 +9,10 @@ namespace dBASE.NET.Memo.Adapters
     {
         private Stream stream;
         private const int blockMetaSize = 2; // Meta-Information like block end marker
-        private int blockSize = 512;
+        private const int blockSize = 512;
+        private const int maxReusableLength = 64 * 1024;
         const byte markerBlockEnd = 0x1A; // 0x1A/26 - block end marker
+        private byte[] readBuffer = new byte[blockSize];
 
         public void Initialize(Stream stream, BinaryReader reader, BinaryWriter writer)
         {
@@ -23,16 +26,21 @@ namespace dBASE.NET.Memo.Adapters
 
         public string GetBlockData(int index, Encoding encoding)
         {
-            GotoBlock(index);
-            int length = GetBlockContentSize(index);
-            var data = new byte[length];
-            var _ = stream.Read(data, 0, data.Length);
-            return encoding.GetString(data).Trim();
+            var data = ReadBlock(index, out int length);
+            stream.Seek((long)blockSize * index + length, SeekOrigin.Begin);
+            if (encoding.IsReadOnly && FieldBytes.IsSystemEncoding(encoding))
+                return encoding.GetString(data, 0, length).Trim();
+
+            var exactData = new byte[length];
+            Buffer.BlockCopy(data, 0, exactData, 0, length);
+            return encoding.GetString(exactData).Trim();
         }
 
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)
         {
-            int oldLength = GetBlockContentSize(index);
+            long position = stream.Position;
+            ReadBlock(index, out int oldLength);
+            stream.Position = position;
             if (data.Length > blockSize - blockMetaSize)
             {
                 int increasedBy = data.Length - oldLength;
@@ -40,7 +48,7 @@ namespace dBASE.NET.Memo.Adapters
                 if (increasedBy > canBeAdded) return BlockWriteStatusEnum.NeedResize;
             }
 
-            var offset = blockSize * index;
+            var offset = (long)blockSize * index;
             stream.Seek(offset, SeekOrigin.Begin);
 
             stream.Write(data, 0, data.Length);
@@ -55,8 +63,9 @@ namespace dBASE.NET.Memo.Adapters
             var block = GetFreeBlock();
 
             var newBlockLen = data.Length + blockMetaSize;
-            stream.SetLength(block * blockSize + newBlockLen);
-            stream.Seek(block * blockSize, SeekOrigin.Begin);
+            long offset = (long)block * blockSize;
+            stream.SetLength(offset + newBlockLen);
+            stream.Seek(offset, SeekOrigin.Begin);
 
             stream.Write(data, 0, data.Length);
             stream.WriteByte(markerBlockEnd);
@@ -66,29 +75,35 @@ namespace dBASE.NET.Memo.Adapters
             return block;
         }
 
-        private int GetBlockContentSize(int block)
+        private byte[] ReadBlock(int index, out int length)
         {
-            var position = stream.Position;
-            GotoBlock(block);
-            int length = 0;
-            byte prevByte = 0;
+            stream.Seek((long)blockSize * index, SeekOrigin.Begin);
+            var data = readBuffer;
+            int count = 0;
             while (true)
             {
-                length++;
-                int readed = stream.ReadByte();
-                if ((byte)readed == markerBlockEnd && prevByte == markerBlockEnd) break;
-                prevByte = (byte)readed;
-                if (readed == -1) throw new InvalidDataException("Block doest not contain end marker!");
-            }
-            length -= 2; // Remove last two bytes of marker
-            stream.Position = position;
-            return length;
-        }
+                if (count == data.Length)
+                {
+                    Array.Resize(ref data, checked(data.Length * 2));
+                    if (data.Length <= maxReusableLength)
+                        readBuffer = data;
+                }
 
-        private void GotoBlock(int index)
-        {
-            var offset = blockSize * index;
-            stream.Seek(offset, SeekOrigin.Begin);
+                int read = stream.Read(data, count, Math.Min(blockSize, data.Length - count));
+                if (read == 0)
+                    throw new InvalidDataException("Block does not contain an end marker.");
+
+                int end = count + read;
+                for (int i = Math.Max(1, count); i < end; i++)
+                {
+                    if (data[i] == markerBlockEnd && data[i - 1] == markerBlockEnd)
+                    {
+                        length = i - 1;
+                        return data;
+                    }
+                }
+                count = end;
+            }
         }
 
         private void GenerateHeader()

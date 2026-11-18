@@ -11,15 +11,18 @@ internal static class Program
     {
         if (args.Length == 0 || !File.Exists(args[0]))
         {
-            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [BenchmarkDotNet options]");
+            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [BenchmarkDotNet options] or <memo/dbt/large.dbf> --dbt [BenchmarkDotNet options]");
             return 2;
         }
 
         // The generated benchmark process starts in a different working directory.
         Environment.SetEnvironmentVariable(DatasetPathVariable, Path.GetFullPath(args[0]));
-        string[] options = args.Length == 1 ? new[] { "--filter", "*" } : args.Skip(1).ToArray();
+        bool dbt = args.Length > 1 && args[1] == "--dbt";
+        int optionStart = dbt ? 2 : 1;
+        string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
+        var scenarios = dbt ? new[] { typeof(DbtMemoBenchmarks) } : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks) };
 
-        var summaries = BenchmarkSwitcher.FromTypes(new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks) }).Run(options);
+        var summaries = BenchmarkSwitcher.FromTypes(scenarios).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||
             summary.Reports.Any(report => !report.Success || report.ResultStatistics == null)) ? 1 : 0;
     }

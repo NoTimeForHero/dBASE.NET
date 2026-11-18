@@ -134,5 +134,14 @@ public class HarbourReadBenchmarks
         return length;
     }
 
+    [Benchmark]
+    public long BlockReadMemo()
+    {
+        long length = 0;
+        foreach (var row in table.ReadValues(memoColumn))
+            length += (row.Values[0] as string)?.Length ?? 0;
+        return length;
+    }
+
     private FastDbf OpenTable() => FastDbf.ReadFile(path, encoding, readOnly: true);
 }

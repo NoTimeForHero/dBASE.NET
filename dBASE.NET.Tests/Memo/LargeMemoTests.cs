@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dBASE.NET.Memo.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace dBASE.NET.Tests.Memo
@@ -139,5 +141,70 @@ namespace dBASE.NET.Tests.Memo
         [TestMethod]
         public void TestAppendLarge_FPT() => TestAppendLarge("fixtures/memo/fpt/large.dbf", "F");
 
+        [TestMethod]
+        public void DbtReadHandlesMarkerAcrossBlocksAndShortReads()
+        {
+            var bytes = new byte[1027];
+            var payload = new string('A', 200) + (char)0x1a + new string('B', 310);
+            Encoding.ASCII.GetBytes(payload).CopyTo(bytes, 512);
+            bytes[1023] = 0x1a;
+            bytes[1024] = 0x1a;
+            bytes[1025] = (byte)'X';
+
+            using (var stream = new MemoryStream(bytes))
+            using (var shortStream = new ShortMemoStream(bytes))
+            {
+                foreach (var input in new[] { stream, shortStream })
+                {
+                    var adapter = new Dbase3Adapter();
+                    adapter.Initialize(input, null, null);
+                    Assert.AreEqual(payload, adapter.GetBlockData(1, Encoding.ASCII));
+                    Assert.AreEqual(1023L, input.Position);
+                }
+            }
+
+            bytes[1024] = 0;
+            using var malformed = new MemoryStream(bytes);
+            var broken = new Dbase3Adapter();
+            broken.Initialize(malformed, null, null);
+            Helpers.AssertThrows<InvalidDataException>(() => broken.GetBlockData(1, Encoding.ASCII));
+        }
+
+        [TestMethod]
+        public void FptReadKeepsWhitespaceAndUsesOnlyAvailablePayload()
+        {
+            var bytes = new byte[907];
+            bytes[7] = 64;
+            Encoding.ASCII.GetBytes("Harbour").CopyTo(bytes, 8);
+            bytes[518] = 1;
+            bytes[519] = 44; // Big-endian length of 300.
+            string longMemo = " " + new string('x', 298) + " ";
+            Encoding.ASCII.GetBytes(longMemo).CopyTo(bytes, 520);
+            bytes[903] = 10; // The last memo has only three bytes before EOF.
+            Encoding.ASCII.GetBytes(" y ").CopyTo(bytes, 904);
+
+            using var stream = new ShortMemoStream(bytes);
+            using var reader = new BinaryReader(stream);
+            var adapter = new FoxProAdapter();
+            adapter.Initialize(stream, reader, null);
+
+            Assert.AreEqual(longMemo, adapter.GetBlockData(8, Encoding.ASCII));
+            Assert.AreEqual(" y ", adapter.GetBlockData(14, Encoding.ASCII));
+            Assert.AreEqual("3", adapter.GetBlockData(14, new LengthReportingEncoding()));
+            Assert.AreEqual(longMemo, adapter.GetBlockData(8, Encoding.ASCII));
+        }
+
+        private sealed class ShortMemoStream : MemoryStream
+        {
+            public ShortMemoStream(byte[] bytes) : base(bytes) { }
+
+            public override int Read(byte[] buffer, int offset, int count)
+                => base.Read(buffer, offset, Math.Min(count, 13));
+        }
+
+        private sealed class LengthReportingEncoding : UTF8Encoding
+        {
+            public override string GetString(byte[] bytes) => bytes.Length.ToString();
+        }
     }
 }

@@ -7,16 +7,18 @@ namespace dBASE.NET.Encoders
     {
         public static bool HasStandardAsciiBytes(Encoding encoding)
         {
-            if (encoding == null)
-                return false;
+            return encoding != null && IsSystemEncoding(encoding) && encoding.CodePage is 866 or 1251 or 20127 or 65001;
+        }
 
+        public static bool IsSystemEncoding(Encoding encoding)
+        {
             // An application can supply a custom Encoding with the same code page.
             var assembly = encoding.GetType().Assembly;
             bool systemEncoding = assembly == typeof(Encoding).Assembly;
 #if NET8_0_OR_GREATER
             systemEncoding |= assembly == typeof(CodePagesEncodingProvider).Assembly;
 #endif
-            return systemEncoding && encoding.CodePage is 866 or 1251 or 20127 or 65001;
+            return systemEncoding;
         }
 
         public static ArraySegment<byte> TrimAsciiSpaces(ArraySegment<byte> field)

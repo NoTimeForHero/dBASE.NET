@@ -1,0 +1,90 @@
+{
+   "Title":"DbtMemoBenchmarks-20261119-015921",
+   "HostEnvironmentInfo":{
+      "BenchmarkDotNetCaption":"BenchmarkDotNet",
+      "BenchmarkDotNetVersion":"0.15.8",
+      "OsVersion":"Windows 10 (10.0.19045.6456/22H2/2022Update)",
+      "ProcessorName":"12th Gen Intel Core i7-12700K",
+      "PhysicalProcessorCount":1,
+      "PhysicalCoreCount":12,
+      "LogicalCoreCount":20,
+      "RuntimeVersion":".NET Framework 4.8.1 (4.8.9310.0)",
+      "Architecture":"X64",
+      "HasAttachedDebugger":false,
+      "HasRyuJit":true,
+      "Configuration":"RELEASE",
+      "DotNetCliVersion":"10.0.404",
+      "ChronometerFrequency":{
+         "Hertz":10000000
+      },
+      "HardwareTimerKind":"Unknown"
+   },
+   "Benchmarks":[
+      {
+         "DisplayInfo":"DbtMemoBenchmarks.ReadMemoValues: .NET Framework 4.7.2(Runtime=.NET Framework 4.7.2, Toolchain=net472, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3)",
+         "Namespace":null,
+         "Type":"DbtMemoBenchmarks",
+         "Method":"ReadMemoValues",
+         "MethodTitle":"ReadMemoValues",
+         "Parameters":"",
+         "FullName":"DbtMemoBenchmarks.ReadMemoValues",
+         "HardwareIntrinsics":" VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               32068066.666666668,32593800,32463166.666666668,32745750,33706800,33762950,33011600,33026700
+            ],
+            "N":8,
+            "Min":32068066.666666668,
+            "LowerFence":31607766.666666672,
+            "Q1":32561141.666666668,
+            "Median":32878675,
+            "Mean":32922354.166666668,
+            "Q3":33196725,
+            "UpperFence":34150100,
+            "Max":33762950,
+            "InterquartileRange":635583.33333333209,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":207906.51475239545,
+            "Variance":345800951011.90424,
+            "StandardDeviation":588048.42573711928,
+            "Skewness":0.19502611726144453,
+            "Kurtosis":1.534384365305129,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":32922354.166666668,
+               "StandardError":207906.51475239545,
+               "Level":12,
+               "Margin":1124334.0064919244,
+               "Lower":31798020.160174742,
+               "Upper":34046688.173158593
+            },
+            "Percentiles":{
+               "P0":32068066.666666668,
+               "P25":32561141.666666668,
+               "P50":32878675,
+               "P67":33022019,
+               "P80":33434760,
+               "P85":33672795,
+               "P90":33723645,
+               "P95":33743297.5,
+               "P100":33762950
+            }
+         },
+         "Memory":{
+            "Gen0Collections":4,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":6,
+            "BytesAllocatedPerOperation":4631271
+         }
+      }
+   ]
+}

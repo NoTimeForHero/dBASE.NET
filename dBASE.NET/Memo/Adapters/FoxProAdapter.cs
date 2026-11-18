@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using dBASE.NET.Encoders;
 using dBASE.NET.Other.Extensions;
 
 namespace dBASE.NET.Memo.Adapters
@@ -10,6 +11,7 @@ namespace dBASE.NET.Memo.Adapters
         private const int headerSize = 1024;
         private const int defaultBlockSize = 64;
         private const int blockMetaSize = 8; // Meta-Information like block end marker
+        private const int maxReusableLength = 64 * 1024;
         private const string harbourSignature = "Harbour";
 
         private BinaryWriter writer;
@@ -17,6 +19,7 @@ namespace dBASE.NET.Memo.Adapters
         private Stream stream;
         private int blockSize;
         private bool preserveWhitespace;
+        private byte[] readBuffer = Array.Empty<byte>();
 
         public void Initialize(Stream stream, BinaryReader reader, BinaryWriter writer)
         {
@@ -62,9 +65,28 @@ namespace dBASE.NET.Memo.Adapters
             // Block
             stream.Seek((long)index * blockSize + 4, SeekOrigin.Begin);
             var length = (int)reader.ReadUInt32Reverse();
-            var buffer = reader.ReadBytes(length);
-            var text = encoding.GetString(buffer);
+            var text = DecodeBlock(length, encoding);
             return preserveWhitespace ? text : text.Trim();
+        }
+
+        private string DecodeBlock(int length, Encoding encoding)
+        {
+            // A custom encoding can override the whole-array overload or retain its input.
+            if (length <= 0 || length > maxReusableLength || !encoding.IsReadOnly || !FieldBytes.IsSystemEncoding(encoding))
+                return encoding.GetString(reader.ReadBytes(length));
+
+            if (readBuffer.Length < length)
+                readBuffer = new byte[Math.Min(maxReusableLength, Math.Max(length, Math.Max(256, readBuffer.Length * 2)))];
+
+            int count = 0;
+            while (count < length)
+            {
+                int read = reader.Read(readBuffer, count, length - count);
+                if (read == 0)
+                    break;
+                count += read;
+            }
+            return encoding.GetString(readBuffer, 0, count);
         }
 
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)

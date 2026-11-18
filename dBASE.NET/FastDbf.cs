@@ -159,7 +159,7 @@ namespace dBASE.NET
             if (columns == null)
                 throw new ArgumentNullException(nameof(columns));
 
-            var selected = DbfReadColumn.Prepare(_fields, columns);
+            var selected = DbfReadColumn.Prepare(_fields, columns, projection: true);
             var context = new EncoderContext { Encoding = Encoding, Memo = memo };
             int rowIndex = 0;
             foreach (var record in DbfRecordReader.Read(baseStream, header, RecordCount))

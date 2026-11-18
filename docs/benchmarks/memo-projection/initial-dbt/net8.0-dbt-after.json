@@ -1,0 +1,155 @@
+{
+   "Title":"DbtMemoBenchmarks-20261119-023909",
+   "HostEnvironmentInfo":{
+      "BenchmarkDotNetCaption":"BenchmarkDotNet",
+      "BenchmarkDotNetVersion":"0.15.8",
+      "OsVersion":"Windows 10 (10.0.19045.6456/22H2/2022Update)",
+      "ProcessorName":"12th Gen Intel Core i7-12700K",
+      "PhysicalProcessorCount":1,
+      "PhysicalCoreCount":12,
+      "LogicalCoreCount":20,
+      "RuntimeVersion":".NET 8.0.0 (8.0.0, 8.0.23.53103)",
+      "Architecture":"X64",
+      "HasAttachedDebugger":false,
+      "HasRyuJit":true,
+      "Configuration":"RELEASE",
+      "DotNetCliVersion":"10.0.404",
+      "ChronometerFrequency":{
+         "Hertz":10000000
+      },
+      "HardwareTimerKind":"Unknown"
+   },
+   "Benchmarks":[
+      {
+         "DisplayInfo":"DbtMemoBenchmarks.ReadMemoValues: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3)",
+         "Namespace":null,
+         "Type":"DbtMemoBenchmarks",
+         "Method":"ReadMemoValues",
+         "MethodTitle":"ReadMemoValues",
+         "Parameters":"",
+         "FullName":"DbtMemoBenchmarks.ReadMemoValues",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               10092200,9847406.666666666,10063246.666666666,9878573.333333334,10172873.333333334,9840086.666666666,9896393.333333334,9710560
+            ],
+            "N":8,
+            "Min":9710560,
+            "LowerFence":9508214.166666664,
+            "Q1":9845576.666666666,
+            "Median":9887483.333333334,
+            "Mean":9937667.5,
+            "Q3":10070485,
+            "UpperFence":10407847.5,
+            "Max":10172873.333333334,
+            "InterquartileRange":224908.33333333395,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":55002.39210436565,
+            "Variance":24202105097.61908,
+            "StandardDeviation":155570.2577539135,
+            "Skewness":0.16691924408850617,
+            "Kurtosis":1.4323450612171604,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":9937667.5,
+               "StandardError":55002.39210436565,
+               "Level":12,
+               "Margin":297446.47470518335,
+               "Lower":9640221.025294816,
+               "Upper":10235113.974705184
+            },
+            "Percentiles":{
+               "P0":9710560,
+               "P25":9845576.666666666,
+               "P50":9887483.333333334,
+               "P67":10011522.133333333,
+               "P80":10080618.666666666,
+               "P85":10090752.333333334,
+               "P90":10116402,
+               "P95":10144637.666666668,
+               "P100":10172873.333333334
+            }
+         },
+         "Memory":{
+            "Gen0Collections":5,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":15,
+            "BytesAllocatedPerOperation":4545200
+         }
+      },{
+         "DisplayInfo":"DbtMemoBenchmarks.BlockReadMemoValues: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3)",
+         "Namespace":null,
+         "Type":"DbtMemoBenchmarks",
+         "Method":"BlockReadMemoValues",
+         "MethodTitle":"BlockReadMemoValues",
+         "Parameters":"",
+         "FullName":"DbtMemoBenchmarks.BlockReadMemoValues",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               10217666.666666666,10119306.666666666,10060973.333333334,10153846.666666666,10011686.666666666,10157893.333333334,9984346.666666666
+            ],
+            "N":7,
+            "Min":9984346.666666666,
+            "LowerFence":9857020,
+            "Q1":10036330,
+            "Median":10119306.666666666,
+            "Mean":10100817.142857144,
+            "Q3":10155870,
+            "UpperFence":10335180,
+            "Max":10217666.666666666,
+            "InterquartileRange":119540,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":32057.477542132416,
+            "Variance":7193773064.550271,
+            "StandardDeviation":84816.11323652051,
+            "Skewness":-0.09704153648090431,
+            "Kurtosis":1.2552418001978631,
+            "ConfidenceInterval":{
+               "N":7,
+               "Mean":10100817.142857144,
+               "StandardError":32057.477542132416,
+               "Level":12,
+               "Margin":191024.61553361756,
+               "Lower":9909792.527323525,
+               "Upper":10291841.758390762
+            },
+            "Percentiles":{
+               "P0":9984346.666666666,
+               "P25":10036330,
+               "P50":10119306.666666666,
+               "P67":10153927.6,
+               "P80":10157084,
+               "P85":10163870.666666666,
+               "P90":10181802.666666668,
+               "P95":10199734.666666666,
+               "P100":10217666.666666666
+            }
+         },
+         "Memory":{
+            "Gen0Collections":5,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":15,
+            "BytesAllocatedPerOperation":4851360
+         }
+      }
+   ]
+}

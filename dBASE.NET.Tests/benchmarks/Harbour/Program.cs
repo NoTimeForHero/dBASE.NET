@@ -12,7 +12,7 @@ internal static class Program
     {
         if (args.Length == 0 || !File.Exists(args[0]))
         {
-            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [--verify | BenchmarkDotNet options] or <memo/dbt/large.dbf> --dbt [BenchmarkDotNet options]");
+            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [--verify | BenchmarkDotNet options] or <memo/dbt/large.dbf> --dbt [--verify | BenchmarkDotNet options]");
             return 2;
         }
 
@@ -34,6 +34,21 @@ internal static class Program
             return 0;
         }
         bool dbt = args.Length > 1 && args[1] == "--dbt";
+        if (dbt && args.Length == 3 && args[2] == "--verify")
+        {
+            var checks = new DbtMemoBenchmarks();
+            try
+            {
+                checks.SetUp();
+                checks.VerifyReads();
+            }
+            finally
+            {
+                checks.TearDown();
+            }
+            Console.WriteLine($"DBT read checks passed on {RuntimeInformation.FrameworkDescription}.");
+            return 0;
+        }
         int optionStart = dbt ? 2 : 1;
         string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
         var scenarios = dbt

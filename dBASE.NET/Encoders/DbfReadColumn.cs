@@ -10,15 +10,17 @@ namespace dBASE.NET.Encoders
         private readonly int offset;
         private readonly int length;
 
-        private DbfReadColumn(DbfField field, int offset)
+        private DbfReadColumn(DbfField field, int offset, bool projection)
         {
             this.field = field;
             this.offset = offset;
             length = field.Length;
-            decoder = EncoderFactory.GetEncoder(field.Type);
+            decoder = projection && field.Type == DbfFieldType.Memo
+                ? MemoEncoder.ProjectionDecoder
+                : EncoderFactory.GetEncoder(field.Type);
         }
 
-        internal static DbfReadColumn[] Prepare(IReadOnlyList<DbfField> fields, int[] columns = null)
+        internal static DbfReadColumn[] Prepare(IReadOnlyList<DbfField> fields, int[] columns = null, bool projection = false)
         {
             var offsets = new int[fields.Count];
             int offset = 1; // Deletion marker.
@@ -34,7 +36,7 @@ namespace dBASE.NET.Encoders
                 int ordinal = columns == null ? i : columns[i];
                 if ((uint)ordinal >= (uint)fields.Count)
                     throw new ArgumentOutOfRangeException(nameof(columns), ordinal, "Column index is outside the DBF schema.");
-                prepared[i] = new DbfReadColumn(fields[ordinal], offsets[ordinal]);
+                prepared[i] = new DbfReadColumn(fields[ordinal], offsets[ordinal], projection);
             }
 
             return prepared;

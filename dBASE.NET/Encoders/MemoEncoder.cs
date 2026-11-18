@@ -9,6 +9,7 @@ namespace dBASE.NET.Encoders
     internal class MemoEncoder : IEncoder
     {
         private static readonly object Key = new();
+        internal static readonly IEncoder ProjectionDecoder = new MemoValueDecoder();
 
         /// <inheritdoc />
         public byte[] Encode(EncoderContext encoder, object data)
@@ -82,6 +83,34 @@ namespace dBASE.NET.Encoders
                 if (index == 0) return null;
             }
             return index;
+        }
+
+        private sealed class MemoValueDecoder : IEncoder
+        {
+            public byte[] Encode(EncoderContext context, object data) =>
+                throw new NotSupportedException("The memo projection decoder only reads values.");
+
+            public object Decode(EncoderContext context, ArraySegment<byte> field)
+            {
+                int? index;
+                if (field.Count > sizeof(int))
+                {
+                    string text = Encoding.ASCII.GetString(field.Array, field.Offset, field.Count).Trim();
+                    index = text.Length == 0 ? (int?)null : Convert.ToInt32(text);
+                }
+                else if (field.Count == sizeof(int))
+                {
+                    int block = BitConverter.ToInt32(field.Array, field.Offset);
+                    index = block == 0 ? (int?)null : block;
+                }
+                else
+                {
+                    // Preserve the diagnostic for malformed binary pointers shorter than four bytes.
+                    index = GetBlockIndex(FieldBytes.GetFieldArray(field));
+                }
+
+                return index.HasValue ? context.Memo.Adapter.GetBlockData(index.Value, context.Encoding) : null;
+            }
         }
 
         private struct ContextData

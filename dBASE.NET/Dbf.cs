@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using dBASE.NET.Encoders;
 using dBASE.NET.Memo;
 
 namespace dBASE.NET
@@ -100,10 +101,6 @@ namespace dBASE.NET
             header = Utils.Read.Header(reader);
             _fields = Utils.Read.Fields(reader, Encoding);
 
-            // After reading the fields, we move the read pointer to the beginning
-            // of the records, as indicated by the "HeaderLength" value in the header.
-            baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
-
             if (memoStream == null)
             {
                 var hasMemoField = _fields.Any(x => x.Type == DbfFieldType.Memo);
@@ -118,18 +115,23 @@ namespace dBASE.NET
                 memo.Initialize(copiedStream, header.Version);
             }
 
-            _records = ReadRecords(reader, memo);
+            _records = ReadRecords(baseStream, memo);
         }
 
-        private List<DbfRecord> ReadRecords(BinaryReader reader, MemoContext memoData)
+        private List<DbfRecord> ReadRecords(Stream stream, MemoContext memoData)
         {
             var records = new List<DbfRecord>();
-            // Records are terminated by 0x1a char (officially), or EOF (also seen).
-            while (reader.PeekChar() != 0x1a && reader.PeekChar() != -1)
+            DbfReadColumn[] columns = null;
+            foreach (var record in DbfRecordReader.Read(stream, header))
             {
+                bool isDeleted = DbfRecord.DecodeDeletionMarker(record.Array[record.Offset]);
+                if (record.Count == 1)
+                    continue; // The marker has no record data after it.
+
+                columns ??= DbfReadColumn.Prepare(_fields);
                 try
                 {
-                    records.Add(new DbfRecord(reader, header, _fields, memoData, Encoding));
+                    records.Add(new DbfRecord(_fields, memoData, Encoding, isDeleted, record, columns));
                 }
                 catch (EndOfStreamException) { }
             }

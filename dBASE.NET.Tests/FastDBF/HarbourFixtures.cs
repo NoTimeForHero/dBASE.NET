@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,6 +25,11 @@ namespace dBASE.NET.Tests.FastDBF
                 {
                     Assert.AreEqual(fixture.Rows.Length, dbf.RecordCount, name);
                     Assert.AreEqual(fixture.Fields.Length, dbf.Fields.Count, name);
+                    var scanned = dbf.ReadRecords().ToArray();
+                    var ordinals = Enumerable.Range(0, fixture.Fields.Length).Reverse().ToArray();
+                    var projected = dbf.ReadValues(ordinals).ToArray();
+                    Assert.AreEqual(fixture.Rows.Length, scanned.Length, name);
+                    Assert.AreEqual(fixture.Rows.Length, projected.Length, name);
                     for (int column = 0; column < fixture.Fields.Length; column++)
                     {
                         var expected = fixture.Fields[column];
@@ -41,12 +47,17 @@ namespace dBASE.NET.Tests.FastDBF
                         Assert.AreEqual(row + 1, expected.Record, name);
                         Assert.AreEqual(expected.Deleted, record.IsDeleted, name);
                         Assert.AreEqual(expected.Deleted, dbf.IsDeleted(row), name);
+                        Assert.AreEqual(expected.Deleted, scanned[row].IsDeleted, name);
+                        Assert.AreEqual(expected.Deleted, projected[row].IsDeleted, name);
+                        Assert.AreEqual(row, projected[row].RowIndex, name);
                         for (int column = 0; column < fixture.Fields.Length; column++)
                         {
                             var field = fixture.Fields[column];
                             var value = ToDbfValue(field, expected.Values[column]);
                             var label = $"{name}: record {expected.Record}, field {field.Name}";
                             Assert.AreEqual(value, record[column], label);
+                            Assert.AreEqual(value, scanned[row][column], label);
+                            Assert.AreEqual(value, projected[row].Values[ordinals.Length - 1 - column], label);
                             var cell = dbf.GetValue(row, column);
                             Assert.AreEqual(value, cell, label);
                             if (value is DateTime)
@@ -140,7 +151,85 @@ namespace dBASE.NET.Tests.FastDBF
                 }
                 Helpers.AssertThrows<ArgumentOutOfRangeException>(() => single.GetValue(0, -1));
                 Helpers.AssertThrows<ArgumentOutOfRangeException>(() => single.GetValue(0, single.Fields.Count));
+                Helpers.AssertThrows<ArgumentOutOfRangeException>(() => single.ReadValues(-1).ToArray());
+                Helpers.AssertThrows<ArgumentOutOfRangeException>(() => single.ReadValues(single.Fields.Count).ToArray());
             }
+        }
+
+        [TestMethod]
+        public void SequentialReadFillsBlocksAcrossShortAndInterleavedReads()
+        {
+            using var baseStream = new ShortReadStream(File.ReadAllBytes(FixturePath("test_main", "dbf")));
+            using var memoStream = File.OpenRead(FixturePath("test_main", "fpt"));
+            using var dbf = new FastDbf(baseStream, memoStream, Cp866, readOnly: true);
+            int rowIndex = 0;
+            int lastIndex = dbf.RecordCount - 1;
+            foreach (var row in dbf.ReadValues(0))
+            {
+                Assert.AreEqual(rowIndex + 1.0, row.Values[0]);
+                if (rowIndex % 100 == 0)
+                    Assert.AreEqual(lastIndex + 1.0, dbf.GetValue(lastIndex, 0));
+                rowIndex++;
+            }
+            Assert.AreEqual(dbf.RecordCount, rowIndex);
+        }
+
+        [TestMethod]
+        public void SequentialReadStopsAtAnEndMarkerWithTrailingBytes()
+        {
+            var bytes = File.ReadAllBytes(FixturePath("numeric", "dbf"));
+            int dataOffset = BitConverter.ToUInt16(bytes, 8);
+            int recordLength = BitConverter.ToUInt16(bytes, 10);
+            bytes[dataOffset + recordLength] = 0x1a;
+
+            using var fast = new FastDbf(new MemoryStream(bytes), readOnly: true);
+            Assert.AreEqual(1, fast.ReadRecords().Count());
+            Assert.AreEqual(1, fast.ReadValues(0).Count());
+
+            using var dbf = new Dbf();
+            dbf.Read(new MemoryStream(bytes));
+            Assert.AreEqual(1, dbf.Records.Count);
+        }
+
+        [TestMethod]
+        public void SequentialReadIgnoresALastRecordWithOnlyAMarker()
+        {
+            var bytes = File.ReadAllBytes(FixturePath("numeric", "dbf"));
+            int dataOffset = BitConverter.ToUInt16(bytes, 8);
+            int recordLength = BitConverter.ToUInt16(bytes, 10);
+            Array.Resize(ref bytes, dataOffset + recordLength + 1);
+
+            using var fast = new FastDbf(new MemoryStream(bytes), readOnly: true);
+            Assert.AreEqual(1, fast.ReadRecords().Count());
+            Assert.AreEqual(0, fast.ReadValues().Single().Values.Length);
+
+            using var dbf = new Dbf();
+            dbf.Read(new MemoryStream(bytes));
+            Assert.AreEqual(1, dbf.Records.Count);
+        }
+
+        [TestMethod]
+        public void SequentialRecordKeepsMemoPointerAfterTheBlockIsReused()
+        {
+            using var baseStream = new MemoryStream(File.ReadAllBytes(FixturePath("test_main", "dbf")));
+            using var memoStream = new MemoryStream(File.ReadAllBytes(FixturePath("test_main", "fpt")));
+            using var dbf = new FastDbf(baseStream, memoStream, Cp866);
+            var records = dbf.ReadRecords().ToArray();
+            var record = records[0];
+            Assert.AreEqual("Оплата за месяц", record["NOTE"]);
+
+            record.Data[8] = "Оплата";
+            dbf.WriteRecord(0, record);
+            Assert.AreEqual("Оплата", dbf.GetValue(0, 8));
+            Assert.AreEqual("Оплата за месяц", dbf.GetValue(7, 8));
+        }
+
+        private sealed class ShortReadStream : MemoryStream
+        {
+            internal ShortReadStream(byte[] bytes) : base(bytes, writable: false) { }
+
+            public override int Read(byte[] buffer, int offset, int count) =>
+                base.Read(buffer, offset, Math.Min(count, 29));
         }
 
         private static string FixturePath(string name, string extension) =>

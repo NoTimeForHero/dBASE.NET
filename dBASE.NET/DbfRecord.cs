@@ -25,26 +25,17 @@
         private readonly List<DbfField> fields;
         private readonly EncoderContext encoderContext;
 
-        internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding)
+        private DbfRecord(List<DbfField> fields, MemoContext memoData, Encoding encoding, bool isDeleted)
         {
             this.fields = fields;
             Data = new List<object>(fields.Count);
             encoderContext = new EncoderContext { Encoding = encoding, Memo = memoData };
+            IsDeleted = isDeleted;
+        }
 
-            // Read record marker.
-            byte marker = reader.ReadByte();
-            switch (marker)
-            {
-                case (byte)DbfRecordMarker.Normal:
-                    // Normal, not-deleted
-                    break;
-                case (byte)DbfRecordMarker.Deleted:
-                    IsDeleted = true;
-                    break;
-                default:
-                    throw new ArgumentException($"Invalid marker: {marker}");
-            }
-
+        internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding)
+            : this(fields, memoData, encoding, DecodeDeletionMarker(reader.ReadByte()))
+        {
             // Read entire record as sequence of bytes.
             // Note that record length includes marker.
             byte[] row = reader.ReadBytes(header.RecordLength - 1);
@@ -63,15 +54,28 @@
             }
         }
 
+        internal DbfRecord(List<DbfField> fields, MemoContext memoData, Encoding encoding,
+            bool isDeleted, ArraySegment<byte> record, DbfReadColumn[] columns)
+            : this(fields, memoData, encoding, isDeleted)
+        {
+            foreach (var column in columns)
+                Data.Add(column.Decode(encoderContext, record));
+        }
+
+        internal static bool DecodeDeletionMarker(byte marker) => marker switch
+        {
+            (byte)DbfRecordMarker.Normal => false,
+            (byte)DbfRecordMarker.Deleted => true,
+            _ => throw new ArgumentException($"Invalid marker: {marker}")
+        };
+
         /// <summary>
         /// Create an empty record.
         /// </summary>
         internal DbfRecord(List<DbfField> fields, MemoContext memoData, Encoding encoding)
+            : this(fields, memoData, encoding, false)
         {
-            this.fields = fields;
-            Data = new List<object>(fields.Count);
             foreach (DbfField field in fields) Data.Add(null);
-            encoderContext = new EncoderContext { Memo = memoData, Encoding = encoding };
         }
 
         public List<object> Data { get; }

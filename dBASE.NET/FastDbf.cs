@@ -122,6 +122,41 @@ namespace dBASE.NET
             return new DbfRecord(reader, header, _fields, memo, Encoding);
         }
 
+        /// <summary>Reads full records sequentially in physical order, including deleted records.</summary>
+        /// <remarks>Keep the table open and its schema unchanged while enumerating.</remarks>
+        public IEnumerable<DbfRecord> ReadRecords()
+        {
+            DbfReadColumn[] selected = null;
+            foreach (var record in DbfRecordReader.Read(baseStream, header, RecordCount))
+            {
+                bool isDeleted = DbfRecord.DecodeDeletionMarker(record.Array[record.Offset]);
+                selected ??= DbfReadColumn.Prepare(_fields);
+                yield return new DbfRecord(_fields, memo, Encoding, isDeleted, record, selected);
+            }
+        }
+
+        /// <summary>Reads the requested columns sequentially in physical record order, including deleted records.</summary>
+        /// <param name="columns">Zero-based column indexes in the order to return. An empty selection reads row metadata.</param>
+        /// <remarks>Keep the table open and its schema unchanged while enumerating.</remarks>
+        public IEnumerable<DbfRow> ReadValues(params int[] columns)
+        {
+            if (columns == null)
+                throw new ArgumentNullException(nameof(columns));
+
+            var selected = DbfReadColumn.Prepare(_fields, columns);
+            var context = new EncoderContext { Encoding = Encoding, Memo = memo };
+            int rowIndex = 0;
+            foreach (var record in DbfRecordReader.Read(baseStream, header, RecordCount))
+            {
+                bool isDeleted = DbfRecord.DecodeDeletionMarker(record.Array[record.Offset]);
+                var values = selected.Length == 0 ? Array.Empty<object>() : new object[selected.Length];
+                for (int i = 0; i < selected.Length; i++)
+                    values[i] = selected[i].Decode(context, record);
+
+                yield return new DbfRow(rowIndex++, isDeleted, values);
+            }
+        }
+
         /// <summary>
         /// Check is record at specific index is deleted
         /// </summary>

@@ -28,6 +28,8 @@ public class HarbourReadBenchmarks
         idColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "ID");
         printedColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "IS_PRINTED");
         memoColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "NOTE");
+        if (SequentialGetRecord() != BlockReadRecords() || SequentialGetValue() != BlockReadValues())
+            throw new InvalidOperationException("Bulk reads differ from indexed reads.");
     }
 
     [GlobalCleanup]
@@ -60,6 +62,27 @@ public class HarbourReadBenchmarks
         {
             sum += (long)(double)table.GetValue(row, idColumn);
             if ((bool)table.GetValue(row, printedColumn)) sum++;
+        }
+        return sum;
+    }
+
+    [Benchmark]
+    public long BlockReadRecords()
+    {
+        long sum = 0;
+        foreach (var record in table.ReadRecords())
+            sum += (long)(double)record[idColumn];
+        return sum;
+    }
+
+    [Benchmark]
+    public long BlockReadValues()
+    {
+        long sum = 0;
+        foreach (var row in table.ReadValues(idColumn, printedColumn))
+        {
+            sum += (long)(double)row.Values[0];
+            if ((bool)row.Values[1]) sum++;
         }
         return sum;
     }

@@ -38,7 +38,7 @@ internal static class Program
         string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
         var scenarios = dbt
             ? new[] { typeof(DbtMemoBenchmarks) }
-            : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks), typeof(RandomReadBenchmarks) };
+            : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks), typeof(RandomReadBenchmarks), typeof(MemoryReadBenchmarks) };
 
         var summaries = BenchmarkSwitcher.FromTypes(scenarios).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||

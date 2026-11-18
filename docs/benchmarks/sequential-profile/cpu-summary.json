@@ -1,0 +1,1542 @@
+[
+  {
+    "method": "BlockReadAllValues",
+    "unit": "milliseconds",
+    "weight": 3965.63,
+    "categories": [
+      {
+        "frame": "io",
+        "weight": 1750.86,
+        "percent": 44.15
+      },
+      {
+        "frame": "fptAdapter",
+        "weight": 1129.18,
+        "percent": 28.47
+      },
+      {
+        "frame": "fptIo",
+        "weight": 1092.15,
+        "percent": 27.54
+      },
+      {
+        "frame": "blockIterator",
+        "weight": 660.22,
+        "percent": 16.65
+      }
+    ],
+    "exclusive": [
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 1730.83,
+        "percent": 43.65
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+        "weight": 650.41,
+        "percent": 16.4
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 412.07,
+        "percent": 10.39
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 346.09,
+        "percent": 8.73
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 219.71,
+        "percent": 5.54
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.MemoEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 131.55,
+        "percent": 3.32
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseNumber(!!0*&,!!0*,value class System.Globalization.NumberStyles,value class NumberBuffer&,class System.Globalization.NumberFormatInfo)",
+        "weight": 96.45,
+        "percent": 2.43
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadAllValues()",
+        "weight": 83.61,
+        "percent": 2.11
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateEncoder.TryDecodeAsciiDate(value class System.ArraySegment`1<unsigned int8>,class System.Object&)",
+        "weight": 68.66,
+        "percent": 1.73
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.JulianToDateTime(int64)",
+        "weight": 40.11,
+        "percent": 1.01
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.NumberToFloatingPointBits(value class NumberBuffer&)",
+        "weight": 32.5,
+        "percent": 0.82
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.StelemRef(class System.Object[],int,class System.Object)",
+        "weight": 30.83,
+        "percent": 0.78
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.DigitsToUInt64(unsigned int8*,int32)",
+        "weight": 29.78,
+        "percent": 0.75
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Memo.Adapters.FoxProAdapter.GetBlockData(int32,class System.Text.Encoding)",
+        "weight": 17.87,
+        "percent": 0.45
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.SBCSCodePageEncoding.GetChars(unsigned int8*,int32,wchar*,int32,class System.Text.DecoderNLS)",
+        "weight": 15.13,
+        "percent": 0.38
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 14.01,
+        "percent": 0.35
+      },
+      {
+        "frame": "System.Private.CoreLib.il!Interop+Kernel32.ReadFile(class System.Runtime.InteropServices.SafeHandle,unsigned int8*,int32,int32&,value class System.Threading.NativeOverlapped*)",
+        "weight": 13.89,
+        "percent": 0.35
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseBinaryIntegerStyle(value class System.ReadOnlySpan`1<!!0>,value class System.Globalization.NumberStyles,class System.Globalization.NumberFormatInfo,!!1&)",
+        "weight": 9.93,
+        "percent": 0.25
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseFloat(value class System.ReadOnlySpan`1<!!0>,value class System.Globalization.NumberStyles,class System.Globalization.NumberFormatInfo,!!1&)",
+        "weight": 5.49,
+        "percent": 0.14
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.RuntimeTypeHandle.<InternalAllocNoChecks>g__InternalAllocNoChecksWorker|37_0(value class System.Runtime.CompilerServices.MethodTable*)",
+        "weight": 4.07,
+        "percent": 0.1
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Box(value class System.Runtime.CompilerServices.MethodTable*,unsigned int8&)",
+        "weight": 4.0,
+        "percent": 0.1
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 2.02,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Object.GetHashCode()",
+        "weight": 2.0,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.GenericsHelpers.Class(int,int)",
+        "weight": 1.99,
+        "percent": 0.05
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 1.51,
+        "percent": 0.04
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Text.Ascii.IsValidCore(!!0&,int32)",
+        "weight": 1.1,
+        "percent": 0.03
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 0.0,
+        "percent": 0.0
+      }
+    ],
+    "inclusive": [
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_1.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadAllValues()",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "Process64 dotnet (39168) Args:  \"HarbourBenchmarks-.NET 10.0-1.dll\" --anonymousPipes 1608 1880 --benchmarkName HarbourReadBenchmarks.BlockReadAllValues --job \".NET 10.0\" --benchmarkId 1",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBase.Invoke(class System.Object,class System.Object[])",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "Thread (29688)",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "Threads",
+        "weight": 3965.63,
+        "percent": 100.0
+      },
+      {
+        "frame": "(Activities)",
+        "weight": 3949.67,
+        "percent": 99.6
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_1.WorkloadActionNoUnroll(int64)",
+        "weight": 3949.67,
+        "percent": 99.6
+      },
+      {
+        "frame": "CPU_TIME",
+        "weight": 3935.99,
+        "percent": 99.25
+      },
+      {
+        "frame": "Activity Benchmark(/#39168/1/79/,/benchmarkName=HarbourReadBenchmarks.BlockReadAllValues)",
+        "weight": 3933.67,
+        "percent": 99.19
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Run()",
+        "weight": 3933.67,
+        "percent": 99.19
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 3882.02,
+        "percent": 97.89
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "weight": 3752.86,
+        "percent": 94.63
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 3752.86,
+        "percent": 94.63
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.MemoEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 1934.93,
+        "percent": 48.79
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 1744.72,
+        "percent": 44.0
+      },
+      {
+        "frame": "Activity WorkloadActual(/#39168/1/79/0/)",
+        "weight": 1604.16,
+        "percent": 40.45
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Memo.Adapters.FoxProAdapter.GetBlockData(int32,class System.Text.Encoding)",
+        "weight": 1129.18,
+        "percent": 28.47
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 1087.71,
+        "percent": 27.43
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 682.41,
+        "percent": 17.21
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 664.64,
+        "percent": 16.76
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 660.22,
+        "percent": 16.65
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Box(value class System.Runtime.CompilerServices.MethodTable*,unsigned int8&)",
+        "weight": 658.48,
+        "percent": 16.6
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+        "weight": 650.41,
+        "percent": 16.4
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 412.07,
+        "percent": 10.39
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#39168/1/79/0/)",
+        "weight": 411.14,
+        "percent": 10.37
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#39168/1/79/3/)",
+        "weight": 283.24,
+        "percent": 7.14
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 259.82,
+        "percent": 6.55
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#39168/1/79/9/)",
+        "weight": 221.99,
+        "percent": 5.6
+      }
+    ]
+  },
+  {
+    "method": "BlockReadRecords",
+    "unit": "milliseconds",
+    "weight": 3974.96,
+    "categories": [
+      {
+        "frame": "io",
+        "weight": 1649.15,
+        "percent": 41.49
+      },
+      {
+        "frame": "fptAdapter",
+        "weight": 1152.68,
+        "percent": 29.0
+      },
+      {
+        "frame": "fptIo",
+        "weight": 1089.44,
+        "percent": 27.41
+      },
+      {
+        "frame": "blockIterator",
+        "weight": 559.71,
+        "percent": 14.08
+      }
+    ],
+    "exclusive": [
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 1634.11,
+        "percent": 41.11
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+        "weight": 609.26,
+        "percent": 15.33
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadRecords>d__20.MoveNext()",
+        "weight": 454.13,
+        "percent": 11.42
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 397.27,
+        "percent": 9.99
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 194.1,
+        "percent": 4.88
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.MemoEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 147.99,
+        "percent": 3.72
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateEncoder.TryDecodeAsciiDate(value class System.ArraySegment`1<unsigned int8>,class System.Object&)",
+        "weight": 116.16,
+        "percent": 2.92
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseNumber(!!0*&,!!0*,value class System.Globalization.NumberStyles,value class NumberBuffer&,class System.Globalization.NumberFormatInfo)",
+        "weight": 106.44,
+        "percent": 2.68
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadRecords()",
+        "weight": 58.91,
+        "percent": 1.48
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.JulianToDateTime(int64)",
+        "weight": 52.35,
+        "percent": 1.32
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Memo.Adapters.FoxProAdapter.GetBlockData(int32,class System.Text.Encoding)",
+        "weight": 38.24,
+        "percent": 0.96
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.StelemRef(class System.Object[],int,class System.Object)",
+        "weight": 37.7,
+        "percent": 0.95
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.DigitsToUInt64(unsigned int8*,int32)",
+        "weight": 26.28,
+        "percent": 0.66
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.SBCSCodePageEncoding.GetChars(unsigned int8*,int32,wchar*,int32,class System.Text.DecoderNLS)",
+        "weight": 20.97,
+        "percent": 0.53
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.NumberToFloatingPointBits(value class NumberBuffer&)",
+        "weight": 18.61,
+        "percent": 0.47
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 13.61,
+        "percent": 0.34
+      },
+      {
+        "frame": "System.Private.CoreLib.il!Interop+Kernel32.ReadFile(class System.Runtime.InteropServices.SafeHandle,unsigned int8*,int32,int32&,value class System.Threading.NativeOverlapped*)",
+        "weight": 11.03,
+        "percent": 0.28
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseFloat(value class System.ReadOnlySpan`1<!!0>,value class System.Globalization.NumberStyles,class System.Globalization.NumberFormatInfo,!!1&)",
+        "weight": 7.6,
+        "percent": 0.19
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.TryParseBinaryIntegerStyle(value class System.ReadOnlySpan`1<!!0>,value class System.Globalization.NumberStyles,class System.Globalization.NumberFormatInfo,!!1&)",
+        "weight": 5.51,
+        "percent": 0.14
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Box(value class System.Runtime.CompilerServices.MethodTable*,unsigned int8&)",
+        "weight": 4.01,
+        "percent": 0.1
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.RuntimeTypeHandle.<InternalAllocNoChecks>g__InternalAllocNoChecksWorker|37_0(value class System.Runtime.CompilerServices.MethodTable*)",
+        "weight": 3.68,
+        "percent": 0.09
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.LogicalEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 2.02,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.String.CreateStringFromEncoding(unsigned int8*,int32,class System.Text.Encoding)",
+        "weight": 2.02,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Collections.Generic.Dictionary`2[System.__Canon,System.__Canon].Initialize(int32)",
+        "weight": 2.01,
+        "percent": 0.05
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecord..ctor(class System.Collections.Generic.List`1<class dBASE.NET.DbfField>,class dBASE.NET.MemoContext,class System.Text.Encoding,bool,value class System.ArraySegment`1<unsigned int8>,value class dBASE.NET.Encoders.DbfReadColumn[])",
+        "weight": 1.96,
+        "percent": 0.05
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.NumericEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 1.95,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Text.Encoding.GetString(unsigned int8*,int32)",
+        "weight": 1.93,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.String.FastAllocateString(int)",
+        "weight": 1.7,
+        "percent": 0.04
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Text.Ascii.IsValidCore(!!0&,int32)",
+        "weight": 1.26,
+        "percent": 0.03
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.EncoderContext.set_Encoding(class System.Text.Encoding)",
+        "weight": 1.08,
+        "percent": 0.03
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Number.MatchChars(!!0*,!!0*,value class System.ReadOnlySpan`1<!!0>)",
+        "weight": 1.07,
+        "percent": 0.03
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 0.0,
+        "percent": 0.0
+      }
+    ],
+    "inclusive": [
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadRecords()",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "Process64 dotnet (41172) Args:  \"HarbourBenchmarks-.NET 10.0-1.dll\" --anonymousPipes 1828 1684 --benchmarkName HarbourReadBenchmarks.BlockReadRecords --job \".NET 10.0\" --benchmarkId 0",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBase.Invoke(class System.Object,class System.Object[])",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "Thread (3336)",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "Threads",
+        "weight": 3974.96,
+        "percent": 100.0
+      },
+      {
+        "frame": "(Activities)",
+        "weight": 3956.95,
+        "percent": 99.55
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionNoUnroll(int64)",
+        "weight": 3956.95,
+        "percent": 99.55
+      },
+      {
+        "frame": "CPU_TIME",
+        "weight": 3941.98,
+        "percent": 99.17
+      },
+      {
+        "frame": "Activity Benchmark(/#41172/1/79/,/benchmarkName=HarbourReadBenchmarks.BlockReadRecords)",
+        "weight": 3938.96,
+        "percent": 99.09
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Run()",
+        "weight": 3938.96,
+        "percent": 99.09
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadRecords>d__20.MoveNext()",
+        "weight": 3916.05,
+        "percent": 98.52
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "weight": 3764.77,
+        "percent": 94.71
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 3764.77,
+        "percent": 94.71
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.MemoEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 1930.73,
+        "percent": 48.57
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 1645.14,
+        "percent": 41.39
+      },
+      {
+        "frame": "Activity WorkloadActual(/#41172/1/79/0/)",
+        "weight": 1528.1,
+        "percent": 38.44
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Memo.Adapters.FoxProAdapter.GetBlockData(int32,class System.Text.Encoding)",
+        "weight": 1152.68,
+        "percent": 29.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 1082.42,
+        "percent": 27.23
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecord..ctor(class System.Collections.Generic.List`1<class dBASE.NET.DbfField>,class dBASE.NET.MemoContext,class System.Text.Encoding,bool,value class System.ArraySegment`1<unsigned int8>,value class dBASE.NET.Encoders.DbfReadColumn[])",
+        "weight": 651.21,
+        "percent": 16.38
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 648.17,
+        "percent": 16.31
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Box(value class System.Runtime.CompilerServices.MethodTable*,unsigned int8&)",
+        "weight": 616.95,
+        "percent": 15.52
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+        "weight": 609.26,
+        "percent": 15.33
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 559.71,
+        "percent": 14.08
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 557.68,
+        "percent": 14.03
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#41172/1/79/0/)",
+        "weight": 443.44,
+        "percent": 11.16
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 401.23,
+        "percent": 10.09
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#41172/1/79/3/)",
+        "weight": 339.13,
+        "percent": 8.53
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateTimeEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 246.45,
+        "percent": 6.2
+      }
+    ]
+  },
+  {
+    "method": "BlockReadValues",
+    "unit": "milliseconds",
+    "weight": 3712.18,
+    "categories": [
+      {
+        "frame": "blockIterator",
+        "weight": 3582.42,
+        "percent": 96.5
+      },
+      {
+        "frame": "io",
+        "weight": 3582.42,
+        "percent": 96.5
+      },
+      {
+        "frame": "asciiTrim",
+        "weight": 5.93,
+        "percent": 0.16
+      }
+    ],
+    "exclusive": [
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 3328.91,
+        "percent": 89.68
+      },
+      {
+        "frame": "System.Private.CoreLib.il!Interop+Kernel32.ReadFile(class System.Runtime.InteropServices.SafeHandle,unsigned int8*,int32,int32&,value class System.Threading.NativeOverlapped*)",
+        "weight": 251.54,
+        "percent": 6.78
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 53.69,
+        "percent": 1.45
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadValues()",
+        "weight": 42.53,
+        "percent": 1.15
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.NumericEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 15.64,
+        "percent": 0.42
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TryDecodeAsciiInteger(value class System.ArraySegment`1<unsigned int8>,int32&)",
+        "weight": 8.01,
+        "percent": 0.22
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TrimAsciiSpaces(value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 5.93,
+        "percent": 0.16
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 3.97,
+        "percent": 0.11
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.RandomAccess.ReadAtOffset(class Microsoft.Win32.SafeHandles.SafeFileHandle,value class System.Span`1<unsigned int8>,int64)",
+        "weight": 1.96,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 0.0,
+        "percent": 0.0
+      }
+    ],
+    "inclusive": [
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_2.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks!HarbourReadBenchmarks.BlockReadValues()",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "Process64 dotnet (17628) Args:  \"HarbourBenchmarks-.NET 10.0-1.dll\" --anonymousPipes 1592 2032 --benchmarkName HarbourReadBenchmarks.BlockReadValues --job \".NET 10.0\" --benchmarkId 2",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBase.Invoke(class System.Object,class System.Object[])",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "Thread (22536)",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "Threads",
+        "weight": 3712.18,
+        "percent": 100.0
+      },
+      {
+        "frame": "(Activities)",
+        "weight": 3710.16,
+        "percent": 99.95
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_2.WorkloadActionUnroll(int64)",
+        "weight": 3704.12,
+        "percent": 99.78
+      },
+      {
+        "frame": "Activity Benchmark(/#17628/1/81/,/benchmarkName=HarbourReadBenchmarks.BlockReadValues)",
+        "weight": 3674.15,
+        "percent": 98.98
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Run()",
+        "weight": 3674.15,
+        "percent": 98.98
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 3669.66,
+        "percent": 98.85
+      },
+      {
+        "frame": "CPU_TIME",
+        "weight": 3663.41,
+        "percent": 98.69
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 3582.42,
+        "percent": 96.5
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 3582.42,
+        "percent": 96.5
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 3582.42,
+        "percent": 96.5
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "weight": 3508.48,
+        "percent": 94.51
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 3508.48,
+        "percent": 94.51
+      },
+      {
+        "frame": "Activity WorkloadActual(/#17628/1/81/0/)",
+        "weight": 1658.55,
+        "percent": 44.68
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#17628/1/81/0/)",
+        "weight": 663.55,
+        "percent": 17.88
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 354.67,
+        "percent": 9.55
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.RandomAccess.ReadAtOffset(class Microsoft.Win32.SafeHandles.SafeFileHandle,value class System.Span`1<unsigned int8>,int64)",
+        "weight": 253.5,
+        "percent": 6.83
+      },
+      {
+        "frame": "System.Private.CoreLib.il!Interop+Kernel32.ReadFile(class System.Runtime.InteropServices.SafeHandle,unsigned int8*,int32,int32&,value class System.Threading.NativeOverlapped*)",
+        "weight": 251.54,
+        "percent": 6.78
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 251.51,
+        "percent": 6.78
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#17628/1/81/7/)",
+        "weight": 243.91,
+        "percent": 6.57
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#17628/1/81/4/)",
+        "weight": 236.57,
+        "percent": 6.37
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#17628/1/81/5/)",
+        "weight": 218.46,
+        "percent": 5.88
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#17628/1/81/6/)",
+        "weight": 202.1,
+        "percent": 5.44
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.GetExtraStats(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 201.68,
+        "percent": 5.43
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.MeasureWithGc(int64)",
+        "weight": 201.68,
+        "percent": 5.43
+      }
+    ]
+  },
+  {
+    "method": "ScanHarbour",
+    "unit": "milliseconds",
+    "weight": 3388.76,
+    "categories": [
+      {
+        "frame": "blockIterator",
+        "weight": 3212.34,
+        "percent": 94.79
+      },
+      {
+        "frame": "asciiTrim",
+        "weight": 5.98,
+        "percent": 0.18
+      }
+    ],
+    "exclusive": [
+      {
+        "frame": "System.Private.CoreLib.il!System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 3208.28,
+        "percent": 94.67
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 80.68,
+        "percent": 2.38
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.ScanHarbour()",
+        "weight": 25.92,
+        "percent": 0.76
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Checksum(bool,class System.Object[])",
+        "weight": 20.96,
+        "percent": 0.62
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 13.51,
+        "percent": 0.4
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.NumericEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 9.79,
+        "percent": 0.29
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Scan(class dBASE.NET.FastDbf,int32[])",
+        "weight": 7.95,
+        "percent": 0.23
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TryDecodeAsciiInteger(value class System.ArraySegment`1<unsigned int8>,int32&)",
+        "weight": 6.03,
+        "percent": 0.18
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TrimAsciiSpaces(value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 5.98,
+        "percent": 0.18
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.LogicalEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 3.6,
+        "percent": 0.11
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 2.06,
+        "percent": 0.06
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Unbox(value class System.Runtime.CompilerServices.MethodTable*,class System.Object)",
+        "weight": 2.02,
+        "percent": 0.06
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 2.0,
+        "percent": 0.06
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 0.0,
+        "percent": 0.0
+      }
+    ],
+    "inclusive": [
+      {
+        "frame": "(Activities)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.ScanHarbour()",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "Process64 dotnet (19060) Args:  \"HarbourBenchmarks-.NET 10.0-1.dll\" --anonymousPipes 2032 1840 --benchmarkName MemoryReadBenchmarks.ScanHarbour --job \".NET 10.0\" --benchmarkId 0",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBase.Invoke(class System.Object,class System.Object[])",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "Thread (41324)",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "Threads",
+        "weight": 3388.76,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)",
+        "weight": 3386.82,
+        "percent": 99.94
+      },
+      {
+        "frame": "CPU_TIME",
+        "weight": 3370.19,
+        "percent": 99.45
+      },
+      {
+        "frame": "Activity Benchmark(/#19060/1/81/,/benchmarkName=MemoryReadBenchmarks.ScanHarbour)",
+        "weight": 3356.87,
+        "percent": 99.06
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Run()",
+        "weight": 3356.87,
+        "percent": 99.06
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 3331.91,
+        "percent": 98.32
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 3212.34,
+        "percent": 94.79
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 3210.28,
+        "percent": 94.73
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 3208.28,
+        "percent": 94.67
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "weight": 3174.86,
+        "percent": 93.69
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 3174.86,
+        "percent": 93.69
+      },
+      {
+        "frame": "Activity WorkloadActual(/#19060/1/81/0/)",
+        "weight": 1750.03,
+        "percent": 51.64
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#19060/1/81/0/)",
+        "weight": 692.56,
+        "percent": 20.44
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Scan(class dBASE.NET.FastDbf,int32[])",
+        "weight": 351.25,
+        "percent": 10.37
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#19060/1/81/4/)",
+        "weight": 219.28,
+        "percent": 6.47
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.GetExtraStats(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 213.9,
+        "percent": 6.31
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.MeasureWithGc(int64)",
+        "weight": 213.9,
+        "percent": 6.31
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#19060/1/81/5/)",
+        "weight": 211.3,
+        "percent": 6.24
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#19060/1/81/2/)",
+        "weight": 179.09,
+        "percent": 5.28
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.MemoryStream.Read(value class System.Span`1<unsigned int8>)",
+        "weight": 144.97,
+        "percent": 4.28
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader.FillBlock(class System.IO.Stream,unsigned int8[],int32)",
+        "weight": 140.95,
+        "percent": 4.16
+      },
+      {
+        "frame": "Activity WorkloadPilot(/#19060/1/81/3/)",
+        "weight": 64.93,
+        "percent": 1.92
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 36.89,
+        "percent": 1.09
+      }
+    ]
+  },
+  {
+    "method": "ScanWide",
+    "unit": "milliseconds",
+    "weight": 3119.32,
+    "categories": [
+      {
+        "frame": "blockIterator",
+        "weight": 1325.48,
+        "percent": 42.49
+      },
+      {
+        "frame": "asciiTrim",
+        "weight": 50.23,
+        "percent": 1.61
+      }
+    ],
+    "exclusive": [
+      {
+        "frame": "System.Private.CoreLib.il!System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 1321.77,
+        "percent": 42.37
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 624.34,
+        "percent": 20.02
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateEncoder.TryDecodeAsciiDate(value class System.ArraySegment`1<unsigned int8>,class System.Object&)",
+        "weight": 292.12,
+        "percent": 9.36
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 233.4,
+        "percent": 7.48
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.EncodingNLS.GetChars(unsigned int8*,int32,wchar*,int32)",
+        "weight": 192.44,
+        "percent": 6.17
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Checksum(bool,class System.Object[])",
+        "weight": 132.69,
+        "percent": 4.25
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.RuntimeTypeHandle.<InternalAllocNoChecks>g__InternalAllocNoChecksWorker|37_0(value class System.Runtime.CompilerServices.MethodTable*)",
+        "weight": 81.77,
+        "percent": 2.62
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.NumericEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 81.77,
+        "percent": 2.62
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TrimAsciiSpaces(value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 50.23,
+        "percent": 1.61
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.StelemRef(class System.Object[],int,class System.Object)",
+        "weight": 19.28,
+        "percent": 0.62
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 17.32,
+        "percent": 0.56
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.IsInstanceOfClass(void*,class System.Object)",
+        "weight": 15.51,
+        "percent": 0.5
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.SBCSCodePageEncoding.GetChars(unsigned int8*,int32,wchar*,int32,class System.Text.DecoderNLS)",
+        "weight": 14.83,
+        "percent": 0.48
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.ScanWide()",
+        "weight": 9.94,
+        "percent": 0.32
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Scan(class dBASE.NET.FastDbf,int32[])",
+        "weight": 8.07,
+        "percent": 0.26
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.String.Trim()",
+        "weight": 5.58,
+        "percent": 0.18
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.LogicalEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 4.07,
+        "percent": 0.13
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.SpanHelpers.Memmove(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 3.71,
+        "percent": 0.12
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.TryDecodeAsciiInteger(value class System.ArraySegment`1<unsigned int8>,int32&)",
+        "weight": 3.67,
+        "percent": 0.12
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.Unbox(value class System.Runtime.CompilerServices.MethodTable*,class System.Object)",
+        "weight": 1.95,
+        "percent": 0.06
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Text.Encoding.GetString(unsigned int8*,int32)",
+        "weight": 1.8,
+        "percent": 0.06
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.FieldBytes.IsSystemEncoding(class System.Text.Encoding)",
+        "weight": 1.55,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.EncodingNLS.GetString(unsigned int8[],int32,int32)",
+        "weight": 1.52,
+        "percent": 0.05
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 0.0,
+        "percent": 0.0
+      }
+    ],
+    "inclusive": [
+      {
+        "frame": "(Activities)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_1.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.Runnable_1.WorkloadActionNoUnroll(int64)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks-.NET 10.0-1!BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.ScanWide()",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "Process64 dotnet (16692) Args:  \"HarbourBenchmarks-.NET 10.0-1.dll\" --anonymousPipes 1856 1076 --benchmarkName MemoryReadBenchmarks.ScanWide --job \".NET 10.0\" --benchmarkId 1",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBase.Invoke(class System.Object,class System.Object[])",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "Thread (40404)",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "Threads",
+        "weight": 3119.32,
+        "percent": 100.0
+      },
+      {
+        "frame": "CPU_TIME",
+        "weight": 3098.56,
+        "percent": 99.33
+      },
+      {
+        "frame": "Activity Benchmark(/#16692/1/79/,/benchmarkName=MemoryReadBenchmarks.ScanWide)",
+        "weight": 3080.93,
+        "percent": 98.77
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Run()",
+        "weight": 3080.93,
+        "percent": 98.77
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.FastDbf+<ReadValues>d__21.MoveNext()",
+        "weight": 2957.2,
+        "percent": 94.8
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
+        "weight": 2914.12,
+        "percent": 93.42
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 2914.12,
+        "percent": 93.42
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.DbfRecordReader+<Read>d__2.MoveNext()",
+        "weight": 1325.48,
+        "percent": 42.49
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.IO.Stream.ReadAtLeastCore(value class System.Span`1<unsigned int8>,int32,bool)",
+        "weight": 1325.48,
+        "percent": 42.49
+      },
+      {
+        "frame": "System.Private.CoreLib.il!System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "weight": 1321.77,
+        "percent": 42.37
+      },
+      {
+        "frame": "Activity WorkloadActual(/#16692/1/79/0/)",
+        "weight": 1061.81,
+        "percent": 34.04
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.CharacterEncoder.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 890.82,
+        "percent": 28.56
+      },
+      {
+        "frame": "HarbourBenchmarks!MemoryReadBenchmarks.Scan(class dBASE.NET.FastDbf,int32[])",
+        "weight": 783.96,
+        "percent": 25.13
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DateEncoder.TryDecodeAsciiDate(value class System.ArraySegment`1<unsigned int8>,class System.Object&)",
+        "weight": 373.89,
+        "percent": 11.99
+      },
+      {
+        "frame": "Activity WorkloadActual(/#16692/1/79/10/)",
+        "weight": 225.56,
+        "percent": 7.23
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#16692/1/79/7/)",
+        "weight": 220.66,
+        "percent": 7.07
+      },
+      {
+        "frame": "dBASE.NET!dBASE.NET.Encoders.DbfReadColumn.Decode(class dBASE.NET.Encoders.EncoderContext,value class System.ArraySegment`1<unsigned int8>)",
+        "weight": 214.59,
+        "percent": 6.88
+      },
+      {
+        "frame": "Activity WorkloadActual(/#16692/1/79/8/)",
+        "weight": 214.2,
+        "percent": 6.87
+      },
+      {
+        "frame": "Activity WorkloadWarmup(/#16692/1/79/6/)",
+        "weight": 208.62,
+        "percent": 6.69
+      },
+      {
+        "frame": "System.Text.Encoding.CodePages.il!System.Text.EncodingNLS.GetChars(unsigned int8*,int32,wchar*,int32)",
+        "weight": 207.27,
+        "percent": 6.64
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.GetExtraStats(value class BenchmarkDotNet.Engines.IterationData)",
+        "weight": 205.2,
+        "percent": 6.58
+      },
+      {
+        "frame": "BenchmarkDotNet!BenchmarkDotNet.Engines.Engine.MeasureWithGc(int64)",
+        "weight": 205.2,
+        "percent": 6.58
+      }
+    ]
+  }
+]

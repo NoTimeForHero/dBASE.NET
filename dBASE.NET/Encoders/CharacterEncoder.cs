@@ -42,7 +42,17 @@
         /// <inheritdoc />
         public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            string text = context.Encoding.GetString(field.Array, field.Offset, field.Count).Trim();
+            var encoding = context.Encoding;
+            // Preserve the input range for custom decoders and configurable fallbacks.
+            if (field.Count != 0 && context.CanDecodeAsciiFields && encoding.IsReadOnly &&
+                (encoding.CodePage is 866 or 1251 || encoding.DecoderFallback is DecoderReplacementFallback))
+            {
+                field = FieldBytes.TrimAsciiSpaces(field);
+                if (field.Count == 0)
+                    return null;
+            }
+
+            string text = encoding.GetString(field.Array, field.Offset, field.Count).Trim();
             if (text.Length == 0) return null;
             return text;
         }

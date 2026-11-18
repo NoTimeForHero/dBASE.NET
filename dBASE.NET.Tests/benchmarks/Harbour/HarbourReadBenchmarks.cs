@@ -13,6 +13,8 @@ public class HarbourReadBenchmarks
     private FastDbf table;
     private int idColumn;
     private int amountColumn;
+    private int nameColumn;
+    private int houseColumn;
     private int dateColumn;
     private int printedColumn;
     private int memoColumn;
@@ -29,6 +31,8 @@ public class HarbourReadBenchmarks
         var fields = table.Fields;
         idColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "ID");
         amountColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_AMOUNT");
+        nameColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "FULL_NAME");
+        houseColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "HOUSE_NO");
         dateColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_DATE");
         printedColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "IS_PRINTED");
         memoColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "NOTE");
@@ -98,6 +102,15 @@ public class HarbourReadBenchmarks
         foreach (var row in table.ReadValues(amountColumn))
             sum += (double)row.Values[0];
         return sum;
+    }
+
+    [Benchmark]
+    public long BlockReadText()
+    {
+        long length = 0;
+        foreach (var row in table.ReadValues(nameColumn, houseColumn))
+            length += ((string)row.Values[0]).Length + ((string)row.Values[1]).Length;
+        return length;
     }
 
     [Benchmark]

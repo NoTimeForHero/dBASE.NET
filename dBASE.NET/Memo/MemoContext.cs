@@ -35,13 +35,13 @@ namespace dBASE.NET
             currentStream.CopyTo(target);
         }
 
-        internal void Initialize(Stream stream, DbfVersion version)
+        internal void Initialize(Stream stream, DbfVersion version, bool readOnly = false)
         {
             Dispose();
             if (stream == null) return;
             this.stream = stream;
             reader = new BinaryReader(stream);
-            writer = new BinaryWriter(stream);
+            writer = readOnly ? null : new BinaryWriter(stream);
             Format = MemoFormatParser.FromVersion(version);
 
             switch (version)

@@ -29,7 +29,8 @@ namespace dBASE.NET
 
         // [x]Harbour DBase (like Advantage Database Server?)
 		AutoIncrement = '+', // Auto-Increment ID
-		UnixTime = '@', // Unix Timestamp
+		UnixTime = '@', // Harbour timestamp (Julian day and milliseconds)
+		ModificationTime = '=',
 		RowVersion = '^', // Record modification count
     }
 

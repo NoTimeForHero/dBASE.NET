@@ -24,7 +24,8 @@ namespace dBASE.NET.Encoders
 
             {DbfFieldType.AutoIncrement, Resolve<IntegerEncoder>()},
             {DbfFieldType.RowVersion, Resolve<LongEncoder>()},
-            {DbfFieldType.UnixTime, Resolve<LongEncoder>()},
+            {DbfFieldType.UnixTime, Resolve<DateTimeEncoder>()},
+            {DbfFieldType.ModificationTime, Resolve<DateTimeEncoder>()},
         };
 
         private static readonly IEncoder UnknownEncoder = Resolve<UnknownEncoder>();

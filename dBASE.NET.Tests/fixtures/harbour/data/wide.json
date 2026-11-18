@@ -1,0 +1,1 @@
+{"harbour":"Harbour 3.2.0dev (r2503200530)","rdd":"DBFCDX","codePage":"UA866","dbfVersion":3,"ldid":0,"fields":[{"name":"NUM","type":"N","descriptor":"N","length":20,"decimals":0}],"rows":[{"record":1,"deleted":false,"values":["9007199254740993"]}]}

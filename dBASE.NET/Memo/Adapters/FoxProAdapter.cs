@@ -10,11 +10,13 @@ namespace dBASE.NET.Memo.Adapters
         private const int headerSize = 1024;
         private const int defaultBlockSize = 64;
         private const int blockMetaSize = 8; // Meta-Information like block end marker
+        private const string harbourSignature = "Harbour";
 
         private BinaryWriter writer;
         private BinaryReader reader;
         private Stream stream;
         private int blockSize;
+        private bool preserveWhitespace;
 
         public void Initialize(Stream stream, BinaryReader reader, BinaryWriter writer)
         {
@@ -22,15 +24,20 @@ namespace dBASE.NET.Memo.Adapters
             this.reader = reader;
             this.writer = writer;
 
-            if (stream.Length < headerSize)
+            if (writer != null && stream.Length < headerSize)
             {
                 GenerateHeader(headerSize, defaultBlockSize);
                 blockSize = defaultBlockSize;
+                preserveWhitespace = true;
             }
             else
             {
+                if (stream.Length < 512) throw new InvalidDataException("Incomplete FPT header.");
                 stream.Position = 6;
                 blockSize = (int)reader.ReadUInt16Reverse();
+                if (blockSize == 0) throw new InvalidDataException("Invalid FPT block size.");
+                // Keep the established trimming behavior for non-Harbour FPT files.
+                preserveWhitespace = Encoding.ASCII.GetString(reader.ReadBytes(harbourSignature.Length)) == harbourSignature;
             }
         }
 
@@ -39,7 +46,7 @@ namespace dBASE.NET.Memo.Adapters
             writer.Write(new byte[headerSize]);
             stream.Position = 6;
             writer.WriteReverse((ushort)blockSize);
-            writer.Write(Encoding.ASCII.GetBytes("Harbour"));
+            writer.Write(Encoding.ASCII.GetBytes(harbourSignature));
             stream.Position = 512;
             writer.Write(Encoding.ASCII.GetBytes("FlexFile3"));
             stream.Position = headerSize;
@@ -53,10 +60,11 @@ namespace dBASE.NET.Memo.Adapters
             // [4 - 7 bytes] - Length of memo field
             // [8 - ...n ] - Memo data
             // Block
-            stream.Seek(index * blockSize + 4, SeekOrigin.Begin);
+            stream.Seek((long)index * blockSize + 4, SeekOrigin.Begin);
             var length = (int)reader.ReadUInt32Reverse();
             var buffer = reader.ReadBytes(length);
-            return encoding.GetString(buffer).Trim();
+            var text = encoding.GetString(buffer);
+            return preserveWhitespace ? text : text.Trim();
         }
 
         public BlockWriteStatusEnum WriteBlockData(int index, byte[] data)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using dBASE.NET.Encoders;
+using dBASE.NET.Memo;
 
 namespace dBASE.NET
 {
@@ -17,6 +18,7 @@ namespace dBASE.NET
         private readonly Stream baseStream;
         private readonly BinaryReader reader;
         private readonly BinaryWriter writer;
+        private readonly Stream unusedMemoStream;
         private EncoderContext encoderContext;
         private int[] fieldOffsets;
 
@@ -30,35 +32,35 @@ namespace dBASE.NET
         /// </summary>
         public static FastDbf ReadFile(string path, Encoding encoding = null, bool readOnly = false)
         {
-            // Open stream for reading.
-            var baseStream = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            string memoPath = Utils.GetMemoPath(path);
-            if (memoPath == null)
+            var baseStream = File.Open(path, FileMode.Open, Access(readOnly), FileShare.ReadWrite);
+            try
             {
-                return new FastDbf(baseStream, encoding: encoding, readOnly: readOnly);
+                return new FastDbf(baseStream, null, encoding, readOnly, path);
             }
-            var memoStream = File.Open(memoPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            return new FastDbf(baseStream, memoStream, encoding, readOnly);
+            catch
+            {
+                baseStream.Dispose();
+                throw;
+            }
         }
+
+        private static FileAccess Access(bool readOnly) => readOnly ? FileAccess.Read : FileAccess.ReadWrite;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastDbf" />.
-        /// <br/>
-        /// <b>BUG:</b> readOnly flag currently not supported with <b>MEMO</b> fields
         /// </summary>
-        /// <exception cref="InvalidOperationException">If you trying to load file with MEMO fields without MEMO stream</exception>
-        public FastDbf(Stream baseStream, Stream memoStream = null, Encoding encoding = null, bool readOnly = false) : base(encoding)
+        /// <exception cref="InvalidOperationException">The table has memo fields and no memo stream was supplied.</exception>
+        public FastDbf(Stream baseStream, Stream memoStream = null, Encoding encoding = null, bool readOnly = false)
+            : this(baseStream, memoStream, encoding, readOnly, null) { }
+
+        private FastDbf(Stream baseStream, Stream memoStream, Encoding encoding, bool readOnly, string path)
+            : base(encoding)
         {
             Utils.EnsureStreamSeekable(baseStream);
             this.readOnly = readOnly;
             this.baseStream = baseStream;
             reader = new BinaryReader(baseStream, Encoding.ASCII);
             if (!readOnly) writer = new BinaryWriter(baseStream, Encoding.ASCII);
-            Initialize(memoStream);
-        }
-
-        private void Initialize(Stream memoStream, bool readOnly = false)
-        {
             header = Utils.Read.Header(reader);
             _fields = Utils.Read.Fields(reader, Encoding);
 
@@ -70,17 +72,6 @@ namespace dBASE.NET
                 offset += _fields[i].Length;
             }
 
-            if (memoStream == null)
-            {
-                var hasMemoField = _fields.Any(x => x.Type == DbfFieldType.Memo);
-                // TODO: This hack is needed because MEMO fields not supported readonly mode
-                if (!readOnly && hasMemoField) throw new InvalidOperationException("Missed MEMO file for DBF file with MEMO fields!");
-            }
-            else
-            {
-                memo.Initialize(memoStream, header.Version);
-            }
-
             // After reading the fields, we move the read pointer to the beginning
             // of the records, as indicated by the "HeaderLength" value in the header.
             baseStream.Seek(header.HeaderLength, SeekOrigin.Begin);
@@ -88,6 +79,36 @@ namespace dBASE.NET
             var bodyLength = baseStream.Length - header.HeaderLength;
             RecordCount = (int)(bodyLength / header.RecordLength);
             encoderContext = new EncoderContext { Encoding = Encoding, Memo = memo };
+
+            if (_fields.Any(field => field.Type == DbfFieldType.Memo))
+                InitializeMemo(memoStream, path);
+            else
+                unusedMemoStream = memoStream;
+        }
+
+        private void InitializeMemo(Stream memoStream, string path)
+        {
+            if (path != null)
+            {
+                string memoPath = MemoFormatParser.FromVersion(header.Version) == MemoFormat.FPT
+                    ? Path.ChangeExtension(path, ".fpt")
+                    : Utils.GetMemoPath(path);
+                if (File.Exists(memoPath))
+                    memoStream = File.Open(memoPath, FileMode.Open, Access(readOnly), FileShare.ReadWrite);
+            }
+
+            if (memoStream == null)
+                throw new InvalidOperationException("Missing memo file for a DBF table with memo fields.");
+
+            try
+            {
+                memo.Initialize(memoStream, header.Version, readOnly);
+            }
+            catch
+            {
+                if (path != null) memoStream.Dispose();
+                throw;
+            }
         }
 
         /// <summary>
@@ -96,9 +117,8 @@ namespace dBASE.NET
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public DbfRecord GetRecord(int rowIndex)
         {
-            if (rowIndex > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            var offset = header.HeaderLength + rowIndex * header.RecordLength;
-            baseStream.Seek(offset, SeekOrigin.Begin);
+            if ((uint)rowIndex >= (uint)RecordCount) throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            baseStream.Seek(RecordOffset(rowIndex), SeekOrigin.Begin);
             return new DbfRecord(reader, header, _fields, memo, Encoding);
         }
 
@@ -108,21 +128,19 @@ namespace dBASE.NET
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public bool IsDeleted(int rowIndex)
         {
-            if (rowIndex > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            var offset = header.HeaderLength + rowIndex * header.RecordLength;
-            baseStream.Seek(offset, SeekOrigin.Begin);
+            if ((uint)rowIndex >= (uint)RecordCount) throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            baseStream.Seek(RecordOffset(rowIndex), SeekOrigin.Begin);
             byte marker = reader.ReadByte();
             return marker == (byte)DbfRecordMarker.Deleted;
         }
 
-        private int CalculateOffset(int row, int column)
+        private long RecordOffset(int row) => header.HeaderLength + (long)row * header.RecordLength;
+
+        private long CalculateOffset(int row, int column)
         {
-            if (row >= RecordCount) throw new ArgumentOutOfRangeException(nameof(row));
-            if (column >= _fields.Count) throw new ArgumentOutOfRangeException(nameof(column));
-            var deletedMarkerLength = 1;
-            var fieldOffset = fieldOffsets[column];
-            var offset = header.HeaderLength + row * header.RecordLength + deletedMarkerLength + fieldOffset;
-            return offset;
+            if ((uint)row >= (uint)RecordCount) throw new ArgumentOutOfRangeException(nameof(row));
+            if ((uint)column >= (uint)_fields.Count) throw new ArgumentOutOfRangeException(nameof(column));
+            return RecordOffset(row) + 1 + fieldOffsets[column];
         }
 
         /// <summary>
@@ -168,9 +186,8 @@ namespace dBASE.NET
         public void WriteRecord(int index, DbfRecord record)
         {
             if (readOnly) throw new InvalidOperationException("File is Readonly!");
-            if (index > RecordCount - 1) throw new ArgumentOutOfRangeException(nameof(index));
-            var offset = header.HeaderLength + index * header.RecordLength;
-            baseStream.Seek(offset, SeekOrigin.Begin);
+            if ((uint)index >= (uint)RecordCount) throw new ArgumentOutOfRangeException(nameof(index));
+            baseStream.Seek(RecordOffset(index), SeekOrigin.Begin);
             record.Write(writer, Encoding);
         }
 
@@ -205,6 +222,7 @@ namespace dBASE.NET
         {
             baseStream?.Dispose();
             memo?.Dispose();
+            unusedMemoStream?.Dispose();
             reader?.Dispose();
             writer?.Dispose();
         }

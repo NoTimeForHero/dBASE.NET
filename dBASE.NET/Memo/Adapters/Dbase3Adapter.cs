@@ -16,7 +16,8 @@ namespace dBASE.NET.Memo.Adapters
             this.stream = stream;
             var len = stream.Length;
 
-            if (len > 0 && len < blockSize) throw new InvalidDataException("Corrupted header!");
+            if (len < blockSize && (len > 0 || writer == null))
+                throw new InvalidDataException("Corrupted header!");
             if (len == 0) GenerateHeader();
         }
 

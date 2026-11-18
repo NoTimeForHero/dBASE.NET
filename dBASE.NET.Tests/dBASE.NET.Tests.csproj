@@ -45,6 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -66,6 +67,7 @@
     <Compile Include="CustomEncoding.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FastDBF\FastColumns.cs" />
+    <Compile Include="FastDBF\HarbourFixtures.cs" />
     <Compile Include="FastDBF\SimpleTests.cs" />
     <Compile Include="Formats\Dbase3WithMemoStreamRead.cs" />
     <Compile Include="Formats\Dbase3WithMemo.cs" />
@@ -88,6 +90,9 @@
     <Compile Include="Writing.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fixtures\harbour\data\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="fixtures\cp1251.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

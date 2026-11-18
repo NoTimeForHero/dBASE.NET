@@ -3,8 +3,10 @@
 This is the fork of [henck/dBASE.NET](https://github.com/henck/dBASE.NET).\
 Deeply thankful to him for awesome library.
 
-The primary target of this fork - add support for reading and writing [xHarbour](http://www.xharbour.org/)/[Harbour](https://harbour.github.io/) Dbase fields.\
+The primary target of this fork is fast reading of DBF tables created by [Harbour](https://harbour.github.io/).\
 It is based on [dBase Level 7 Specification](https://www.dbf2002.com/dbf-file-format.html) with possible additions.
+
+For Harbour tables, use `FastDbf.ReadFile` with the encoding used by the source table and `readOnly: true`. Harbour fields `@` and `=` are read as `DateTime` with `DateTimeKind.Unspecified` and millisecond precision. Empty timestamps return `null`. The enum member `DbfFieldType.UnixTime` still identifies the `@` field. [Harbour fixtures and benchmarks](dBASE.NET.Tests/fixtures/harbour/README.md)
 
 Current progress:
 1. Perfomance

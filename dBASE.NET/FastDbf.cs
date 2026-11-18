@@ -21,6 +21,10 @@ namespace dBASE.NET
         private readonly Stream unusedMemoStream;
         private EncoderContext encoderContext;
         private int[] fieldOffsets;
+#if NET8_0_OR_GREATER
+        private readonly bool canReuseReadBuffers;
+        private byte[] fieldReadBuffer;
+#endif
 
         /// <summary>
         /// Total count of records in file
@@ -79,6 +83,9 @@ namespace dBASE.NET
             var bodyLength = baseStream.Length - header.HeaderLength;
             RecordCount = (int)(bodyLength / header.RecordLength);
             encoderContext = new EncoderContext { Encoding = Encoding, Memo = memo };
+#if NET8_0_OR_GREATER
+            canReuseReadBuffers = path != null && readOnly && Encoding.IsReadOnly && FieldBytes.IsSystemEncoding(Encoding);
+#endif
 
             if (_fields.Any(field => field.Type == DbfFieldType.Memo))
                 InitializeMemo(memoStream, path);
@@ -188,6 +195,18 @@ namespace dBASE.NET
             baseStream.Seek(offset, SeekOrigin.Begin);
             var field = _fields[column];
             encoderContext.Field = field;
+#if NET8_0_OR_GREATER
+            if (canReuseReadBuffers && field.Type != DbfFieldType.Memo)
+            {
+                var decoder = EncoderFactory.GetEncoder(field.Type, strict: false);
+                if (decoder is not UnknownEncoder)
+                {
+                    fieldReadBuffer ??= new byte[byte.MaxValue];
+                    int count = baseStream.ReadAtLeast(fieldReadBuffer.AsSpan(0, field.Length), field.Length, throwOnEndOfStream: false);
+                    return decoder.Decode(encoderContext, new ArraySegment<byte>(fieldReadBuffer, 0, count));
+                }
+            }
+#endif
             var buffer = reader.ReadBytes(field.Length);
             IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
             return encoder.Decode(encoderContext, new ArraySegment<byte>(buffer));

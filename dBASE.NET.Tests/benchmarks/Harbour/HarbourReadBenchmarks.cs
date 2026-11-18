@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using BenchmarkDotNet.Attributes;
@@ -19,6 +20,7 @@ public class HarbourReadBenchmarks
     private int dateColumn;
     private int printedColumn;
     private int memoColumn;
+    private int[] randomRows;
 
     [GlobalSetup]
     public void SetUp()
@@ -38,8 +40,16 @@ public class HarbourReadBenchmarks
         dateColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "PAY_DATE");
         printedColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "IS_PRINTED");
         memoColumn = Enumerable.Range(0, fields.Count).Single(index => fields[index].Name == "NOTE");
+        randomRows = Enumerable.Range(0, table.RecordCount).ToArray();
+        var random = new Random(866);
+        for (int i = randomRows.Length - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1);
+            (randomRows[i], randomRows[j]) = (randomRows[j], randomRows[i]);
+        }
         long total = SequentialGetRecord();
-        if (total != BlockReadRecords() || total != BlockReadAllValues() || SequentialGetValue() != BlockReadValues())
+        long selected = SequentialGetValue();
+        if (total != BlockReadRecords() || total != BlockReadAllValues() || selected != BlockReadValues() || selected != RandomGetValue())
             throw new InvalidOperationException("Bulk reads differ from indexed reads.");
     }
 
@@ -75,6 +85,85 @@ public class HarbourReadBenchmarks
             if ((bool)table.GetValue(row, printedColumn)) sum++;
         }
         return sum;
+    }
+
+    [Benchmark]
+    public long RandomGetValue()
+    {
+        long sum = 0;
+        foreach (int row in randomRows)
+        {
+            sum += (long)(double)table.GetValue(row, idColumn);
+            if ((bool)table.GetValue(row, printedColumn)) sum++;
+        }
+        return sum;
+    }
+
+    internal void VerifyReads()
+    {
+        using (var dbfStream = File.OpenRead(path))
+        using (var memoStream = File.OpenRead(Path.ChangeExtension(path, ".fpt")))
+        using (var expected = new FastDbf(dbfStream, memoStream, encoding, readOnly: true))
+        {
+            int index = 0;
+            foreach (var projected in table.ReadValues(allColumns))
+            {
+                var reference = expected.GetRecord(index);
+                var indexed = table.GetRecord(index);
+                if (projected.RowIndex != index || projected.IsDeleted != reference.IsDeleted ||
+                    indexed.IsDeleted != reference.IsDeleted || table.IsDeleted(index) != reference.IsDeleted)
+                    throw new InvalidOperationException($"Record metadata differs at row {index}.");
+
+                foreach (int column in allColumns)
+                {
+                    var actual = table.GetValue(index, column);
+                    table.GetValue(randomRows[index], column);
+                    if (!Equals(reference[column], actual) || !Equals(reference[column], indexed[column]) ||
+                        !Equals(reference[column], projected.Values[column]))
+                        throw new InvalidOperationException($"Value differs at row {index}, column {column}.");
+                }
+                index++;
+            }
+            if (index != expected.RecordCount)
+                throw new InvalidOperationException("Unexpected physical record count.");
+        }
+        VerifyShortField();
+    }
+
+    private void VerifyShortField()
+    {
+        string directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        string dbfPath = Path.Combine(directory, "short.dbf");
+        string memoPath = Path.ChangeExtension(dbfPath, ".fpt");
+        try
+        {
+            File.Copy(path, dbfPath);
+            File.Copy(Path.ChangeExtension(path, ".fpt"), memoPath);
+            using (var file = new FileStream(dbfPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var header = new BinaryReader(file))
+            using (var indexed = FastDbf.ReadFile(dbfPath, encoding, readOnly: true))
+            {
+                file.Position = 8;
+                int headerLength = header.ReadUInt16();
+                int recordLength = header.ReadUInt16();
+                int lastRow = indexed.RecordCount - 1;
+                int nameOffset = 1 + indexed.Fields.Take(nameColumn).Sum(field => (int)field.Length);
+                indexed.GetValue(0, nameColumn); // Leave bytes in the field buffer before a short read.
+                file.Position = headerLength + (long)lastRow * recordLength + nameOffset;
+                file.WriteByte(encoding.GetBytes("Я")[0]);
+                file.SetLength(file.Position);
+                file.Flush();
+                if (!Equals("Я", indexed.GetValue(lastRow, nameColumn)))
+                    throw new InvalidOperationException("A short field read included bytes outside the available range.");
+            }
+        }
+        finally
+        {
+            File.Delete(dbfPath);
+            File.Delete(memoPath);
+            Directory.Delete(directory);
+        }
     }
 
     [Benchmark]

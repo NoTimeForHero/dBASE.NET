@@ -47,7 +47,11 @@
             if (field.Count != 0 && context.CanDecodeAsciiFields && encoding.IsReadOnly &&
                 (encoding.CodePage is 866 or 1251 || encoding.DecoderFallback is DecoderReplacementFallback))
             {
+#if NET8_0_OR_GREATER
+                field = TrimTextPadding(field);
+#else
                 field = FieldBytes.TrimAsciiSpaces(field);
+#endif
                 if (field.Count == 0)
                     return null;
             }
@@ -56,5 +60,21 @@
             if (text.Length == 0) return null;
             return text;
         }
+
+#if NET8_0_OR_GREATER
+        private static ArraySegment<byte> TrimTextPadding(ArraySegment<byte> field)
+        {
+            if (field.Count < 32)
+                return FieldBytes.TrimAsciiSpaces(field);
+
+            ReadOnlySpan<byte> contents = field.AsSpan();
+            int first = contents.IndexOfAnyExcept((byte)' ');
+            if (first < 0)
+                return new ArraySegment<byte>(field.Array, field.Offset + field.Count, 0);
+
+            int length = contents.Slice(first).LastIndexOfAnyExcept((byte)' ') + 1;
+            return new ArraySegment<byte>(field.Array, field.Offset + first, length);
+        }
+#endif
     }
 }

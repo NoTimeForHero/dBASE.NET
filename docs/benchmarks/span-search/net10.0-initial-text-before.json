@@ -1,0 +1,155 @@
+{
+   "Title":"HarbourReadBenchmarks-20261119-024841",
+   "HostEnvironmentInfo":{
+      "BenchmarkDotNetCaption":"BenchmarkDotNet",
+      "BenchmarkDotNetVersion":"0.15.8",
+      "OsVersion":"Windows 10 (10.0.19045.6456/22H2/2022Update)",
+      "ProcessorName":"12th Gen Intel Core i7-12700K",
+      "PhysicalProcessorCount":1,
+      "PhysicalCoreCount":12,
+      "LogicalCoreCount":20,
+      "RuntimeVersion":".NET 8.0.0 (8.0.0, 8.0.23.53103)",
+      "Architecture":"X64",
+      "HasAttachedDebugger":false,
+      "HasRyuJit":true,
+      "Configuration":"RELEASE",
+      "DotNetCliVersion":"10.0.404",
+      "ChronometerFrequency":{
+         "Hertz":10000000
+      },
+      "HardwareTimerKind":"Unknown"
+   },
+   "Benchmarks":[
+      {
+         "DisplayInfo":"HarbourReadBenchmarks.BlockReadAmount: .NET 10.0(Runtime=.NET 10.0, Toolchain=net10.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3)",
+         "Namespace":null,
+         "Type":"HarbourReadBenchmarks",
+         "Method":"BlockReadAmount",
+         "MethodTitle":"BlockReadAmount",
+         "Parameters":"",
+         "FullName":"HarbourReadBenchmarks.BlockReadAmount",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               666632.5657894737,656921.052631579,648445.0657894737,651384.2105263158,636910.5263157894,643044.0789473684,658616.7763157894,645637.8289473684
+            ],
+            "N":8,
+            "Min":636910.5263157894,
+            "LowerFence":626456.0032894735,
+            "Q1":644989.3914473684,
+            "Median":649914.6381578948,
+            "Mean":650949.0131578947,
+            "Q3":657344.9835526317,
+            "UpperFence":675878.3717105265,
+            "Max":666632.5657894737,
+            "InterquartileRange":12355.592105263262,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":3366.5067605342515,
+            "Variance":90666942.14978257,
+            "StandardDeviation":9521.919037136504,
+            "Skewness":0.15861187402374463,
+            "Kurtosis":1.6545832130116076,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":650949.0131578947,
+               "StandardError":3366.5067605342515,
+               "Level":12,
+               "Margin":18205.673056765114,
+               "Lower":632743.3401011296,
+               "Upper":669154.6862146598
+            },
+            "Percentiles":{
+               "P0":636910.5263157894,
+               "P25":644989.3914473684,
+               "P50":649914.6381578948,
+               "P67":655204.6315789474,
+               "P80":657938.4868421052,
+               "P85":658531.990131579,
+               "P90":661021.5131578947,
+               "P95":663827.0394736843,
+               "P100":666632.5657894737
+            }
+         },
+         "Memory":{
+            "Gen0Collections":14,
+            "Gen1Collections":3,
+            "Gen2Collections":0,
+            "TotalOperations":304,
+            "BytesAllocatedPerOperation":625960
+         }
+      },{
+         "DisplayInfo":"HarbourReadBenchmarks.BlockReadText: .NET 10.0(Runtime=.NET 10.0, Toolchain=net10.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3)",
+         "Namespace":null,
+         "Type":"HarbourReadBenchmarks",
+         "Method":"BlockReadText",
+         "MethodTitle":"BlockReadText",
+         "Parameters":"",
+         "FullName":"HarbourReadBenchmarks.BlockReadText",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               1061372.1153846155,1059447.1153846155,1045501.9230769231,1052001.923076923,1049991.3461538462,1051841.3461538462,1048963.4615384615,1047148.5576923077
+            ],
+            "N":8,
+            "Min":1045501.9230769231,
+            "LowerFence":1040479.5072115385,
+            "Q1":1048509.735576923,
+            "Median":1050916.3461538462,
+            "Mean":1052033.4735576923,
+            "Q3":1053863.221153846,
+            "UpperFence":1061893.4495192305,
+            "Max":1061372.1153846155,
+            "InterquartileRange":5353.485576923005,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":1992.5263822778045,
+            "Variance":31761291.072584603,
+            "StandardDeviation":5635.715666406939,
+            "Skewness":0.5511434551165756,
+            "Kurtosis":1.6259827707083534,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":1052033.4735576923,
+               "StandardError":1992.5263822778045,
+               "Level":12,
+               "Margin":10775.348589221885,
+               "Lower":1041258.1249684704,
+               "Upper":1062808.8221469142
+            },
+            "Percentiles":{
+               "P0":1045501.9230769231,
+               "P25":1048509.735576923,
+               "P50":1050916.3461538462,
+               "P67":1051952.144230769,
+               "P80":1056469.0384615385,
+               "P85":1059074.8557692308,
+               "P90":1060024.6153846155,
+               "P95":1060698.3653846155,
+               "P100":1061372.1153846155
+            }
+         },
+         "Memory":{
+            "Gen0Collections":20,
+            "Gen1Collections":4,
+            "Gen2Collections":0,
+            "TotalOperations":208,
+            "BytesAllocatedPerOperation":1263400
+         }
+      }
+   ]
+}

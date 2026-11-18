@@ -25,6 +25,9 @@ internal static class Program
             {
                 checks.SetUp();
                 checks.VerifyReads();
+#if NET8_0_OR_GREATER
+                TextTrimBenchmarks.VerifyDbfText();
+#endif
             }
             finally
             {
@@ -53,7 +56,13 @@ internal static class Program
         string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
         var scenarios = dbt
             ? new[] { typeof(DbtMemoBenchmarks) }
-            : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks), typeof(RandomReadBenchmarks), typeof(MemoryReadBenchmarks) };
+            : new[]
+            {
+                typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks), typeof(RandomReadBenchmarks), typeof(MemoryReadBenchmarks),
+#if NET8_0_OR_GREATER
+                typeof(TextTrimBenchmarks),
+#endif
+            };
 
         var summaries = BenchmarkSwitcher.FromTypes(scenarios).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||

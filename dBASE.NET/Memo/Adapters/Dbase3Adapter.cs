@@ -94,6 +94,16 @@ namespace dBASE.NET.Memo.Adapters
                     throw new InvalidDataException("Block does not contain an end marker.");
 
                 int end = count + read;
+#if NET8_0_OR_GREATER
+                // Include the last byte of the previous chunk to find a split marker.
+                int start = Math.Max(0, count - 1);
+                int marker = data.AsSpan(start, end - start).IndexOf("\u001a\u001a"u8);
+                if (marker >= 0)
+                {
+                    length = start + marker;
+                    return data;
+                }
+#else
                 for (int i = Math.Max(1, count); i < end; i++)
                 {
                     if (data[i] == markerBlockEnd && data[i - 1] == markerBlockEnd)
@@ -102,6 +112,7 @@ namespace dBASE.NET.Memo.Adapters
                         return data;
                     }
                 }
+#endif
                 count = end;
             }
         }

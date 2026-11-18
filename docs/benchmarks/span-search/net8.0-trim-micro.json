@@ -1,0 +1,415 @@
+{
+   "Title":"TextTrimBenchmarks-20261119-024515",
+   "HostEnvironmentInfo":{
+      "BenchmarkDotNetCaption":"BenchmarkDotNet",
+      "BenchmarkDotNetVersion":"0.15.8",
+      "OsVersion":"Windows 10 (10.0.19045.6456/22H2/2022Update)",
+      "ProcessorName":"12th Gen Intel Core i7-12700K",
+      "PhysicalProcessorCount":1,
+      "PhysicalCoreCount":12,
+      "LogicalCoreCount":20,
+      "RuntimeVersion":".NET 8.0.0 (8.0.0, 8.0.23.53103)",
+      "Architecture":"X64",
+      "HasAttachedDebugger":false,
+      "HasRyuJit":true,
+      "Configuration":"RELEASE",
+      "DotNetCliVersion":"10.0.404",
+      "ChronometerFrequency":{
+         "Hertz":10000000
+      },
+      "HardwareTimerKind":"Unknown"
+   },
+   "Benchmarks":[
+      {
+         "DisplayInfo":"TextTrimBenchmarks.ScalarTrim: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=12]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"ScalarTrim",
+         "MethodTitle":"ScalarTrim",
+         "Parameters":"Width=12",
+         "FullName":"TextTrimBenchmarks.ScalarTrim(Width: 12)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               40053.46875,39200.739583333336,40276.447916666664,39829.53125,39690.802083333336,40646.885416666664,40559.53125
+            ],
+            "N":7,
+            "Min":39200.739583333336,
+            "LowerFence":38773.432291666686,
+            "Q1":39760.16666666667,
+            "Median":40053.46875,
+            "Mean":40036.77232142857,
+            "Q3":40417.98958333333,
+            "UpperFence":41404.723958333314,
+            "Max":40646.885416666664,
+            "InterquartileRange":657.822916666657,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":193.0231329933257,
+            "Variance":260805.50909391372,
+            "StandardDeviation":510.69120718288633,
+            "Skewness":-0.26912959835678585,
+            "Kurtosis":1.5147860026803595,
+            "ConfidenceInterval":{
+               "N":7,
+               "Mean":40036.77232142857,
+               "StandardError":193.0231329933257,
+               "Level":12,
+               "Margin":1150.189365981279,
+               "Lower":38886.582955447295,
+               "Upper":41186.96168740985
+            },
+            "Percentiles":{
+               "P0":39200.739583333336,
+               "P25":39760.16666666667,
+               "P50":40053.46875,
+               "P67":40282.10958333333,
+               "P80":40502.91458333333,
+               "P85":40568.26666666666,
+               "P90":40594.472916666666,
+               "P95":40620.67916666667,
+               "P100":40646.885416666664
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":4800,
+            "BytesAllocatedPerOperation":0
+         }
+      },{
+         "DisplayInfo":"TextTrimBenchmarks.SpanTrim: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=12]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"SpanTrim",
+         "MethodTitle":"SpanTrim",
+         "Parameters":"Width=12",
+         "FullName":"TextTrimBenchmarks.SpanTrim(Width: 12)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               42817.772108843536,42416.64540816326,42715.96513605442,42504.40051020408,44099.723639455784,43856.73894557823,43005.44217687075,42254.5918367347
+            ],
+            "N":8,
+            "Min":42254.5918367347,
+            "LowerFence":41378.75478316326,
+            "Q1":42482.461734693876,
+            "Median":42766.86862244898,
+            "Mean":42958.9099702381,
+            "Q3":43218.26636904762,
+            "UpperFence":44321.97332057823,
+            "Max":44099.723639455784,
+            "InterquartileRange":735.8046343537426,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":238.49804466060706,
+            "Variance":455050.5384554634,
+            "StandardDeviation":674.5743387169894,
+            "Skewness":0.6469269472431567,
+            "Kurtosis":1.6435696531909834,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":42958.9099702381,
+               "StandardError":238.49804466060706,
+               "Level":12,
+               "Margin":1289.7694062790817,
+               "Lower":41669.140563959016,
+               "Upper":44248.67937651718
+            },
+            "Percentiles":{
+               "P0":42254.5918367347,
+               "P25":42482.461734693876,
+               "P50":42766.86862244898,
+               "P67":42947.26445578231,
+               "P80":43516.22023809524,
+               "P85":43814.174107142855,
+               "P90":43929.634353741494,
+               "P95":44014.67899659864,
+               "P100":44099.723639455784
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":4704,
+            "BytesAllocatedPerOperation":0
+         }
+      },{
+         "DisplayInfo":"TextTrimBenchmarks.SpanSearch: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=12]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"SpanSearch",
+         "MethodTitle":"SpanSearch",
+         "Parameters":"Width=12",
+         "FullName":"TextTrimBenchmarks.SpanSearch(Width: 12)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               34766.32231404959,34789.824380165286,34750.65426997245,34641.546143250685,34623.94972451791,34391.51170798898,34490.013774104686
+            ],
+            "N":7,
+            "Min":34391.51170798898,
+            "LowerFence":34254.721935261696,
+            "Q1":34556.98174931129,
+            "Median":34641.546143250685,
+            "Mean":34636.26033057851,
+            "Q3":34758.488292011025,
+            "UpperFence":35060.74810606062,
+            "Max":34789.824380165286,
+            "InterquartileRange":201.50654269973165,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":56.70589215565604,
+            "Variance":22508.907436182253,
+            "StandardDeviation":150.02968851591424,
+            "Skewness":-0.44300112923686535,
+            "Kurtosis":1.4265143228658006,
+            "ConfidenceInterval":{
+               "N":7,
+               "Mean":34636.26033057851,
+               "StandardError":56.70589215565604,
+               "Level":12,
+               "Margin":337.8999870868952,
+               "Lower":34298.360343491615,
+               "Upper":34974.1603176654
+            },
+            "Percentiles":{
+               "P0":34391.51170798898,
+               "P25":34556.98174931129,
+               "P50":34641.546143250685,
+               "P67":34750.967630854,
+               "P80":34763.18870523416,
+               "P85":34768.67252066116,
+               "P90":34775.72314049587,
+               "P95":34782.77376033057,
+               "P100":34789.824380165286
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":5808,
+            "BytesAllocatedPerOperation":0
+         }
+      },{
+         "DisplayInfo":"TextTrimBenchmarks.ScalarTrim: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=64]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"ScalarTrim",
+         "MethodTitle":"ScalarTrim",
+         "Parameters":"Width=64",
+         "FullName":"TextTrimBenchmarks.ScalarTrim(Width: 64)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               241850.4716981132,241246.58018867925,241494.1037735849,243008.96226415093,242699.05660377358,241808.37264150943,240849.1745283019,240690.09433962265
+            ],
+            "N":8,
+            "Min":240690.09433962265,
+            "LowerFence":239774.14504716985,
+            "Q1":241147.2287735849,
+            "Median":241651.23820754717,
+            "Mean":241705.852004717,
+            "Q3":242062.61792452828,
+            "UpperFence":243435.70165094335,
+            "Max":243008.96226415093,
+            "InterquartileRange":915.3891509433743,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":290.85480262324916,
+            "Variance":676772.129672074,
+            "StandardDeviation":822.6616131022973,
+            "Skewness":0.3173656883402678,
+            "Kurtosis":1.5028844800695946,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":241705.852004717,
+               "StandardError":290.85480262324916,
+               "Level":12,
+               "Margin":1572.9086023604161,
+               "Lower":240132.94340235658,
+               "Upper":243278.7606070774
+            },
+            "Percentiles":{
+               "P0":240690.09433962265,
+               "P25":241147.2287735849,
+               "P50":241651.23820754717,
+               "P67":241837.42099056602,
+               "P80":242359.62264150943,
+               "P85":242656.62735849054,
+               "P90":242792.0283018868,
+               "P95":242900.49528301886,
+               "P100":243008.96226415093
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":848,
+            "BytesAllocatedPerOperation":0
+         }
+      },{
+         "DisplayInfo":"TextTrimBenchmarks.SpanTrim: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=64]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"SpanTrim",
+         "MethodTitle":"SpanTrim",
+         "Parameters":"Width=64",
+         "FullName":"TextTrimBenchmarks.SpanTrim(Width: 64)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               207858.68644067796,207570.55084745763,214157.41525423728,210066.94915254237,212234.00423728814,217091.84322033898,208018.00847457626,208387.39406779662
+            ],
+            "N":8,
+            "Min":207570.55084745763,
+            "LowerFence":200873.15942796605,
+            "Q1":207978.17796610168,
+            "Median":209227.1716101695,
+            "Mean":210673.1064618644,
+            "Q3":212714.85699152542,
+            "UpperFence":219819.87552966102,
+            "Max":217091.84322033898,
+            "InterquartileRange":4736.679025423742,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":1238.9890446218471,
+            "Variance":12280750.821543664,
+            "StandardDeviation":3504.3902210718006,
+            "Skewness":0.6608272481936893,
+            "Kurtosis":1.7266850168286119,
+            "ConfidenceInterval":{
+               "N":8,
+               "Mean":210673.1064618644,
+               "StandardError":1238.9890446218471,
+               "Level":12,
+               "Margin":6700.307194309469,
+               "Lower":203972.79926755495,
+               "Upper":217373.41365617386
+            },
+            "Percentiles":{
+               "P0":207570.55084745763,
+               "P25":207978.17796610168,
+               "P50":209227.1716101695,
+               "P67":211562.21716101695,
+               "P80":213388.0508474576,
+               "P85":214061.24470338982,
+               "P90":215037.74364406778,
+               "P95":216064.79343220335,
+               "P100":217091.84322033898
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":944,
+            "BytesAllocatedPerOperation":0
+         }
+      },{
+         "DisplayInfo":"TextTrimBenchmarks.SpanSearch: .NET 8.0(Runtime=.NET 8.0, Toolchain=net8.0, IterationCount=8, IterationTime=200ms, LaunchCount=1, WarmupCount=3) [Width=64]",
+         "Namespace":null,
+         "Type":"TextTrimBenchmarks",
+         "Method":"SpanSearch",
+         "MethodTitle":"SpanSearch",
+         "Parameters":"Width=64",
+         "FullName":"TextTrimBenchmarks.SpanSearch(Width: 64)",
+         "HardwareIntrinsics":"AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL VectorSize=256",
+         "Statistics":{
+            "OriginalValues":[
+               31117.82349246231,31458.40138190955,31230.480527638192,31360.97675879397,31074.136306532662,31651.083542713568,31354.13002512563
+            ],
+            "N":7,
+            "Min":31074.136306532662,
+            "LowerFence":30820.84641959799,
+            "Q1":31174.152010050253,
+            "Median":31354.13002512563,
+            "Mean":31321.0045764537,
+            "Q3":31409.68907035176,
+            "UpperFence":31762.99466080402,
+            "Max":31651.083542713568,
+            "InterquartileRange":235.53706030150715,
+            "LowerOutliers":[
+
+            ],
+            "UpperOutliers":[
+
+            ],
+            "AllOutliers":[
+
+            ],
+            "StandardError":75.7417567143041,
+            "Variance":40157.69597118183,
+            "StandardDeviation":200.39385212920536,
+            "Skewness":0.25708555705787123,
+            "Kurtosis":1.5694101906464024,
+            "ConfidenceInterval":{
+               "N":7,
+               "Mean":31321.0045764537,
+               "StandardError":75.7417567143041,
+               "Level":12,
+               "Margin":451.33120462067126,
+               "Lower":30869.67337183303,
+               "Upper":31772.33578107437
+            },
+            "Percentiles":{
+               "P0":31074.136306532662,
+               "P25":31174.152010050253,
+               "P50":31354.13002512563,
+               "P67":31362.925251256285,
+               "P80":31438.916457286432,
+               "P85":31477.669597989952,
+               "P90":31535.474246231155,
+               "P95":31593.278894472365,
+               "P100":31651.083542713568
+            }
+         },
+         "Memory":{
+            "Gen0Collections":0,
+            "Gen1Collections":0,
+            "Gen2Collections":0,
+            "TotalOperations":6368,
+            "BytesAllocatedPerOperation":0
+         }
+      }
+   ]
+}

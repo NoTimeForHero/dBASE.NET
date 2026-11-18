@@ -39,10 +39,11 @@
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext context, byte[] buffer)
+        public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            uint dateWord = BitConverter.ToUInt32(buffer, 0);
-            uint milliseconds = BitConverter.ToUInt32(buffer, 4);
+            FieldBytes.RequireWidth(field, 2 * sizeof(uint));
+            uint dateWord = BitConverter.ToUInt32(field.Array, field.Offset);
+            uint milliseconds = BitConverter.ToUInt32(field.Array, field.Offset + sizeof(uint));
             if (milliseconds >= 86400000) throw new InvalidDataException("Invalid DBF timestamp time of day.");
 
             if (context.Field.Type == DbfFieldType.DateTime)

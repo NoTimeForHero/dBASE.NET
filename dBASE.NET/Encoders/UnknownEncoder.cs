@@ -14,6 +14,6 @@ namespace dBASE.NET.Encoders
             return rawBuffer;
         }
 
-        public object Decode(EncoderContext context, byte[] buffer) => buffer;
+        public object Decode(EncoderContext context, ArraySegment<byte> field) => FieldBytes.GetFieldArray(field);
     }
 }

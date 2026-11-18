@@ -1,6 +1,6 @@
 ﻿namespace dBASE.NET.Encoders
 {
-    using System.Text;
+    using System;
 
     internal class NullFlagsEncoder : IEncoder
     {
@@ -13,9 +13,10 @@
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext context, byte[] buffer)
+        public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            return buffer[0];
+            if (field.Count == 0) throw new IndexOutOfRangeException();
+            return field.Array[field.Offset];
         }
     }
 }

@@ -40,9 +40,9 @@
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext context, byte[] buffer)
+        public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            string text = context.Encoding.GetString(buffer).Trim();
+            string text = context.Encoding.GetString(field.Array, field.Offset, field.Count).Trim();
             if (text.Length == 0) return null;
             return text;
         }

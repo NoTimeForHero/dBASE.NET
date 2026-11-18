@@ -55,15 +55,17 @@ namespace dBASE.NET.Encoders
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext encoder, byte[] buffer)
+        public object Decode(EncoderContext encoder, ArraySegment<byte> field)
         {
-            var index = GetBlockIndex(buffer, encoder.Encoding);
+            // Preserve only this field's pointer bytes for a later write.
+            byte[] buffer = FieldBytes.GetFieldArray(field);
+            var index = GetBlockIndex(buffer);
             encoder.RecordContext[Key] = new ContextData { inputBuffer = buffer, blockIndex = index ?? ContextData.MissingBlockIndex };
             if (!index.HasValue) return null;
             return encoder.Memo.Adapter.GetBlockData(index.Value, encoder.Encoding);
         }
 
-        private static int? GetBlockIndex(byte[] buffer, Encoding encoding)
+        private static int? GetBlockIndex(byte[] buffer)
         {
             int index;
             // Memo fields of 5+ byts in length store their index in text, e.g. "     39394"

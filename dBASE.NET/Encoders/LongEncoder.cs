@@ -18,5 +18,11 @@
         {
             return BitConverter.ToInt64(buffer, 0);
         }
+
+        object IEncoder.Decode(EncoderContext context, ArraySegment<byte> field)
+        {
+            FieldBytes.RequireWidth(field, sizeof(long));
+            return BitConverter.ToInt64(field.Array, field.Offset);
+        }
     }
 }

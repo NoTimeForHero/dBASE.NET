@@ -9,6 +9,6 @@ namespace dBASE.NET.Encoders
     internal interface IEncoder
     {
         byte[] Encode(EncoderContext context, object data);
-        object Decode(EncoderContext context, byte[] buffer);
+        object Decode(EncoderContext context, ArraySegment<byte> field);
     }
 }

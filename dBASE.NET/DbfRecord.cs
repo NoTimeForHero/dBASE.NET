@@ -28,7 +28,7 @@
         internal DbfRecord(BinaryReader reader, DbfHeader header, List<DbfField> fields, MemoContext memoData, Encoding encoding)
         {
             this.fields = fields;
-            Data = new List<object>();
+            Data = new List<object>(fields.Count);
             encoderContext = new EncoderContext { Encoding = encoding, Memo = memoData };
 
             // Read record marker.
@@ -56,13 +56,10 @@
             foreach (DbfField field in fields)
             {
                 encoderContext.Field = field;
-                // Copy bytes from record buffer into field buffer.
-                byte[] buffer = new byte[field.Length];
-                Array.Copy(row, offset, buffer, 0, field.Length);
-                offset += field.Length;
-
+                var fieldBytes = new ArraySegment<byte>(row, offset, field.Length);
                 IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-                Data.Add(encoder.Decode(encoderContext, buffer));
+                Data.Add(encoder.Decode(encoderContext, fieldBytes));
+                offset += fieldBytes.Count;
             }
         }
 
@@ -72,7 +69,7 @@
         internal DbfRecord(List<DbfField> fields, MemoContext memoData, Encoding encoding)
         {
             this.fields = fields;
-            Data = new List<object>();
+            Data = new List<object>(fields.Count);
             foreach (DbfField field in fields) Data.Add(null);
             encoderContext = new EncoderContext { Memo = memoData, Encoding = encoding };
         }

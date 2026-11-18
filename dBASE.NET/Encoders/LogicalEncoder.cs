@@ -1,5 +1,6 @@
 ﻿namespace dBASE.NET.Encoders
 {
+    using System;
     using System.Text;
 
     internal class LogicalEncoder : IEncoder
@@ -22,9 +23,9 @@
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext context, byte[] buffer)
+        public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            string text = context.Encoding.GetString(buffer).Trim().ToUpper();
+            string text = context.Encoding.GetString(field.Array, field.Offset, field.Count).Trim().ToUpper();
             if (text == "?") return null;
             return (text == "Y" || text == "T");
         }

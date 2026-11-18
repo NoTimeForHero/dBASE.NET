@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,6 +17,20 @@ namespace dBASE.NET.Tests
         {
             dbf = new Dbf();
             dbf.Read("fixtures/83/dbase_83.dbf");
+        }
+
+        [TestMethod]
+        public void ShortBinaryFieldDoesNotReadBytesFromTheNextField()
+        {
+            var header = new Dbf3Header { RecordLength = 5 };
+            var fields = new List<DbfField>
+            {
+                new DbfField("BROKEN", DbfFieldType.Integer, 1),
+                new DbfField("NEXT", DbfFieldType.Character, 3)
+            };
+            using var reader = new BinaryReader(new MemoryStream(new byte[] { 0x20, 1, 65, 66, 67 }));
+
+            Helpers.AssertThrows<ArgumentException>(() => new DbfRecord(reader, header, fields, null, Encoding.ASCII));
         }
 
         [TestMethod]

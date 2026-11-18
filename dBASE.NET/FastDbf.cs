@@ -155,7 +155,7 @@ namespace dBASE.NET
             encoderContext.Field = field;
             var buffer = reader.ReadBytes(field.Length);
             IEncoder encoder = EncoderFactory.GetEncoder(field.Type);
-            return encoder.Decode(encoderContext, buffer);
+            return encoder.Decode(encoderContext, new ArraySegment<byte>(buffer));
         }
 
         /// <summary>

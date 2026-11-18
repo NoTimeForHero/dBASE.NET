@@ -14,9 +14,10 @@
         }
 
         /// <inheritdoc />
-        public object Decode(EncoderContext context, byte[] buffer)
+        public object Decode(EncoderContext context, ArraySegment<byte> field)
         {
-            return BitConverter.ToSingle(buffer, 0);
+            FieldBytes.RequireWidth(field, sizeof(float));
+            return BitConverter.ToSingle(field.Array, field.Offset);
         }
     }
 }

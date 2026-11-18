@@ -20,7 +20,9 @@ internal static class Program
         bool dbt = args.Length > 1 && args[1] == "--dbt";
         int optionStart = dbt ? 2 : 1;
         string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
-        var scenarios = dbt ? new[] { typeof(DbtMemoBenchmarks) } : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks) };
+        var scenarios = dbt
+            ? new[] { typeof(DbtMemoBenchmarks) }
+            : new[] { typeof(HarbourReadBenchmarks), typeof(BinaryFieldBenchmarks), typeof(RandomReadBenchmarks) };
 
         var summaries = BenchmarkSwitcher.FromTypes(scenarios).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||

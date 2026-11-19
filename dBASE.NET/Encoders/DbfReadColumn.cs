@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace dBASE.NET.Encoders
 {
@@ -42,13 +43,33 @@ namespace dBASE.NET.Encoders
             return prepared;
         }
 
-        internal object Decode(EncoderContext context, ArraySegment<byte> record)
+        internal object Decode(EncoderContext context, ArraySegment<byte> record) =>
+            decoder.Decode(context, GetFieldBytes(context, record));
+
+        internal double? DecodeNumber(EncoderContext context, ArraySegment<byte> record)
+        {
+            if (decoder is not NumericEncoder numeric)
+                throw new InvalidOperationException("The selected field is not Numeric.");
+
+            return numeric.DecodeNumber(context, GetFieldBytes(context, record));
+        }
+
+        internal string DecodeText(EncoderContext context, ArraySegment<byte> record)
+        {
+            if (decoder is not CharacterEncoder character)
+                throw new InvalidOperationException("The selected field is not Character.");
+
+            return (string)character.Decode(context, GetFieldBytes(context, record));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private ArraySegment<byte> GetFieldBytes(EncoderContext context, ArraySegment<byte> record)
         {
             if (offset + length > record.Count)
                 throw new ArgumentException("The field extends beyond the end of the DBF record.", nameof(record));
 
             context.Field = field;
-            return decoder.Decode(context, new ArraySegment<byte>(record.Array, record.Offset + offset, length));
+            return new ArraySegment<byte>(record.Array, record.Offset + offset, length);
         }
     }
 }

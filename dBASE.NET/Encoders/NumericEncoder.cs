@@ -75,5 +75,20 @@
 
             return Convert.ToDouble(text, CultureInfo.InvariantCulture);
         }
+
+        internal double? DecodeNumber(EncoderContext context, ArraySegment<byte> field)
+        {
+            if (field.Count != 0 && context.CanDecodeAsciiFields)
+            {
+                var unpadded = FieldBytes.TrimAsciiSpaces(field);
+                if (unpadded.Count == 0)
+                    return null;
+                if (FieldBytes.TryDecodeAsciiInteger(unpadded, out int integer))
+                    return integer;
+            }
+
+            // Keep the existing decimal and custom encoding semantics.
+            return (double?)Decode(context, field);
+        }
     }
 }

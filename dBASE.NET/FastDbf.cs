@@ -173,6 +173,30 @@ namespace dBASE.NET
             }
         }
 
+        /// <summary>Visits records in physical order, including records marked for deletion.</summary>
+        /// <param name="visitor">A synchronous callback that can read values from the current record.</param>
+        /// <param name="columns">Zero-based schema indexes in the order exposed to the callback.</param>
+        /// <remarks>
+        /// Values are decoded when requested. An empty selection visits row metadata only.
+        /// Keep the table open and its schema unchanged throughout the call.
+        /// </remarks>
+        public void VisitRows(DbfRowVisitor visitor, params int[] columns)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            if (columns == null)
+                throw new ArgumentNullException(nameof(columns));
+
+            var selected = DbfReadColumn.Prepare(_fields, columns, projection: true);
+            var context = new EncoderContext { Encoding = Encoding, Memo = memo };
+            int rowIndex = 0;
+            foreach (var record in DbfRecordReader.Read(baseStream, header, RecordCount))
+            {
+                bool isDeleted = DbfRecord.DecodeDeletionMarker(record.Array[record.Offset]);
+                visitor(new DbfRowReader(rowIndex++, isDeleted, record, selected, context));
+            }
+        }
+
         /// <summary>
         /// Check is record at specific index is deleted
         /// </summary>

@@ -30,6 +30,23 @@ namespace dBASE.NET.Tests.FastDBF
                     var projected = dbf.ReadValues(ordinals).ToArray();
                     Assert.AreEqual(fixture.Rows.Length, scanned.Length, name);
                     Assert.AreEqual(fixture.Rows.Length, projected.Length, name);
+                    int visited = 0;
+                    dbf.VisitRows(row =>
+                    {
+                        Assert.AreEqual(visited++, row.RowIndex, name);
+                        Assert.AreEqual(projected[row.RowIndex].IsDeleted, row.IsDeleted, name);
+                        for (int column = 0; column < ordinals.Length; column++)
+                        {
+                            object expected = projected[row.RowIndex].Values[column];
+                            Assert.AreEqual(expected, row.GetValue(column), name);
+                            var field = dbf.Fields[ordinals[column]];
+                            if (field.Type == DbfFieldType.Numeric)
+                                Assert.AreEqual(expected, (object)row.GetNumber(column), name);
+                            if (field.Type == DbfFieldType.Character)
+                                Assert.AreEqual(expected, row.GetText(column), name);
+                        }
+                    }, ordinals);
+                    Assert.AreEqual(fixture.Rows.Length, visited, name);
                     for (int column = 0; column < fixture.Fields.Length; column++)
                     {
                         var expected = fixture.Fields[column];
@@ -185,10 +202,40 @@ namespace dBASE.NET.Tests.FastDBF
             using var fast = new FastDbf(new MemoryStream(bytes), readOnly: true);
             Assert.AreEqual(1, fast.ReadRecords().Count());
             Assert.AreEqual(1, fast.ReadValues(0).Count());
+            int visited = 0;
+            fast.VisitRows(row => visited++);
+            Assert.AreEqual(1, visited);
 
             using var dbf = new Dbf();
             dbf.Read(new MemoryStream(bytes));
             Assert.AreEqual(1, dbf.Records.Count);
+        }
+
+        [TestMethod]
+        public void RowVisitorDecodesOnlyAccessedValuesAndCanRestart()
+        {
+            var bytes = File.ReadAllBytes(FixturePath("numeric", "dbf"));
+            int dataOffset = BitConverter.ToUInt16(bytes, 8);
+            bytes[dataOffset + 1] = (byte)'?';
+            for (int i = 5; i < 20; i++) bytes[dataOffset + i] = (byte)' ';
+
+            using var dbf = new FastDbf(new MemoryStream(bytes), encoding: Cp866, readOnly: true);
+            Helpers.AssertThrows<FormatException>(() => dbf.VisitRows(row => row.GetNumber(0), 0));
+            Helpers.AssertThrows<ArgumentNullException>(() => dbf.VisitRows(null, 0));
+            Helpers.AssertThrows<ArgumentNullException>(() => dbf.VisitRows(row => { }, null));
+            Helpers.AssertThrows<ArgumentOutOfRangeException>(() => dbf.VisitRows(row => { }, -1));
+            Helpers.AssertThrows<ArgumentOutOfRangeException>(() => dbf.VisitRows(row => row.GetValue(1), 0));
+            Helpers.AssertThrows<InvalidOperationException>(() => dbf.VisitRows(row => row.GetText(0), 0));
+
+            int visited = 0;
+            dbf.VisitRows(row =>
+            {
+                Assert.AreEqual(visited++, row.RowIndex);
+                var amount = row.GetNumber(0);
+                if (row.RowIndex == 0) Assert.IsNull(amount);
+                Assert.AreEqual(amount, row.GetNumber(1));
+            }, 1, 1, 0);
+            Assert.AreEqual(dbf.RecordCount, visited);
         }
 
         [TestMethod]

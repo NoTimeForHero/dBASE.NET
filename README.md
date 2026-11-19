@@ -8,6 +8,18 @@ It is based on [dBase Level 7 Specification](https://www.dbf2002.com/dbf-file-fo
 
 For Harbour tables, use `FastDbf.ReadFile` with the encoding used by the source table and `readOnly: true`. Harbour fields `@` and `=` are read as `DateTime` with `DateTimeKind.Unspecified` and millisecond precision. Empty timestamps return `null`. The enum member `DbfFieldType.UnixTime` still identifies the `@` field. [Harbour fixtures and benchmarks](dBASE.NET.Tests/fixtures/harbour/README.md)
 
+`FastDbf.VisitRows` visits physical records synchronously and decodes selected values on demand. Pass zero-based schema indexes to select columns. Inside the callback, use zero-based positions in that selection. `GetNumber` reads `N`, `GetText` reads `C`, and `GetValue` uses the regular decoder for the selected field. The row reader is valid for the duration of the callback.
+
+```csharp
+table.VisitRows(row =>
+{
+    if (row.IsDeleted || row.GetNumber(0) != desiredCity) return;
+    Console.WriteLine(row.GetText(1));
+}, cityColumn, nameColumn);
+```
+
+The callback can check deletion and filter fields before decoding the rest of the selection. [Filtered scan and benchmark plan](docs/plans/20261119-filtered-dbf-scan.md)
+
 Current progress:
 1. Perfomance
    - [x] Lazy manipulation with the file (without reading it fully to the memory and rewriting the full file on the drive)

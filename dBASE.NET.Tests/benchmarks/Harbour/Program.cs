@@ -12,12 +12,24 @@ internal static class Program
     {
         if (args.Length == 0 || !File.Exists(args[0]))
         {
-            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [--verify | BenchmarkDotNet options] or <memo/dbt/large.dbf> --dbt [--verify | BenchmarkDotNet options]");
+            Console.Error.WriteLine("Usage: HarbourBenchmarks <test_main.dbf> [--verify | BenchmarkDotNet options], <memo/dbt/large.dbf> --dbt [...], or <requests.dbf> --keystone [...]");
             return 2;
         }
 
         // The generated benchmark process starts in a different working directory.
         Environment.SetEnvironmentVariable(DatasetPathVariable, Path.GetFullPath(args[0]));
+        if (args.Length > 1 && args[1] == "--keystone")
+        {
+            if (args.Length == 3 && args[2] == "--verify")
+            {
+                KeystoneRequestBenchmarks.Verify();
+                new KeystoneStreetBenchmarks().Verify();
+                Console.WriteLine($"Keystone scan checks passed on {RuntimeInformation.FrameworkDescription}, {RuntimeInformation.ProcessArchitecture}.");
+                return 0;
+            }
+
+            return Run(new[] { typeof(KeystoneRequestBenchmarks), typeof(KeystoneStreetBenchmarks) }, args.Skip(2).ToArray());
+        }
         if (args.Length == 2 && args[1] == "--verify")
         {
             var checks = new HarbourReadBenchmarks();
@@ -53,7 +65,6 @@ internal static class Program
             return 0;
         }
         int optionStart = dbt ? 2 : 1;
-        string[] options = args.Length == optionStart ? new[] { "--filter", "*" } : args.Skip(optionStart).ToArray();
         var scenarios = dbt
             ? new[] { typeof(DbtMemoBenchmarks) }
             : new[]
@@ -64,6 +75,12 @@ internal static class Program
 #endif
             };
 
+        return Run(scenarios, args.Skip(optionStart).ToArray());
+    }
+
+    private static int Run(Type[] scenarios, string[] options)
+    {
+        if (options.Length == 0) options = new[] { "--filter", "*" };
         var summaries = BenchmarkSwitcher.FromTypes(scenarios).Run(options);
         return summaries.Any(summary => summary.HasCriticalValidationErrors ||
             summary.Reports.Any(report => !report.Success || report.ResultStatistics == null)) ? 1 : 0;

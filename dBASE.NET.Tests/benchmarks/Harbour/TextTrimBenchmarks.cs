@@ -103,6 +103,22 @@ public class TextTrimBenchmarks
         var actual = CaptureFallback(() => dbf.GetValue(0, 1));
         if (expected.Index != actual.Index || !expected.BytesUnknown.AsSpan().SequenceEqual(actual.BytesUnknown))
             throw new InvalidOperationException("Strict UTF-8 decoding reported a different byte range.");
+
+        for (int start = 0; start < 256; start += field.Length)
+        {
+            for (int i = 0; i < field.Length; i++)
+                data[offset + i] = (byte)(start + i);
+
+            string expectedText = cp866.GetString(data, offset, field.Length).Trim();
+            string visitedText = null;
+            standard.VisitRows(row =>
+            {
+                if (row.RowIndex == 0)
+                    visitedText = row.GetText(0);
+            }, 1);
+            if (!Equals(expectedText, standard.GetValue(0, 1)) || expectedText != visitedText)
+                throw new InvalidOperationException($"CP866 decoding differs for the block at byte {start}.");
+        }
     }
 
     private static DecoderFallbackException CaptureFallback(Action read)
@@ -120,6 +136,7 @@ public class TextTrimBenchmarks
 
     private sealed class PaddingAwareEncoding : UTF8Encoding
     {
+        public override int CodePage => 866;
         public override string GetString(byte[] bytes, int index, int count) => count.ToString();
     }
 }

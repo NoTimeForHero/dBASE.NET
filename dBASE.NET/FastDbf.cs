@@ -190,7 +190,12 @@ namespace dBASE.NET
             var selected = DbfReadColumn.Prepare(_fields, columns, projection: true);
             var context = new EncoderContext { Encoding = Encoding, Memo = memo };
             int rowIndex = 0;
-            foreach (var record in DbfRecordReader.Read(baseStream, header, RecordCount))
+#if NET8_0_OR_GREATER
+            var records = DbfRecordReader.Read(baseStream, header, RecordCount, usePooledBuffer: canReuseReadBuffers);
+#else
+            var records = DbfRecordReader.Read(baseStream, header, RecordCount);
+#endif
+            foreach (var record in records)
             {
                 bool isDeleted = DbfRecord.DecodeDeletionMarker(record.Array[record.Offset]);
                 visitor(new DbfRowReader(rowIndex++, isDeleted, record, selected, context));

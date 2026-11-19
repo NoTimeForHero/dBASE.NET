@@ -85,9 +85,50 @@ public class KeystoneRequestBenchmarks
                 !expected.SequenceEqual(benchmark.VisitRows()) || !expected.SequenceEqual(benchmark.VisitRows()) ||
                 benchmark.VisitMetadata() != benchmark.table.ReadValues().Count(row => !row.IsDeleted))
                 throw new InvalidOperationException("Request results differ from ReadValues.");
+            if (benchmark.table.RecordCount == 65656 && benchmark.table.ReadValues(benchmark.columns)
+                .Count(row => row.IsDeleted && (double)row.Values[0] == City && (string)row.Values[1] == Status) != 2)
+                throw new InvalidOperationException("Expected two deleted matches in the full fixture.");
+            benchmark.VerifyInterleavedReads();
+            if (!expected.SequenceEqual(benchmark.VisitRows()))
+                throw new InvalidOperationException("Filter results changed after an interrupted scan.");
             Console.WriteLine($"Verified {expected.Count} matches in {benchmark.table.RecordCount} physical rows.");
         }
         finally { benchmark.TearDown(); }
+    }
+
+    private void VerifyInterleavedReads()
+    {
+        if (table.RecordCount < 2)
+            return;
+
+        int checkpoint = Math.Min(81, table.RecordCount - 2);
+        int last = table.RecordCount - 1;
+        int ticket = columns[2];
+        double checkpointTicket = (double)table.GetValue(checkpoint, ticket);
+        double lastTicket = (double)table.GetValue(last, ticket);
+        int rowsVisited = 0;
+        var stop = new InvalidOperationException("Stop the test scan.");
+        try
+        {
+            table.VisitRows(row =>
+            {
+                if (row.RowIndex != rowsVisited++)
+                    throw new InvalidOperationException("Record order changed during traversal.");
+                if (row.RowIndex == checkpoint)
+                {
+                    if ((double)table.GetValue(last, ticket) != lastTicket)
+                        throw new InvalidOperationException("Interleaved point read returned the wrong ticket.");
+                    int nestedRows = 0;
+                    table.VisitRows(_ => nestedRows++);
+                    if (nestedRows != table.RecordCount || row.GetNumber(0) != checkpointTicket)
+                        throw new InvalidOperationException("The nested scan changed the outer scan.");
+                }
+                if (row.RowIndex == last)
+                    throw stop;
+            }, ticket);
+            throw new InvalidOperationException("The visitor did not reach the last record.");
+        }
+        catch (InvalidOperationException ex) when (ReferenceEquals(ex, stop)) { }
     }
 }
 

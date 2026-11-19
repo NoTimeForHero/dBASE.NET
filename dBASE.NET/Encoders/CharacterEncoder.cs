@@ -56,12 +56,43 @@
                     return null;
             }
 
-            string text = encoding.GetString(field.Array, field.Offset, field.Count).Trim();
+#if NET8_0_OR_GREATER
+            string text = field.Count != 0 && encoding.CodePage == 866 && ReferenceEquals(encoding, Cp866Lookup.Encoding)
+                ? Cp866Lookup.Decode(field)
+                : encoding.GetString(field.Array, field.Offset, field.Count);
+#else
+            string text = encoding.GetString(field.Array, field.Offset, field.Count);
+#endif
+            text = text.Trim();
             if (text.Length == 0) return null;
             return text;
         }
 
 #if NET8_0_OR_GREATER
+        private static class Cp866Lookup
+        {
+            internal static readonly Encoding Encoding = CodePagesEncodingProvider.Instance.GetEncoding(866);
+            private static readonly string Characters = CreateCharacters();
+
+            private static string CreateCharacters()
+            {
+                Span<byte> bytes = stackalloc byte[256];
+                for (int i = 0; i < bytes.Length; i++)
+                    bytes[i] = (byte)i;
+
+                return Encoding.GetString(bytes);
+            }
+
+            internal static string Decode(ArraySegment<byte> field) =>
+                string.Create(field.Count, field, static (target, bytes) =>
+                {
+                    ReadOnlySpan<byte> input = bytes.AsSpan();
+                    string mapping = Characters;
+                    for (int i = 0; i < target.Length; i++)
+                        target[i] = mapping[input[i]];
+                });
+        }
+
         private static ArraySegment<byte> TrimTextPadding(ArraySegment<byte> field)
         {
             if (field.Count < 32)
